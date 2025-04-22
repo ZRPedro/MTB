@@ -95,8 +95,8 @@ def taskIdToRank(csvPath : str, projectName : str, emtCases : List[cs.Case], ran
     for file in os.listdir(csvPath):
         _, fileName = os.path.split(file)
         root, typ = os.path.splitext(fileName)
-        if rank is None:
-            if typ == '.csv_taskid' or typ == '.inf_taskid' and root.startswith(projectName + '_'):
+        if rank is None and len(emtCases) > 1:
+            if (typ == '.csv_taskid' or typ == '.inf_taskid') and root.startswith(projectName + '_') and len(emtCases) > 1:
                 suffix = root[len(projectName) + 1:]
                 parts = suffix.split('_')
                 if  len(parts) > 0 and parts[0].isnumeric():
@@ -112,10 +112,16 @@ def taskIdToRank(csvPath : str, projectName : str, emtCases : List[cs.Case], ran
                     print(f'WARNING: {fileName} has an invalid task ID. Ignoring file.')
         else:
             if typ == '.inf_taskid':
-                newName = f'{projectName}_{rank}.inf'
+                if rank is None:
+                    newName = f'{projectName}_{emtCases[0].rank}.inf'
+                else:
+                    newName = f'{projectName}_{rank}.inf'
             elif typ == '.csv_taskid':
-                part = root.split('_')[1]
-                newName = f'{projectName}_{rank}_{part}.csv'
+                part = root.split(projectName + '_')[1]
+                if rank is None:
+                    newName = f'{projectName}_{emtCases[0].rank}_{part}.csv'
+                else:
+                    newName = f'{projectName}_{rank}_{part}.csv'
             else:
                 print(f'WARNING: {fileName} is of unknown type. Ignoring file.')
                 continue
