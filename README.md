@@ -32,7 +32,7 @@ pip install -r requirements.txt
 ### Tested Environments
 
 - **PowerFactory**: Tested on version 2024 SP4 with Python versions >= 3.8.8.
-- **PSCAD**: Tested on version 5.0.1.0 with Python 3.7.2 (embedded Python). Compatibility is guaranteed only with Intel Fortran Compilers.
+- **PSCAD**: Tested on version 5.0.2.0 with Python 3.7.2 (embedded Python). Compatibility is guaranteed only with Intel Fortran Compilers.
 
 ## Contributing
 
