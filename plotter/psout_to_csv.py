@@ -2,7 +2,7 @@
 '''
 This is a script to convert Manitoba Hydro International (MHI) PSOUT files to CSV format.
 It reads the PSOUT files from a specified folder, extracts the required signals based on a figure setup CSV file, and writes the data to CSV files. 
-It supports optional compression of the output files, i.e. .zip, .gz, .bz2, or .xz formats.
+It supports optional compression of the output files, i.e. .zip, .gz, .bz2, or .xz formats provided by Pandas' "to_csv" function.
 It is designed to be used in conjunction with the process_psout set of function and uses Manitoba Hydro International (MHI) PSOUT File Reader Library.
 It is designed to be run from the command line with various options for input and output paths, compression type, and verbosity.
 '''
