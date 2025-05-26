@@ -9,7 +9,7 @@ from Cursor import Cursor
 from math import ceil
 from Result import Result
 from read_and_write_functions import loadEMT
-
+from process_psout import getSignals
 
 def addCursors(htmlPlots: List[go.Figure],
                resultList: List[Result],
@@ -17,7 +17,9 @@ def addCursors(htmlPlots: List[go.Figure],
                pfFlatTIme: float,
                pscadInitTime: float,
                rank: int,
-               nColumns: int):
+               nColumns: int,
+               emtRankSignalnamesList: List):
+    
     cursor_settings = [i for i in cursorDict if i.id == rank]
     if len(cursor_settings) == 0:
         return list()
@@ -38,15 +40,18 @@ def addCursors(htmlPlots: List[go.Figure],
         x = []
         y = []
         for result in resultList:
-            signalKey = result.typ.name.lower()
+            signalKey = result.typ.name.lower().split('_')[0]
             rawSigNames = getattr(cursor_setting, f'{signalKey}_signals')
             totalRawSigNames.extend(rawSigNames)
             data = None
             if result.typ == ResultType.RMS:
-                data: pd.DataFrame = pd.read_csv(result.fullpath, sep=';', decimal=',',
-                                                       header=[0, 1])  # type: ignore
-            elif result.typ == ResultType.EMT:
+                data: pd.DataFrame = pd.read_csv(result.fullpath, sep=';', decimal=',', header=[0, 1])  # type: ignore
+            elif result.typ == ResultType.EMT_INF:
                 data: pd.DataFrame = loadEMT(result.fullpath)
+            elif result.typ == ResultType.EMT_PSOUT:
+                data: pd.DataFrame = getSignals(result.fullpath, emtRankSignalnamesList)
+            elif result.typ == ResultType.EMT_CSV or result.typ == ResultType.EMT_ZIP:
+                data: pd.DataFrame = pd.read_csv(result.fullpath, sep=';', decimal=',')  # type: ignore
             if len(rawSigNames) == 0:
                 continue
             for rawSigName in rawSigNames:
@@ -64,7 +69,7 @@ def addCursors(htmlPlots: List[go.Figure],
                     sigColumn = rawSigName
 
                 # Determine the time column and offset based on the type
-                timeColName = 'time' if result.typ == ResultType.EMT else data.columns[0]
+                timeColName = 'time' if result.typ == ResultType.EMT_INF or result.typ == ResultType.EMT_PSOUT or result.typ == ResultType.EMT_CSV  or result.typ == ResultType.EMT_ZIP else data.columns[0]
                 timeoffset = pfFlatTIme if result.typ == ResultType.RMS else pscadInitTime
 
                 if sigColumn in data.columns:

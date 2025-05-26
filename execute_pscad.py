@@ -58,7 +58,11 @@ import sim_interface as si
 import case_setup as cs
 from pscad_update_ums import updateUMs
 
-import mhi.pscad
+try:
+    import mhi.pscad
+except ImportError:
+    print("Could not import mhi.pscad. Make sure PSCAD Automation Library is installed and available in your Python environment.")
+    sys.exit(1)
 
 def connectPSCAD() -> mhi.pscad.PSCAD:
     pid = os.getpid()
@@ -88,15 +92,15 @@ def moveFiles(srcPath : str, dstPath : str, types : List[str], suffix : str = ''
         if typ in types:
             shutil.move(os.path.join(srcPath, file), os.path.join(dstPath, file + suffix))
 
-def taskIdToRank(csvPath : str, projectName : str, emtCases : List[cs.Case], rank: int):
+def taskIdToRank(psoutFolder : str, projectName : str, emtCases : List[cs.Case], rank: int):
     '''
-    Changes task ID to rank in the .csv and .inf files in csvPath.
+    Changes task ID to rank of the .psout files in psoutFolder.
     '''
-    for file in os.listdir(csvPath):
+    for file in os.listdir(psoutFolder):
         _, fileName = os.path.split(file)
         root, typ = os.path.splitext(fileName)
-        if rank is None and len(emtCases) > 1:
-            if (typ == '.csv_taskid' or typ == '.inf_taskid') and root.startswith(projectName + '_') and len(emtCases) > 1:
+        if rank is None:
+            if typ == '.psout_taskid' and root.startswith(projectName + '_'):
                 suffix = root[len(projectName) + 1:]
                 parts = suffix.split('_')
                 if  len(parts) > 0 and parts[0].isnumeric():
@@ -105,43 +109,27 @@ def taskIdToRank(csvPath : str, projectName : str, emtCases : List[cs.Case], ran
                         parts[0] = str(emtCases[taskId  - 1].rank)
                         newName = projectName + '_' + '_'.join(parts) + typ.replace('_taskid', '')
                         print(f'Renaming {fileName} to {newName}')
-                        os.rename(os.path.join(csvPath, fileName), os.path.join(csvPath, newName))
+                        os.rename(os.path.join(psoutFolder, fileName), os.path.join(psoutFolder, newName))
                     else:
                         print(f'WARNING: {fileName} has a task ID that is out of bounds. Ignoring file.')
                 else:
                     print(f'WARNING: {fileName} has an invalid task ID. Ignoring file.')
         else:
-            if typ == '.inf_taskid':
-                if rank is None:
-                    newName = f'{projectName}_{emtCases[0].rank}.inf'
-                else:
-                    newName = f'{projectName}_{rank}.inf'
-            elif typ == '.csv_taskid':
-                part = root.split(projectName + '_')[1]
-                if rank is None:
-                    newName = f'{projectName}_{emtCases[0].rank}_{part}.csv'
-                else:
-                    newName = f'{projectName}_{rank}_{part}.csv'
+            if typ == '.psout_taskid':
+                part = root.split('_')[1]
+                newName = f'{projectName}_{rank}_{part}.psout'
             else:
                 print(f'WARNING: {fileName} is of unknown type. Ignoring file.')
                 continue
             print(f'Renaming {fileName} to {newName}')
-            os.rename(os.path.join(csvPath, fileName), os.path.join(csvPath, newName))
+            os.rename(os.path.join(psoutFolder, fileName), os.path.join(psoutFolder, newName))
             
-def cleanUpOutFiles(buildPath : str, exportPath : str, projectName : str) -> str:
+def cleanUpPsoutFiles(buildPath : str, exportPath : str, projectName : str) -> str:
     '''
-    Cleans up the build folder by moving .out and .csv files to an 'Output' folder in the current working directory.
-    Return path to results folder.
+    Cleans up the build folder by moving .psout files to an time-stamped results folder in the export path.
+    Return path to .psout folder.
     '''
-    # Converting .out files to .csv files
-    for file in os.listdir(buildPath):
-        _, fileName = os.path.split(file)
-        root, typ = os.path.splitext(fileName)
-        if fileName.startswith(projectName) and typ == '.out':
-            print(f'Converting {file} to .csv')
-            outToCsv(os.path.join(buildPath, fileName), os.path.join(buildPath, f'{root}.csv'))
-
-    # Move desired files to the exportPath in the current working directory
+    # Create the exportPath if requied
     if not os.path.exists(exportPath):
         os.mkdir(exportPath)
     else:
@@ -151,20 +139,15 @@ def cleanUpOutFiles(buildPath : str, exportPath : str, projectName : str) -> str
                 if os.listdir(_dir) == []:
                     shutil.rmtree(_dir)
 
-    #Creating a datetime stamped subfolder
+    #Creating a datetime stamped results subfolder
     resultsFolder = f'MTB_{datetime.now().strftime(r"%d%m%Y%H%M%S")}'
 
-    #Move .csv and .inf files away from build folder into exportPath folder
-    csvFolder = os.path.join(exportPath, resultsFolder)
-    os.mkdir(csvFolder)
-    moveFiles(buildPath, csvFolder, ['.csv', '.inf'], '_taskid')
+    #Move .psout files away from build folder into results subfolder in the export folder
+    psoutFolder = os.path.join(exportPath, resultsFolder)
+    os.mkdir(psoutFolder)
+    moveFiles(buildPath, psoutFolder, ['.psout'], '_taskid')
 
-    #Move .out file away from build folder into buildPath folder
-    outFolder = os.path.join(buildPath, resultsFolder)
-    os.mkdir(outFolder)
-    moveFiles(buildPath, outFolder, ['.out'])
-
-    return csvFolder
+    return psoutFolder
 
 def cleanBuildfolder(buildPath : str):
     '''
@@ -259,7 +242,7 @@ def main():
     cleanBuildfolder(buildFolder) #type: ignore
 
     project.parameters(time_duration = 999, time_step = plantSettings.PSCAD_Timestep, sample_step = '1000') #type: ignore
-    project.parameters(PlotType = '1', output_filename = f'{plantSettings.Projectname}.out') #type: ignore
+    project.parameters(PlotType = '2', output_filename = f'{plantSettings.Projectname}.psout') #type: ignore
     project.parameters(SnapType='0', SnapTime='2', snapshot_filename='pannatest5us.snp') #type: ignore
 
     pscad.remove_all_simulation_sets()
@@ -271,11 +254,11 @@ def main():
     pscad.run_simulation_sets('MTB') #type: ignore ??? By sideeffect changes current working directory ???
     os.chdir(executeFolder)
 
-    csvFolder = cleanUpOutFiles(buildFolder, config.exportPath, plantSettings.Projectname)
+    psoutFolder = cleanUpPsoutFiles(buildFolder, config.exportPath, plantSettings.Projectname)
     print()
-    taskIdToRank(csvFolder, plantSettings.Projectname, emtCases, singleRank)
+    taskIdToRank(psoutFolder, plantSettings.Projectname, emtCases, singleRank)
 
-    print('execute.py finished at: ', datetime.now().strftime('%m-%d %H:%M:%S'))
+    print('execute_pscad.py finished at: ', datetime.now().strftime('%m-%d %H:%M:%S'))
 
 if __name__ == '__main__':
     main()

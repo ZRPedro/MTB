@@ -2,8 +2,11 @@ from enum import Enum
 
 
 class ResultType(Enum):
-    RMS = 0
-    EMT = 1
+    RMS       = 0 #PowerFactory standard output
+    EMT_INF   = 1 #PSCAD legacy .inf/.csv support
+    EMT_PSOUT = 2 #PSCAD .psout
+    EMT_CSV   = 3 #PSCAD .psout -> .csv support
+    EMT_ZIP   = 4 #PSCAD .psout -> .zip, .gz, .bz2 and .xz support
 
 
 class Result:
