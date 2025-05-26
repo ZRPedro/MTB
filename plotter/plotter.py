@@ -3,7 +3,7 @@ Minimal script to plot simulation results from PSCAD and PowerFactory.
 '''
 from __future__ import annotations
 from os import listdir, makedirs
-from os.path import join, split, splitext, exists
+from os.path import join, split, exists
 import re
 import pandas as pd
 from plotly.subplots import make_subplots  # type: ignore
@@ -23,6 +23,7 @@ from Result import ResultType, Result
 from Case import Case
 from Cursor import Cursor
 from read_and_write_functions import loadEMT
+from process_psout import getAllSignalnames, getCaseSignalnames, getSignals
 
 try:
     LOG_FILE = open('plotter.log', 'w')
@@ -55,22 +56,33 @@ def idFile(filePath: str) -> Tuple[
     Identifies the type (EMT or RMS), root and case id of a given file. If the file is not recognized, a none tuple is returned.
     '''
     path, fileName = split(filePath)
-    match = re.match(r'^(\w+?)_([0-9]+).(inf|csv)$', fileName.lower())
+    match = re.match(r'^(\w+?)_([0-9]+).(inf|csv|psout|zip|gz|bz2|xz)$', fileName.lower())
     if match:
         rank = int(match.group(2))
         projectName = match.group(1)
         bulkName = join(path, match.group(1))
         fullpath = filePath
-        with open(filePath, 'r') as file:
-            firstLine = file.readline()
-            if match.group(3) == 'inf' and firstLine.startswith('PGB(1)'):
-                fileType = ResultType.EMT
-                return (fileType, rank, projectName, bulkName, fullpath)
-            elif match.group(3) == 'csv':
-                secondLine = file.readline()
-                if secondLine.startswith(r'"b:tnow in s"'):
-                    fileType = ResultType.RMS
+        if match.group(3) == 'psout':
+            fileType = ResultType.EMT_PSOUT
+            return (fileType, rank, projectName, bulkName, fullpath)
+        elif match.group(3) == 'zip' or match.group(3) == 'gz' or match.group(3) == 'bz2' or match.group(3) == 'xz':
+            fileType = ResultType.EMT_ZIP
+            return (fileType, rank, projectName, bulkName, fullpath)
+        else:
+            with open(filePath, 'r') as file:
+                firstLine = file.readline()
+                if match.group(3) == 'inf' and firstLine.startswith('PGB(1)'):
+                    fileType = ResultType.EMT_INF
                     return (fileType, rank, projectName, bulkName, fullpath)
+                elif match.group(3) == 'csv' and firstLine.startswith('time;'):
+                    fileType = ResultType.EMT_CSV
+                    return (fileType, rank, projectName, bulkName, fullpath)
+                elif match.group(3) == 'csv':
+                    secondLine = file.readline()
+                    if secondLine.startswith(r'"b:tnow in s"'):
+                        fileType = ResultType.RMS
+                        return (fileType, rank, projectName, bulkName, fullpath)
+                
     return (None, None, None, None, None)
 
 
@@ -105,22 +117,6 @@ def mapResultFiles(config: ReadConfig) -> Dict[int, List[Result]]:
             results[rank] = [newResult]
 
     return results
-
-
-def emtColumns(infFilePath: str) -> Dict[int, str]:
-    '''
-    Reads EMT result columns from the given inf file and returns a dictionary with the column number as key and the column name as value.
-    '''
-    columns: Dict[int, str] = dict()
-    with open(infFilePath, 'r') as file:
-        for line in file:
-            rem = re.match(
-                r'^PGB\(([0-9]+)\) +Output +Desc="(\w+)" +Group="(\w+)" +Max=([0-9\-\.]+) +Min=([0-9\-\.]+) +Units="(\w*)" *$',
-                line)
-            if rem:
-                columns[int(rem.group(1))] = rem.group(2)
-    return columns
-
 
 def colorMap(results: Dict[int, List[Result]]) -> Dict[str, List[str]]:
     '''
@@ -188,7 +184,7 @@ def addResults(plots: List[go.Figure],
         downsampling_method = figure.down_sampling_method
         traces = 0
         for sig in range(1, 4):
-            signalKey = typ.name.lower()
+            signalKey = typ.name.lower().split('_')[0]
             rawSigName: str = getattr(figure, f'{signalKey}_signal_{sig}')
 
             if typ == ResultType.RMS:
@@ -205,7 +201,7 @@ def addResults(plots: List[go.Figure],
 
             displayName = f'{resultName}:{rawSigName.split(" ")[0]}'
 
-            timeColName = 'time' if typ == ResultType.EMT else data.columns[0]
+            timeColName = 'time' if typ == ResultType.EMT_INF or typ == ResultType.EMT_PSOUT or typ == ResultType.EMT_CSV  or typ == ResultType.EMT_ZIP else data.columns[0]
             timeoffset = pfFlatTIme if typ == ResultType.RMS else pscadInitTime
 
             if sigColumn in data.columns:
@@ -261,7 +257,7 @@ def add_scatterplot_for_result(colPos, colors, displayName, nColumns, plotlyFigu
             go.Scatter(
                 x=x_value,
                 y=y_value,
-                line_color=colors[resultName][traces],
+                #line_color=colors[resultName][traces],
                 name=displayName,
                 legendgroup=displayName,
                 showlegend=True
@@ -287,7 +283,8 @@ def drawPlot(rank: int,
              caseDict: Dict[int, str],
              colorMap: Dict[str, List[str]],
              cursorDict: List[Cursor],
-             config: ReadConfig):
+             config: ReadConfig,
+             emtRankSignalnamesList: List):
     '''
     Draws plots for html and static image export.    
     '''
@@ -317,8 +314,12 @@ def drawPlot(rank: int,
         print(result.typ)
         if result.typ == ResultType.RMS:
             resultData: pd.DataFrame = pd.read_csv(result.fullpath, sep=';', decimal=',', header=[0, 1])  # type: ignore
-        elif result.typ == ResultType.EMT:
-            resultData = loadEMT(result.fullpath)
+        elif result.typ == ResultType.EMT_INF:
+            resultData: pd.DataFrame = loadEMT(result.fullpath)
+        elif result.typ == ResultType.EMT_PSOUT:
+            resultData: pd.DataFrame = getSignals(result.fullpath, emtRankSignalnamesList)
+        elif result.typ == ResultType.EMT_CSV or result.typ == ResultType.EMT_ZIP:
+            resultData: pd.DataFrame = pd.read_csv(result.fullpath, sep=';', decimal=',')  # type: ignore
         else:
             continue
         if config.genHTML:
@@ -330,7 +331,7 @@ def drawPlot(rank: int,
 
     if config.genHTML:
         addCursors(htmlPlotsCursors, resultList, cursorDict, config.pfFlatTIme, config.pscadInitTime,
-                   rank, config.htmlCursorColumns)
+                   rank, config.htmlCursorColumns, emtRankSignalnamesList)
         create_html(htmlPlots, htmlPlotsCursors, figurePath, caseDict[rank] if caseDict is not None else "", rank, config, rankList)
         print(f'Exported plot for rank {rank} to {figurePath}.html')
 
@@ -660,6 +661,7 @@ def main() -> None:
     figureDict = readFigureSetup('figureSetup.csv')
     cursorDict = readCursorSetup('cursorSetup.csv')
     caseDict = readCasesheet(config.optionalCasesheet)
+    emtAllSignalnamesDF = getAllSignalnames('figureSetup.csv')    # Required to process .psout files
     colorSchemeMap = colorMap(resultDict)
     
     if not exists(config.resultsDir):
@@ -670,11 +672,12 @@ def main() -> None:
     threads: List[Thread] = list()
 
     for rank in resultDict.keys():
+        emtRankSignalnamesList = getCaseSignalnames(emtAllSignalnamesDF, rank) # Required to process .psout files
         if config.threads > 1:
             threads.append(Thread(target=drawPlot,
-                                  args=(rank, resultDict, figureDict, caseDict, colorSchemeMap, cursorDict, config)))
+                                  args=(rank, resultDict, figureDict, caseDict, colorSchemeMap, cursorDict, config, emtRankSignalnamesList)))
         else:
-            drawPlot(rank, resultDict, figureDict, caseDict, colorSchemeMap, cursorDict, config)
+            drawPlot(rank, resultDict, figureDict, caseDict, colorSchemeMap, cursorDict, config, emtRankSignalnamesList)
 
     NoT = len(threads)
     if NoT > 0:
