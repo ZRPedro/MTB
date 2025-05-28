@@ -393,11 +393,18 @@ def main():
 
   # Add user channel subscribers
   addCustomSubscribers(thisScript, channels)
-
+  
   #Create export folder if it does not exist
   if not os.path.exists(config.exportPath):
     os.makedirs(config.exportPath)
 
+  #Creating a datetime stamped subfolder
+  datetimeFolder = f'MTB_{datetime.now().strftime(r"%d%m%Y%H%M%S")}'
+
+  #Create the folder for the PowerFactory CSV results
+  csvFolder = os.path.join(config.exportPath, datetimeFolder)
+  os.mkdir(csvFolder)
+  
   # Find initializer script object
   initScript : pf.ComDpl = root.SearchObject('initializer_script.ComDpl') #type: ignore
   assert initScript is not None
@@ -419,7 +426,7 @@ def main():
     if case.RMS:
       # Set-up studycase, variation and balance      
       caseName = f'{str(case.rank).zfill(len(str(maxRank)))}_{case.Name}'.replace('.', '')
-      exportName = os.path.join(os.path.abspath(config.exportPath), f'{plantSettings.Projectname}_{case.rank}')
+      exportName = os.path.join(os.path.abspath(csvFolder), f'{plantSettings.Projectname}_{case.rank}')
       newStudycase : pf.IntCase = studyCaseFolder.CreateObject('IntCase', caseName) #type: ignore
       assert newStudycase is not None
       studycases.append(newStudycase)
