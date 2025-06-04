@@ -94,7 +94,7 @@ def mapResultFiles(config: ReadConfig) -> Dict[int, List[Result]]:
     for dir_ in config.simDataDirs:
         for file_ in listdir(dir_[1]):
             files.append((dir_[0], join(dir_[1], file_)))
-
+    
     results: Dict[int, List[Result]] = dict()
 
     for file in files:
@@ -196,8 +196,16 @@ def addResults(plots: List[go.Figure],
                     sigColumn = ('##' + splitSigName[0], splitSigName[1])
                 else:
                     sigColumn = rawSigName
-            else:
+            elif typ == ResultType.EMT_INF or typ == ResultType.EMT_CSV or typ == ResultType.EMT_ZIP:
+                # uses only the signal name - last part of the hierarchical signal name
+                rawSigName = rawSigName.split('\\')[-1]
                 sigColumn = rawSigName
+            elif typ == ResultType.EMT_PSOUT:
+                # uses the full hierarchical signal name
+                sigColumn = rawSigName
+            else:
+                print(f'File type: {typ} unknown')
+                
 
             displayName = f'{resultName}:{rawSigName.split(" ")[0]}'
 
