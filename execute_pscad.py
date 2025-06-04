@@ -116,8 +116,7 @@ def taskIdToRank(psoutFolder : str, projectName : str, emtCases : List[cs.Case],
                     print(f'WARNING: {fileName} has an invalid task ID. Ignoring file.')
         else:
             if typ == '.psout_taskid':
-                part = root.split('_')[1]
-                newName = f'{projectName}_{rank}_{part}.psout'
+                newName = f'{projectName}_{rank}.psout'
             else:
                 print(f'WARNING: {fileName} is of unknown type. Ignoring file.')
                 continue
