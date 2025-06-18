@@ -27,7 +27,7 @@ def updateUMs(pscad : mhi.pscad.PSCAD, verbose : bool = False) -> None:
         if prjDic['type'].lower() == 'case':
             project = pscad.project(prjDic['name'])
             print(f'Updating unit measurements in project: {project}')
-            ums : List[mhi.pscad.UserCmp]= project.find_all(Name_='$ALIAS_UM_9124$') #type: ignore
+            ums : List[mhi.pscad.UserCmp]= project.find_all(Name_='$Unit$') #type: ignore
             for um in ums:
                 print(f'\t{um}')
                 canvas : mhi.pscad.Canvas = um.canvas()
@@ -47,4 +47,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
