@@ -425,8 +425,12 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
         pf_lonRec = pscad_lonRec = 0.0
 
         # PF: Default symmetrical simulation
-        ldf_c_iopt_net[case.rank] = 0
-        inc_c_iopt_net[case.rank] = 'sym'
+        if plantSettings.PF_force_asymmetrical_sim:
+            ldf_c_iopt_net[case.rank] = 1
+            inc_c_iopt_net[case.rank] = 'rst'
+        else:
+            ldf_c_iopt_net[case.rank] = 0
+            inc_c_iopt_net[case.rank] = 'sym'
 
         # Voltage source control default setup
         mtb_t_vmode[case.rank] = 0
