@@ -206,8 +206,7 @@ def addResults(plots: List[go.Figure],
             else:
                 print(f'File type: {typ} unknown')
                 
-
-            displayName = f'{resultName}:{rawSigName.split(" ")[0]}'
+            displayName = f'{resultName}:{rawSigName.split(" ")[0]}'.replace('$','')
 
             timeColName = 'time' if typ == ResultType.EMT_INF or typ == ResultType.EMT_PSOUT or typ == ResultType.EMT_CSV  or typ == ResultType.EMT_ZIP else data.columns[0]
             timeoffset = pfFlatTIme if typ == ResultType.RMS else pscadInitTime
