@@ -26,6 +26,7 @@ oBlkDefs = app.GetCalcRelevantObjects('*.BlkDef')
 for oBlkDef in oBlkDefs:
   for line in oBlkDef.sAddEquat:
     if line == '001! Encrypted model; Editing not possible.':
+      checkSum = oBlkDef.GetCheckSum()  # Dummy read to ensure the checksum is updated
       app.PrintInfo(f'{oBlkDef}, Checksum = {oBlkDef.cCheckSum}')
 
 #Make a DataFrame with the DSL model type name and Checksum
