@@ -7,10 +7,10 @@ import re
 from math import pi
 
 #PSCAD Project Name
-pscad_project_name = 'Vinkel_PV'
+pscad_project_name = 'Solbakken'
     
 #Read PowerFactory component data from the following Excel file
-excel_path = r'E:\Users\PRW\AIG\2024_Vinkel_DSO\Vinkel EMT Model 2.6\MTB\Vinkel_component_data.xlsx'
+excel_path = r'E:\Users\<username>\Solbakken_PowerFactory_Component_Data.xlsx'
 
 #SET_PARMS = True implies that all the parameters from PowerFactory will be taken as default and over write the PSCAD parameters
 SET_PARAMS = False
@@ -51,9 +51,9 @@ trfr2_names = powerfactory_trfr2_data_df['Transformer name'].tolist()
 if ELMTR3_EXISTS: trfr3_names = powerfactory_trfr3_data_df['Transformer name'].tolist()
 
 with mhi.pscad.application() as pscad:
-    # Get a list cases.
+    #Get a list of cases
     #cases = pscad.cases()    
-    #project = pscad.project(cases[0].name)
+    #project = pscad.project(cases[0].name) #Assume it is the first case
     project = pscad.project(pscad_project_name)
     project.focus()
     main = project.canvas('Main')
@@ -91,13 +91,55 @@ with mhi.pscad.application() as pscad:
             
         #Extract PSCAD parameters
         length = parse_PSCAD_value(params_dict['len'])[0]/1000 if parse_PSCAD_value(params_dict['len'])[1] == 'm' else parse_PSCAD_value(params_dict['len'])[0]
+        #If impedance, admittance data where entered as: 'R_XL_XC_OHM_'
         if params_dict['PU'] == 'R_XL_XC_OHM_':
-            Rp = parse_PSCAD_value(params_dict['Rp'])[0]*1000 if parse_PSCAD_value(params_dict['Rp'])[1] == 'ohm/m' else parse_PSCAD_value(params_dict['Rp'])[0]    #else 'ohm/km'
-            Xp = parse_PSCAD_value(params_dict['Xp'])[0]*1000 if parse_PSCAD_value(params_dict['Xp'])[1] == 'ohm/m' else parse_PSCAD_value(params_dict['Xp'])[0]    #else 'ohm/km'
-            Bp = parse_PSCAD_value(params_dict['Bp'])[0]*1000 if parse_PSCAD_value(params_dict['Bp'])[1] == 'Mohm*m' else parse_PSCAD_value(params_dict['Bp'])[0]   #else 'Mohm*km'
-            Rz = parse_PSCAD_value(params_dict['Rz'])[0]*1000 if parse_PSCAD_value(params_dict['Rz'])[1] == 'ohm/m' else parse_PSCAD_value(params_dict['Rz'])[0]    #else 'ohm/km'
-            Xz = parse_PSCAD_value(params_dict['Xz'])[0]*1000 if parse_PSCAD_value(params_dict['Xz'])[1] == 'ohm/m' else parse_PSCAD_value(params_dict['Xz'])[0]    #else 'ohm/km'
-            Bz = parse_PSCAD_value(params_dict['Bz'])[0]*1000 if parse_PSCAD_value(params_dict['Bz'])[1] == 'Mohm*m' else parse_PSCAD_value(params_dict['Bz'])[0]   #else 'Mohm*km'
+            if parse_PSCAD_value(params_dict['Rp'])[1] == 'ohm/m' or parse_PSCAD_value(params_dict['Rp'])[1] == '': #'ohm/m' default
+                Rp = parse_PSCAD_value(params_dict['Rp'])[0]*1000
+            elif parse_PSCAD_value(params_dict['Rp'])[1] == 'ohm/km':
+                Rp = parse_PSCAD_value(params_dict['Rp'])[0]
+            else:
+                print(f"Unknown unit for positive sequence series resistance: {parse_PSCAD_value(params_dict['Rp'])[1]}")
+                exit(0)
+            if parse_PSCAD_value(params_dict['Xp'])[1] == 'ohm/m' or parse_PSCAD_value(params_dict['Xp'])[1] == '': #'ohm/m' default
+                Xp = parse_PSCAD_value(params_dict['Xp'])[0]*1000
+            elif parse_PSCAD_value(params_dict['Xp'])[1] == 'ohm/km':
+                Xp = parse_PSCAD_value(params_dict['Xp'])[0]
+            else:     
+                print(f"Unknown unit for positive sequence series inductance: {parse_PSCAD_value(params_dict['Xp'])[1]}")
+                exit(0)
+            if parse_PSCAD_value(params_dict['Bp'])[1] == 'Mohm*m' or parse_PSCAD_value(params_dict['Bp'])[1] == '': #'Mohm*m' default
+                Bp = parse_PSCAD_value(params_dict['Bp'])[0]/1000
+            elif parse_PSCAD_value(params_dict['Bp'])[1] == 'Mohm*km':
+                Bp = parse_PSCAD_value(params_dict['Bp'])[0]
+            else:
+                print(f"Unknown unit for positive sequence shunt capacitance: {parse_PSCAD_value(params_dict['Bp'])[1]}")
+                exit(0)
+            #If zero sequence data is entered, then extract the zero sequence parameters
+            if params_dict['Estim'] == 'ENTER':
+                if parse_PSCAD_value(params_dict['Rz'])[1] == 'ohm/m' or parse_PSCAD_value(params_dict['Rz'])[1] == '': #'ohm/m' default
+                    Rz = parse_PSCAD_value(params_dict['Rz'])[0]*1000
+                elif parse_PSCAD_value(params_dict['Rz'])[1] == 'ohm/km':
+                    Rz = parse_PSCAD_value(params_dict['Rz'])[0]
+                else:
+                    print(f"Unknown unit for zero sequence series resistance: {parse_PSCAD_value(params_dict['Rz'])[1]}")
+                    exit(0)
+                if parse_PSCAD_value(params_dict['Xz'])[1] == 'ohm/m' or parse_PSCAD_value(params_dict['Xz'])[1] == '': #'ohm/m' default
+                    Xz = parse_PSCAD_value(params_dict['Xz'])[0]*1000
+                elif parse_PSCAD_value(params_dict['Xz'])[1] == 'ohm/km':
+                    Xz = parse_PSCAD_value(params_dict['Xz'])[0]
+                else:
+                    print(f"Unknown unit for zero sequence series inductance: {parse_PSCAD_value(params_dict['Xz'])[1]}")
+                    exit(0)
+                if parse_PSCAD_value(params_dict['Bz'])[1] == 'Mohm*m' or parse_PSCAD_value(params_dict['Bz'])[1] == '': #'Mohm*m' default
+                    Bz = parse_PSCAD_value(params_dict['Bz'])[0]/1000
+                elif parse_PSCAD_value(params_dict['Bz'])[1] == 'Mohm*km':
+                    Bz = parse_PSCAD_value(params_dict['Bz'])[0]
+                else:
+                    print(f"Unknown unit for zero sequence shunt capacitance: {parse_PSCAD_value(params_dict['Bz'])[1]}")
+                    exit(0)
+            else:
+                Rz = Xz = Bz = 0
+        #If impedance, admittance data where entered as: 'R_L_C_OHM_H_UF_'
         elif params_dict['PU'] == 'R_L_C_OHM_H_UF_':
             f = parse_PSCAD_value(params_dict['F'])[0]
             if parse_PSCAD_value(params_dict['Rp2'])[1] == 'ohm/m' or parse_PSCAD_value(params_dict['Rp2'])[1] == '': #'ohm/m' default
@@ -122,7 +164,8 @@ with mhi.pscad.application() as pscad:
                 Bp = 1/(2*pi*f*parse_PSCAD_value(params_dict['Cp'])[0])
             else:
                 print(f"Unknown unit for positive sequence shunt capacitance: {parse_PSCAD_value(params_dict['Cp'])[1]}")
-                exit(0)                
+                exit(0)
+            #If zero sequence data is entered, then extract the zero sequence parameters               
             if params_dict['Estim'] == 'ENTER':
                 if parse_PSCAD_value(params_dict['Rz2'])[1] == 'ohm/m' or parse_PSCAD_value(params_dict['Rz2'])[1] == '': #'ohm/m' default
                     Rz = parse_PSCAD_value(params_dict['Rz2'])[0]*1000 
@@ -498,6 +541,8 @@ with pd.ExcelWriter(excel_path, mode = "a", if_sheet_exists = 'replace', engine 
   if ELMTR3_EXISTS: trfr3_comparative_data_df.to_excel(project_data_writer, sheet_name = 'Comparative ElmTr3 Data')
 
 print(f'Output written to \'{excel_path}\'')
+
+
 
 
 
