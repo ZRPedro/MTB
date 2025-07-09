@@ -22,16 +22,29 @@ def getAllSignalnames(figureSetupPath):
     
     figureSetupDF = pd.read_csv(figureSetupPath, sep=';')
     
+    signame = []    # Used to check for uniqueness
     signamecase=[]
     for index, row in figureSetupDF.iterrows():
         if pd.isnull(row['include_in_case']):
-            if not pd.isnull(row['emt_signal_1']): signamecase.append([row['emt_signal_1'], np.nan])
-            if not pd.isnull(row['emt_signal_2']): signamecase.append([row['emt_signal_2'], np.nan])
-            if not pd.isnull(row['emt_signal_3']): signamecase.append([row['emt_signal_3'], np.nan])
+            if not pd.isnull(row['emt_signal_1']) and row['emt_signal_1'] not in signame:
+                signame.append(row['emt_signal_1'])
+                signamecase.append([row['emt_signal_1'], np.nan])
+            if not pd.isnull(row['emt_signal_2']) and row['emt_signal_2'] not in signame:
+                signame.append(row['emt_signal_2'])
+                signamecase.append([row['emt_signal_2'], np.nan])
+            if not pd.isnull(row['emt_signal_3']) and row['emt_signal_3'] not in signame:
+                signame.append(row['emt_signal_3'])
+                signamecase.append([row['emt_signal_3'], np.nan])
         else:
-            if not pd.isnull(row['emt_signal_1']): signamecase.append([row['emt_signal_1'], row['include_in_case']])
-            if not pd.isnull(row['emt_signal_2']): signamecase.append([row['emt_signal_2'], row['include_in_case']])
-            if not pd.isnull(row['emt_signal_3']): signamecase.append([row['emt_signal_3'], row['include_in_case']])
+            if not pd.isnull(row['emt_signal_1']) and row['emt_signal_1'] not in signame:
+                signame.append(row['emt_signal_1'])
+                signamecase.append([row['emt_signal_1'], row['include_in_case']])
+            if not pd.isnull(row['emt_signal_2']) and row['emt_signal_2'] not in signame:
+                signame.append(row['emt_signal_2'])
+                signamecase.append([row['emt_signal_2'], row['include_in_case']])
+            if not pd.isnull(row['emt_signal_3']) and row['emt_signal_3'] not in signame:
+                signame.append(row['emt_signal_3'])
+                signamecase.append([row['emt_signal_3'], row['include_in_case']])
             
     return pd.DataFrame(signamecase, columns=['Signalname', 'Case'])
 
