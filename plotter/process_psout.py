@@ -36,7 +36,7 @@ def _getSignal(psoutFile, signalname):
 
 def getSignals(psoutFilePath, signalnames):
     '''
-    Get all signals from the .psout file who's name appear in signalnames list
+    Get all signals from the .psout file whose names appear in the signalnames list
     '''
     signalnames_not_found = list()
     with mhi.psout.File(psoutFilePath) as psoutFile:
@@ -49,7 +49,8 @@ def getSignals(psoutFilePath, signalnames):
                 _, signal = _getSignal(psoutFile, signalname)       # Try to get each signal in the signalnames list
                 signal = np.array(signal)                           # Convert to numpy array
                 signals = np.append(signals, signal, axis=0)        # And append to the signals array
-            except:
+            except Exception as e:
+                print(f"Error retrieving signal '{signalname}': {e}")
                 signalnames_not_found.append(signalname)            # Make a list of all the signal names that could not be found
             
     # Remove the signal names that were not found from the signalnames list
