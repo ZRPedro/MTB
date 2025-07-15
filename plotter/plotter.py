@@ -23,7 +23,7 @@ from Result import ResultType, Result
 from Case import Case
 from Cursor import Cursor
 from read_and_write_functions import loadEMT
-from process_psout import getAllSignalnames, getCaseSignalnames, getSignals
+from process_psout import getSignals
 
 try:
     LOG_FILE = open('plotter.log', 'w')
@@ -256,6 +256,24 @@ def update_y_and_x_axis(colPos, figure, nColumns, plotlyFigure, rowPos):
             row=rowPos, col=colPos
         )
 
+def getUniqueEmtSignals(figureList):
+    '''
+    Get a unique list of emt_signals from the figureList, i.e. with no duplicates
+    '''
+    emt_signals = []
+    
+    for fig in figureList:
+        if fig.emt_signal_1 != '': emt_signals.append(fig.emt_signal_1)
+        if fig.emt_signal_2 != '': emt_signals.append(fig.emt_signal_2)
+        if fig.emt_signal_3 != '': emt_signals.append(fig.emt_signal_3)
+    
+    unique_emt_signals = []
+
+    for emt_signal in emt_signals:
+        if emt_signal not in unique_emt_signals: unique_emt_signals.append(emt_signal)
+    
+    return unique_emt_signals
+
 
 def add_scatterplot_for_result(colPos, colors, displayName, nColumns, plotlyFigure, resultName, rowPos, traces, x_value,
                                y_value):
@@ -290,8 +308,7 @@ def drawPlot(rank: int,
              caseDict: Dict[int, str],
              colorMap: Dict[str, List[str]],
              cursorDict: List[Cursor],
-             config: ReadConfig,
-             emtRankSignalnamesList: List):
+             config: ReadConfig):
     '''
     Draws plots for html and static image export.    
     '''
@@ -324,7 +341,7 @@ def drawPlot(rank: int,
         elif result.typ == ResultType.EMT_INF:
             resultData: pd.DataFrame = loadEMT(result.fullpath)
         elif result.typ == ResultType.EMT_PSOUT:
-            resultData: pd.DataFrame = getSignals(result.fullpath, emtRankSignalnamesList)
+            resultData: pd.DataFrame = getSignals(result.fullpath, getUniqueEmtSignals(figureList))
         elif result.typ == ResultType.EMT_CSV or result.typ == ResultType.EMT_ZIP:
             resultData: pd.DataFrame = pd.read_csv(result.fullpath, sep=';', decimal=',')  # type: ignore
         else:
@@ -338,7 +355,7 @@ def drawPlot(rank: int,
 
     if config.genHTML:
         addCursors(htmlPlotsCursors, resultList, cursorDict, config.pfFlatTIme, config.pscadInitTime,
-                   rank, config.htmlCursorColumns, emtRankSignalnamesList)
+                   rank, config.htmlCursorColumns, getUniqueEmtSignals(figureList))
         create_html(htmlPlots, htmlPlotsCursors, figurePath, caseDict[rank] if caseDict is not None else "", rank, config, rankList)
         print(f'Exported plot for rank {rank} to {figurePath}.html')
 
@@ -688,7 +705,6 @@ def main() -> None:
     figureDict = readFigureSetup('figureSetup.csv')
     cursorDict = readCursorSetup('cursorSetup.csv')
     caseDict = readCasesheet(config.optionalCasesheet)
-    emtAllSignalnamesDF = getAllSignalnames('figureSetup.csv')    # Required to process .psout files
     colorSchemeMap = colorMap(resultDict)
     
     if not exists(config.resultsDir):
@@ -699,12 +715,11 @@ def main() -> None:
     threads: List[Thread] = list()
 
     for rank in resultDict.keys():
-        emtRankSignalnamesList = getCaseSignalnames(emtAllSignalnamesDF, rank) # Required to process .psout files
         if config.threads > 1:
             threads.append(Thread(target=drawPlot,
-                                  args=(rank, resultDict, figureDict, caseDict, colorSchemeMap, cursorDict, config, emtRankSignalnamesList)))
+                                  args=(rank, resultDict, figureDict, caseDict, colorSchemeMap, cursorDict, config)))
         else:
-            drawPlot(rank, resultDict, figureDict, caseDict, colorSchemeMap, cursorDict, config, emtRankSignalnamesList)
+            drawPlot(rank, resultDict, figureDict, caseDict, colorSchemeMap, cursorDict, config)
 
     NoT = len(threads)
     if NoT > 0:

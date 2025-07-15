@@ -15,54 +15,6 @@ except ImportError:
     print("Could not import mhi.psout. Make sure Manitoba Hydro International (MHI) PSOUT File Reader Library is installed and available in your Python environment.")
     sys.exit(1)
 
-def getAllSignalnames(figureSetupPath):
-    '''
-    Get all the EMT signal names required from figureSetup.csv for the figures in the HTML and PNG plotter output
-    '''
-    
-    figureSetupDF = pd.read_csv(figureSetupPath, sep=';')
-    
-    signame = []    # Used to check for uniqueness
-    signamecase=[]
-    for index, row in figureSetupDF.iterrows():
-        if pd.isnull(row['include_in_case']):
-            if not pd.isnull(row['emt_signal_1']) and row['emt_signal_1'] not in signame:
-                signame.append(row['emt_signal_1'])
-                signamecase.append([row['emt_signal_1'], np.nan])
-            if not pd.isnull(row['emt_signal_2']) and row['emt_signal_2'] not in signame:
-                signame.append(row['emt_signal_2'])
-                signamecase.append([row['emt_signal_2'], np.nan])
-            if not pd.isnull(row['emt_signal_3']) and row['emt_signal_3'] not in signame:
-                signame.append(row['emt_signal_3'])
-                signamecase.append([row['emt_signal_3'], np.nan])
-        else:
-            if not pd.isnull(row['emt_signal_1']) and row['emt_signal_1'] not in signame:
-                signame.append(row['emt_signal_1'])
-                signamecase.append([row['emt_signal_1'], row['include_in_case']])
-            if not pd.isnull(row['emt_signal_2']) and row['emt_signal_2'] not in signame:
-                signame.append(row['emt_signal_2'])
-                signamecase.append([row['emt_signal_2'], row['include_in_case']])
-            if not pd.isnull(row['emt_signal_3']) and row['emt_signal_3'] not in signame:
-                signame.append(row['emt_signal_3'])
-                signamecase.append([row['emt_signal_3'], row['include_in_case']])
-            
-    return pd.DataFrame(signamecase, columns=['Signalname', 'Case'])
-
-
-def getCaseSignalnames(emtSignalnamesDF, case):
-    '''
-    Get a list of required signalnames for the specific case
-    '''
-    signalnames = list()
-    for index, row in emtSignalnamesDF.iterrows():
-        if pd.isnull(row['Case']):
-            signalnames.append(row['Signalname'])
-        else:
-            cases = [int(val) for val in row['Case'].split(',')]    # The Cases are stored as comma separated string, and needs to be converted to a list
-            if case in cases:
-                signalnames.append(row['Signalname'])
-    return signalnames
-
 
 def _getSignal(psoutFile, signalname):
     '''
