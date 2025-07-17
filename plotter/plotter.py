@@ -325,7 +325,7 @@ def drawPlot(rank: int,
         # Cursor plots are not currently supported for image export and commented out
         # addCursors(imagePlotsCursors, resultList, cursorDict, config.pfFlatTIme, config.pscadInitTime,
         #           rank, config.imageCursorColumns)
-        #create_image_plots(config, figureList, figurePath, imagePlots)
+        create_image_plots(config, figureList, figurePath, imagePlots)
         # create_cursor_plots(config.htmlCursorColumns, config, figurePath, imagePlotsCursors, ranksCursor)
         print(f'Exported plot for rank {rank} to {figurePath}.{config.imageFormat}')
 
