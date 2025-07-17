@@ -3,7 +3,7 @@ Minimal script to plot simulation results from PSCAD and PowerFactory.
 '''
 from __future__ import annotations
 from os import listdir, makedirs
-from os.path import join, split, exists
+from os.path import abspath, join, split, exists
 import re
 import pandas as pd
 from plotly.subplots import make_subplots  # type: ignore
@@ -23,6 +23,7 @@ from Result import ResultType, Result
 from Case import Case
 from Cursor import Cursor
 from read_and_write_functions import loadEMT
+from process_results import getColNames, getUniqueEmtSignals
 from process_psout import getSignals
 
 try:
@@ -161,23 +162,20 @@ def addResults(plots: List[go.Figure],
     '''
     Add result to plot.
     '''
-
-    assert nColumns > 0
-
-    if nColumns > 3: # Max figure columns
-        plotlyFigure = plots[0]
-    else:
-        assert len(plots) == len(figures)
-
+     
+    SUBPLOT = (len(plots) == 1)
+    
     rowPos = 1
     colPos = 1
+    
     fi = -1
     for figure in figures:
         fi += 1
 
-        if nColumns in (1,2,3):
+        if not SUBPLOT: # Make use of individual plots
             plotlyFigure = plots[fi]
-        else:
+        else:   # Make use of subplots
+            plotlyFigure = plots[0]
             rowPos = (fi // nColumns) + 1
             colPos = (fi % nColumns) + 1
 
@@ -186,48 +184,30 @@ def addResults(plots: List[go.Figure],
         for sig in range(1, 4):
             signalKey = typ.name.lower().split('_')[0]
             rawSigName: str = getattr(figure, f'{signalKey}_signal_{sig}')
-
-            if typ == ResultType.RMS:
-                while rawSigName.startswith('#'):
-                    rawSigName = rawSigName[1:]
-                splitSigName = rawSigName.split('\\')
-
-                if len(splitSigName) == 2:
-                    sigColumn = ('##' + splitSigName[0], splitSigName[1])
-                else:
-                    sigColumn = rawSigName
-            elif typ == ResultType.EMT_INF or typ == ResultType.EMT_CSV or typ == ResultType.EMT_ZIP:
-                # uses only the signal name - last part of the hierarchical signal name
-                rawSigName = rawSigName.split('\\')[-1]
-                sigColumn = rawSigName
-            elif typ == ResultType.EMT_PSOUT:
-                # uses the full hierarchical signal name
-                sigColumn = rawSigName
-            else:
-                print(f'File type: {typ} unknown')
+            sigColName = getColNames(rawSigName,typ)
                 
             displayName = f'{resultName}:{rawSigName.split(" ")[0]}'.replace('$','')
-
+            
             timeColName = 'time' if typ == ResultType.EMT_INF or typ == ResultType.EMT_PSOUT or typ == ResultType.EMT_CSV  or typ == ResultType.EMT_ZIP else data.columns[0]
             timeoffset = pfFlatTIme if typ == ResultType.RMS else pscadInitTime
 
-            if sigColumn in data.columns:
+            if sigColName in data.columns:
                 x_value = data[timeColName] - timeoffset  # type: ignore
-                y_value = data[sigColumn]  # type: ignore
+                y_value = data[sigColName]  # type: ignore
                 if downsampling_method == DownSamplingMethod.GRADIENT:
                     x_value, y_value = sampling_functions.downsample_based_on_gradient(x_value, y_value,
                                                                                        figure.gradient_threshold)  # type: ignore
                 elif downsampling_method == DownSamplingMethod.AMOUNT:
                     x_value, y_value = sampling_functions.down_sample(x_value, y_value)  # type: ignore
 
-                add_scatterplot_for_result(colPos, colors, displayName, nColumns, plotlyFigure, resultName, rowPos,
+                add_scatterplot_for_result(colPos, colors, displayName, SUBPLOT, plotlyFigure, resultName, rowPos,
                                            traces, x_value, y_value)
 
                 # plot_cursor_functions.add_annotations(x_value, y_value, plotlyFigure)
                 traces += 1
-            elif sigColumn != '':
+            elif sigColName != '' and typ != ResultType.EMT_CSV: # Temporary fix for ideal output result type files where not all signals are present
                 print(f'Signal "{rawSigName}" not recognized in resultfile: {file}')
-                add_scatterplot_for_result(colPos, colors, f'{displayName} (Unknown)', nColumns, plotlyFigure, resultName, rowPos,
+                add_scatterplot_for_result(colPos, colors, f'{displayName} (Unknown)', SUBPLOT, plotlyFigure, resultName, rowPos,
                                            traces, None, None)
                 traces += 1
 
@@ -256,28 +236,10 @@ def update_y_and_x_axis(colPos, figure, nColumns, plotlyFigure, rowPos):
             row=rowPos, col=colPos
         )
 
-def getUniqueEmtSignals(figureList):
-    '''
-    Get a unique list of emt_signals from the figureList, i.e. with no duplicates
-    '''
-    emt_signals = []
-    
-    for fig in figureList:
-        if fig.emt_signal_1 != '': emt_signals.append(fig.emt_signal_1)
-        if fig.emt_signal_2 != '': emt_signals.append(fig.emt_signal_2)
-        if fig.emt_signal_3 != '': emt_signals.append(fig.emt_signal_3)
-    
-    unique_emt_signals = []
 
-    for emt_signal in emt_signals:
-        if emt_signal not in unique_emt_signals: unique_emt_signals.append(emt_signal)
-    
-    return unique_emt_signals
-
-
-def add_scatterplot_for_result(colPos, colors, displayName, nColumns, plotlyFigure, resultName, rowPos, traces, x_value,
+def add_scatterplot_for_result(colPos, colors, displayName, SUBPLOT, plotlyFigure, resultName, rowPos, traces, x_value,
                                y_value):
-    if nColumns in (1,2,3):
+    if not SUBPLOT:
         plotlyFigure.add_trace(  # type: ignore
             go.Scatter(
                 x=x_value,
@@ -293,7 +255,7 @@ def add_scatterplot_for_result(colPos, colors, displayName, nColumns, plotlyFigu
             go.Scatter(
                 x=x_value,
                 y=y_value,
-                line_color=colors[resultName][traces],
+                #line_color=colors[resultName][traces],
                 name=displayName,
                 legendgroup=resultName,
                 showlegend=True
@@ -331,9 +293,9 @@ def drawPlot(rank: int,
     htmlPlotsCursors: List[go.Figure] = list()
     imagePlotsCursors: List[go.Figure] = list()
 
-    columnNr = setupPlotLayout(caseDict, config, figureList, htmlPlots, imagePlots, rank)
-    if len(ranksCursor) > 0:
-        setupPlotLayoutCursors(config, ranksCursor, htmlPlotsCursors, imagePlotsCursors)
+    setupPlotLayout(caseDict, config, figureList, htmlPlots, imagePlots, rank)
+    #if len(ranksCursor) > 0:
+    #    setupPlotLayoutCursors(config, ranksCursor, htmlPlotsCursors, imagePlotsCursors)
     for result in resultList:
         print(result.typ)
         if result.typ == ResultType.RMS:
@@ -354,8 +316,8 @@ def drawPlot(rank: int,
                        config.imageColumns, config.pfFlatTIme, config.pscadInitTime)
 
     if config.genHTML:
-        addCursors(htmlPlotsCursors, resultList, cursorDict, config.pfFlatTIme, config.pscadInitTime,
-                   rank, config.htmlCursorColumns, getUniqueEmtSignals(figureList))
+        #addCursors(htmlPlotsCursors, resultList, cursorDict, config.pfFlatTIme, config.pscadInitTime,
+        #           rank, config.htmlCursorColumns, getUniqueEmtSignals(figureList))
         create_html(htmlPlots, htmlPlotsCursors, figurePath, caseDict[rank] if caseDict is not None else "", rank, config, rankList)
         print(f'Exported plot for rank {rank} to {figurePath}.html')
 
@@ -363,15 +325,15 @@ def drawPlot(rank: int,
         # Cursor plots are not currently supported for image export and commented out
         # addCursors(imagePlotsCursors, resultList, cursorDict, config.pfFlatTIme, config.pscadInitTime,
         #           rank, config.imageCursorColumns)
-        create_image_plots(columnNr, config, figureList, figurePath, imagePlots)
+        #create_image_plots(config, figureList, figurePath, imagePlots)
         # create_cursor_plots(config.htmlCursorColumns, config, figurePath, imagePlotsCursors, ranksCursor)
         print(f'Exported plot for rank {rank} to {figurePath}.{config.imageFormat}')
 
     print(f'Plot for rank {rank} done.')
 
 
-def create_image_plots(columnNr, config, figureList, figurePath, imagePlots):
-    if columnNr in (1,2,3):
+def create_image_plots(config, figureList, figurePath, imagePlots):
+    if config.imageColumns == 1:
         # Combine all figures into a single plot, same as for nColumns > 1 but no grid needed
         combined_plot = make_subplots(rows=len(imagePlots), cols=1,
                                       subplot_titles=[fig.layout.title.text for fig in imagePlots])
@@ -397,12 +359,12 @@ def create_image_plots(columnNr, config, figureList, figurePath, imagePlots):
     else:
         # Combine all figures into a grid when nColumns > 1
         imagePlots[0].update_layout(
-            height=500 * ceil(len(figureList) / columnNr),
-            width=500 * config.imageColumns,  # Adjust width based on column number
+            height=500 * ceil(len(figureList) / config.imageColumns),
+            width=700 * config.imageColumns,  # Adjust width based on column number
             showlegend=True,
         )
-        imagePlots[0].write_image(f'{figurePath}.{config.imageFormat}', height=500 * ceil(len(figureList) / columnNr),
-                                  width=500 * config.imageColumns)  # type: ignore
+        imagePlots[0].write_image(f'{figurePath}.{config.imageFormat}', height=500 * ceil(len(figureList) / config.imageColumns),
+                                  width=700 * config.imageColumns)  # type: ignore
 
 
 def create_cursor_plots(columnNr, config, figurePath, imagePlotsCursors, ranksCursor):
@@ -447,8 +409,8 @@ def setupPlotLayout(caseDict, config, figureList, htmlPlots, imagePlots, rank):
     if config.genImage:
         lst.append((config.imageColumns, imagePlots))
 
-    for columnNr, plotList in lst:
-        if columnNr in (1,2,3):
+    for numColumns, plotList in lst:
+        if numColumns == 1 and plotList == imagePlots or numColumns in (1,2,3) and plotList == htmlPlots:
             for fig in figureList:
                 # Create a direct Figure instead of subplots when there's only 1 column
                 plotList.append(go.Figure())  # Normal figure, no subplots
@@ -463,12 +425,11 @@ def setupPlotLayout(caseDict, config, figureList, htmlPlots, imagePlots, rank):
                         x=0.12,
                     )
                 )
-        elif columnNr > 1:
-            plotList.append(make_subplots(rows=ceil(len(figureList) / columnNr), cols=columnNr))
-            plotList[-1].update_layout(height=500 * ceil(len(figureList) / columnNr))  # type: ignore
+        else:
+            plotList.append(make_subplots(rows=ceil(len(figureList) / numColumns), cols=numColumns))
+            plotList[-1].update_layout(height=500 * ceil(len(figureList) / numColumns))  # type: ignore
             if plotList == imagePlots and caseDict is not None:
                 plotList[-1].update_layout(title_text=caseDict[rank])  # type: ignore
-    return columnNr
 
 
 def create_css(resultsDir):
@@ -553,14 +514,14 @@ def create_css(resultsDir):
 def create_html(plots: List[go.Figure], cursor_plots: List[go.Figure], path: str, title: str, rank: int,
                 config: ReadConfig, rankList) -> None:
                 
-    source_list = '<div style="text-align: left; margin-top: 1px;">'
-    source_list += '<h4>Source data:</h4>'
+    source_list = '<div style="text-align: left; margin-top: 75px;">'
+    source_list += '<h2><div id="Source">Source data:</div></h2>'
     for group in config.simDataDirs:
-        source_list += f'<p>{group[0]} = {group[1]}</p>'
+        source_list += f'<p>{group[0]} = <a href="file:///{abspath(group[1])}" >{abspath(group[1])}</a></p>'
 
     source_list += '</div>'
 
-    html_content = create_html_plots(config.htmlColumns, plots, title, rank)
+    html_content = create_html_plots(config.htmlColumns, plots, title)
     html_content_cursors = create_html_plots(config.htmlCursorColumns, cursor_plots, "Relevant signal metrics", rank) if len(
         cursor_plots) > 0 else ""
     
@@ -624,10 +585,13 @@ def create_html(plots: List[go.Figure], cursor_plots: List[go.Figure], path: str
     <script id="MathJax-script" async
       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
     </script>
+    <h1>Rank {rank}: {title}</h1>
+    <h4><a href="#Figures">Figures</a>&emsp;<a href="#Cursors">Cursors</a>&emsp;<a href="#Source">Source Data</a></h4>
+    <br>
     {html_content}
     {html_content_cursors}
     {source_list}
-    <p><center><a href="https://github.com/Energinet-AIG/MTB" target="_blank">Generated with Energinets Model Testbench</a></center></p>
+    <p><center><a href="https://github.com/Energinet-AIG/MTB" target="_blank">Generated with Energinet's Model Testbench (MTB)</a></center></p>
   </body>
 </html>'''
 
@@ -635,29 +599,31 @@ def create_html(plots: List[go.Figure], cursor_plots: List[go.Figure], path: str
         file.write(full_html_content)
 
 
-def create_html_plots(columns, plots, title, rank):
+def create_html_plots(columns, plots, title):
     if columns in (1,2,3):
         figur_links = '<div style="text-align: left; margin-top: 1px;">'
-        figur_links += '<h4>Figures:</h4>'
+        figur_links += '<h2><div id="Figures">Figures:</div></h2><br>'
         for p in plots:
             plot_title: str = p['layout']['title']['text']  # type: ignore
-            figur_links += f'<a href="#{plot_title}">{plot_title}</a>&emsp;'
+            plot_ref = plot_title.replace('$','') # For future use with MathJax
+            figur_links += f'<a href="#{plot_ref}">{plot_title}</a>&emsp;'
 
         figur_links += '</div>'
     else:
         figur_links = ''
-    html_content = f'<h1>Rank {rank}: {title}</h1>'
-    html_content += figur_links
+
+    html_content = figur_links
     html_content += '<table style="width:100%">'
     for i, p in enumerate(plots):
         plot_title: str = p['layout']['title']['text']  # type: ignore
+        plot_ref = plot_title.replace('$','') # For future use with MathJax
 
         if ((i+1) % columns) == 1:
             html_content += '<tr>'
-        html_content += f'<td><div id="{plot_title}">' + p.to_html(full_html=False,
-                                                               include_plotlyjs='cdn',
-                                                               include_mathjax='cdn',
-                                                               default_width='100%') + '</div></td>'  # type: ignore
+        html_content += f'<td><div id="{plot_ref}">' + p.to_html(full_html=False,
+                                                                   include_plotlyjs='cdn',
+                                                                   include_mathjax='cdn',
+                                                                   default_width='100%') + '</div></td>'  # type: ignore
         if ((i+1) % columns) == 0:
             html_content += '</tr>'
 
