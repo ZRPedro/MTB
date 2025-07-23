@@ -614,6 +614,10 @@ def create_html_plots(columns, plots, title):
 
     html_content = figur_links
     html_content += '<table style="width:100%">'
+    html_content += '<tr>'
+    for i in range(columns):
+        html_content += f'<th style="width:{round(100/columns)}%"> &nbsp; </th>'
+    html_content += '</tr>'
     for i, p in enumerate(plots):
         plot_title: str = p['layout']['title']['text']  # type: ignore
         plot_ref = plot_title.replace('$','') # For future use with MathJax
