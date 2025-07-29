@@ -200,7 +200,7 @@ def addResults(plots: List[go.Figure],
         for sig in range(1, 4):
             signalKey = result.typ.name.lower().split('_')[0]
             rawSigName: str = getattr(figure, f'{signalKey}_signal_{sig}')
-            sigColName, sigDispName= getColNames(rawSigName,result)
+            sigColName, sigDispName = getColNames(rawSigName, result)
 
             if sigColName in resultData.columns:
                 x_value = resultData[timeColName] - timeoffset  # type: ignore
@@ -463,41 +463,6 @@ def create_image_plots(config, figureList, figurePath, imagePlots):
                                   width=700 * config.imageColumns)  # type: ignore
 
 
-def create_cursor_plots(columnNr, config, figurePath, imagePlotsCursors, ranksCursor):
-    # Handle the cursor plots (which are tables)
-    if len(ranksCursor) > 0:
-        cursor_path = figurePath + "_cursor"
-        if columnNr in (1,2,3):
-            # Create a combined plot for tables using the 'table' spec type
-            combined_cursor_plot = make_subplots(rows=len(imagePlotsCursors)*2, cols=1,
-                                                 specs=[[{"type": "table"}]] * len(imagePlotsCursors),
-                                                 # 'table' type for each subplot
-                                                 subplot_titles=[fig.layout.title.text for fig in imagePlotsCursors])
-            for i, cursor_plot in enumerate(imagePlotsCursors):
-                for trace in cursor_plot['data']:  # Add each trace (table) to the combined cursor plot
-                    combined_cursor_plot.add_trace(trace, row=i + 1, col=1)
-
-            # Explicitly set width and height in the layout for table plots
-            combined_cursor_plot.update_layout(
-                height=500 * len(imagePlotsCursors),
-                width=600,  # Set the desired width for tables
-                showlegend=False,
-            )
-
-            # Save the combined table plot as a single image
-            combined_cursor_plot.write_image(f'{cursor_path}.{config.imageFormat}', height=500 * len(imagePlotsCursors),
-                                             width=600)
-        else:
-            imagePlotsCursors[0].update_layout(
-                height=500 * ceil(len(ranksCursor) / columnNr),
-                width=500 * config.imageColumns,  # Adjust width for multiple columns
-                showlegend=False,
-            )
-            imagePlotsCursors[0].write_image(f'{cursor_path}.{config.imageFormat}',
-                                             height=500 * ceil(len(ranksCursor) / columnNr),
-                                             width=500 * config.imageColumns)
-
-
 def setupPlotLayout(rankName, config, figureList, htmlPlots, imagePlots, rank):
     lst: List[Tuple[int, List[go.Figure]]] = []
     if config.genHTML:
@@ -603,6 +568,7 @@ def create_css(resultsDir):
 
 .dropdown:hover .dropdown-content {
   display: block;
+}
   
 td {
   height: 50px;
