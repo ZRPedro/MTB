@@ -5,10 +5,23 @@ from scipy.signal import bilinear, lfilter
 from Result import ResultType
 
 
-def genIdealResults(result, resultData, settingDict,  caseDf, pscadInitTime):
+def genIdealResults(result, resultData, settingDict, caseDf, pscadInitTime):
     '''
-    
-    '''    
+    Generates ideal results for different test cases based on PSCAD simulation data and settings.
+
+    Parameters:
+        result: Result object containing result type information.
+        resultData: pandas.DataFrame containing simulation data.
+        settingDict: dict containing test settings and parameters.
+        caseDf: pandas.DataFrame containing case configuration and events.
+        pscadInitTime: float, initial time offset from PSCAD simulation.
+
+    Returns:
+        dict with keys:
+            'figs': list of figure names to plot,
+            'signals': list of signal names in the DataFrame,
+            'data': pandas.DataFrame with calculated ideal results.
+    '''
     
     # Use PSCAD result for calculating the ideal response
     if result.typ in (ResultType.EMT_INF, ResultType.EMT_PSOUT, ResultType.EMT_CSV, ResultType.EMT_ZIP):
@@ -22,7 +35,7 @@ def genIdealResults(result, resultData, settingDict,  caseDf, pscadInitTime):
             Pstep = caseDf['Event 1']['X1'].squeeze()
             assert caseDf['Event 1']['X2'].squeeze() == 0.0
             
-            idealData.P_pu_PoC = pd.Series(idealPramp(Pref=P0, Tstep=Tstep, Pstep=Pstep, t=t) for t in idealData.time)
+            idealData.P_pu_PoC = pd.Series([idealPramp(Pref=P0, Tstep=Tstep, Pstep=Pstep, t=t) for t in idealData.time])
 
             returnDict = {'figs': ['Ppoc'], 'signals': ['P_pu_PoC'], 'data': idealData}
 
@@ -72,7 +85,7 @@ def genIdealResults(result, resultData, settingDict,  caseDf, pscadInitTime):
             Qref0 = caseDf['Initial Settings']['Qref0'].squeeze()               # Initial PF setpoint
             
             if caseDf['Event 1']['type'].squeeze() == 'Pref':   # Pref changes -> slow ramping of Ppoc, thus use Ppoc and not Pref
-                idealQpf.Q_pu_PoC = idealQpf(idealData.P_pu_PoC, Qref0)
+                idealData.Q_pu_PoC = idealQpf(idealData.P_pu_PoC, Qref0)
             elif caseDf['Event 1']['type'].squeeze() == 'Qref': # PFref changes & Pref constant
                 idealData.Q_pu_PoC = idealQpf(idealData.mtb_s_pref_pu, idealData.mtb_s_qref)
                 
