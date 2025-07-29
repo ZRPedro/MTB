@@ -112,7 +112,7 @@ def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, pfFlatTIme,
     for i, cursor in enumerate(ranksCursor):
         if result.typ == ResultType.RMS:
             rawSigNames = cursor.rms_signals
-        elif result.typ == ResultType.EMT_INF or ResultType.EMT_PSOUT or ResultType.EMT_CSV  or ResultType.EMT_ZIP:
+        elif result.typ in (ResultType.EMT_INF, ResultType.EMT_PSOUT, ResultType.EMT_CSV, ResultType.EMT_ZIP):
             rawSigNames = cursor.emt_signals
         else:
             print(f'File type: {result.typ} unknown')
@@ -136,7 +136,7 @@ def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, pfFlatTIme,
                     elif option.name == 'GRAD_MEAN':
                         cursorMetricData.append(cursorGradMean(cursorSignalsDf, time_interval))
                     elif option.name == 'RESPONSE':
-                        cursorMetricData.append(cursorResponseDelayl(cursorSignalsDf, time_interval))
+                        cursorMetricData.append(cursorResponseDelay(cursorSignalsDf, time_interval))
                     elif option.name == 'RISE_FALL':
                         cursorMetricData.append(cursorRiseFallTime(cursorSignalsDf, time_interval))
                     elif option.name == 'SETTLING':
@@ -308,7 +308,7 @@ def cursorGradMax(cursorSignalsDf, time_interval):
     return cursorMetricText
 
 
-def cursorResponseDelayl(cursorSignalsDf, time_interval):
+def cursorResponseDelay(cursorSignalsDf, time_interval):
     '''
     Calculate the signal response delay until it reaches 10% to delta value over a time interval
     '''
