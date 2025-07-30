@@ -272,25 +272,89 @@ def add_scatterplot_for_result(colPos, colors, dash, displayName, SUBPLOT, plotl
 
 def genCursorPlotlyTables(ranksCursor, dfCursorsList):
     goCursorList = []
+
+    EMPIRICAL_HEADER_ROW_HEIGHT_PX = 35  # Measured height for a header row (font size 10)
+    EMPIRICAL_CELL_ROW_HEIGHT_PX = 28    # Measured height for a single line of data (font size 10)
+                                         # If text wraps, this value needs to be higher (e.g., 50-55px for two lines)
+
+    FIGURE_TITLE_HEIGHT_PX = 40          # Estimated height for the `fig.update_layout` title
+    LAYOUT_MARGIN_TOP_PX = 50            # Top margin
+    LAYOUT_MARGIN_BOTTOM_PX = 0          # Bottom margin
+    LAYOUT_MARGIN_LEFT_PX = 60           # Left margin
+    LAYOUT_MARGIN_RIGHT_PX = 60          # Right margin
+
+    # Define default column width ratios for tables with varying numbers of columns.
+    # This is crucial for controlling text wrapping and thus cell heights.
+    # Adjust these ratios based on the typical content of your columns.
+    DEFAULT_COLUMN_WIDTH_RATIOS = {
+        1: [1.0],
+        2: [0.25, 0.75],
+        3: [0.25, 0.375, 0.375], # Example for a 3-column table
+        4: [0.25, 0.25, 0.25, 0.25]
+        # Add more entries as per your dataframes' column counts
+    }
+
     for i, cursor in enumerate(ranksCursor):
         cursor_title = cursor.title
-        rows = len(dfCursorsList[i])
-        fig = go.Figure(data=[go.Table(header=dict(values=list(dfCursorsList[i].columns),
-                                                   fill_color='#00847c',
-                                                   font=dict(color='#ffffff'),
-                                                   align='left'),
-                                       cells=dict(values=[dfCursorsList[i][f'{column}'] for column in dfCursorsList[i].columns],
-                                                  fill_color='#d8d8d8',
-                                                  font=dict(color='#02525e'),
-                                                  align='left'))
-                              ])
-        fig.update_layout(title_text=cursor_title)
-        fig.update_layout(height = (rows+1)*50, margin=dict(t=50, l=50, r=50, b=0))
-        goCursorList.append(fig)
+        df_current = dfCursorsList[i]
         
-    return goCursorList
+        num_data_rows = len(df_current)
+        
+        # Calculate height consumed by the table content (header + data rows)
+        table_content_height = EMPIRICAL_HEADER_ROW_HEIGHT_PX + \
+                               (num_data_rows * EMPIRICAL_CELL_ROW_HEIGHT_PX)
 
-    
+        # Calculate the total figure height
+        # Sum of table content, figure title, and top/bottom layout margins
+        total_figure_height = table_content_height + \
+                              FIGURE_TITLE_HEIGHT_PX + \
+                              LAYOUT_MARGIN_TOP_PX + \
+                              LAYOUT_MARGIN_BOTTOM_PX
+        
+        # Ensure a minimum height to avoid rendering issues with very small tables
+        total_figure_height = max(total_figure_height, 200) # Minimum height, adjust as needed
+
+        # Determine column widths for the current table
+        if df_current.empty:
+            current_table_column_widths = []
+        else:
+            num_cols_in_table = len(df_current.columns)
+            current_table_column_widths = DEFAULT_COLUMN_WIDTH_RATIOS.get(
+                num_cols_in_table, 
+                [1.0 / num_cols_in_table] * num_cols_in_table # Default to even distribution if not specified
+            )
+
+        fig = go.Figure(data=[go.Table(
+            header=dict(values=list(df_current.columns),
+                        fill_color='#00847c',
+                        font=dict(size=10, color='#ffffff'),
+                        align='left'),
+            cells=dict(values=[df_current[f'{column}'].tolist() for column in df_current.columns],
+                       fill_color='#d8d8d8',
+                       font=dict(size=10, color='#02525e'),
+                       align='left'),
+            # Crucial for accurate height: set column widths to control text wrapping
+            columnwidth=current_table_column_widths
+        )])
+        
+        fig.update_layout(
+            title_text=cursor_title,
+            title_x=0.5, # Center the title
+            # Apply the calculated height and a reasonable width
+            height=total_figure_height,
+            margin=dict(
+                t=LAYOUT_MARGIN_TOP_PX,
+                l=LAYOUT_MARGIN_LEFT_PX,
+                r=LAYOUT_MARGIN_RIGHT_PX,
+                b=LAYOUT_MARGIN_BOTTOM_PX
+            )
+        )
+        
+        goCursorList.append(fig) # Still return the list of figures if needed elsewhere
+            
+    return goCursorList    
+
+
 def genCursorPdf(rank, rankName, ranksCursor, dfCursorsList, nColumns, figurePath):
     row_col_specs = []
     rows=ceil(len(ranksCursor)/nColumns)
@@ -327,7 +391,7 @@ def genCursorPdf(rank, rankName, ranksCursor, dfCursorsList, nColumns, figurePat
     fig.write_image(f'{cursor_path}.pdf', height=50*total_number_of_rows, width=800*nColumns)    
 
     
-def genCursorHTML(htmlCursorColumns, goCursorList):
+def genCursorHTML(htmlCursorColumns, goCursorList, rank, rankName):
     html = '<h2><div id="Cursors">Cursors:</div></h2><br>'
     html += '<div style="text-align: left; margin-top: 1px;">'
     for goCursor in goCursorList:
@@ -345,10 +409,21 @@ def genCursorHTML(htmlCursorColumns, goCursorList):
         cursor_ref = cursor_title.replace(' ', '_')
         if ((i+1) % htmlCursorColumns) == 1:
             html += '<tr>'
-        html += f'<td><div id="{cursor_ref}">' + goCursor.to_html(full_html=False,
-                                                                         include_plotlyjs='cdn',
-                                                                         include_mathjax='cdn',
-                                                                         default_width='100%') + '</div></td>'  # type: ignore
+        cursor_png_filename = f'Rank_{rank}-{rankName}-Cursor-{cursor_ref}'
+        cursor_config = {'toImageButtonOptions': {'filename': cursor_png_filename,  # Unique filename for this plot
+                                                  'format': 'png',                  # Default download format
+                                                  'scale': 2                        # Optional: Resolution scale for download (2 for 2x)
+                                                 },
+                         'displayModeBar': True, # Ensure the modebar is visible for this plot
+                         'displaylogo': True    # Optional: Hide Plotly logo for this plot
+                         # Add any other plot-specific config options here
+                        }
+        cursor_html = goCursor.to_html(full_html=False,
+                                       include_plotlyjs='cdn',
+                                       include_mathjax='cdn',
+                                       default_width='100%',
+                                       config=cursor_config)        
+        html += f'<td><div id="{cursor_ref}">' + cursor_html + '</div></td>'  # type: ignore
         if ((i+1) % htmlCursorColumns) == 0:
             html += '</tr>'
     html += '</table>'
@@ -420,9 +495,7 @@ def drawPlot(rank: int,
     if config.genImage:
         # Cursor plots are not currently supported for image export and commented out
         create_image_plots(config, figureList, figurePath, imagePlots)
-        genCursorPdf(rank, rankName, ranksCursor, dfCursorsList, config.imageCursorColumns, figurePath)
-    
-        # create_cursor_plots(config.htmlCursorColumns, config, figurePath, imagePlotsCursors, ranksCursor)
+        #genCursorPdf(rank, rankName, ranksCursor, dfCursorsList, config.imageCursorColumns, figurePath)
         print(f'Exported plot for Rank {rank} to {figurePath}.{config.imageFormat}')
 
     print(f'Plot for Rank {rank} done.')
@@ -589,8 +662,8 @@ def create_html(plots: List[go.Figure], goCursorList: List[go.Figure], path: str
 
     source_list += '</div>'
 
-    html_content = create_html_plots(config.htmlColumns, plots)
-    html_content_cursors = genCursorHTML(config.htmlCursorColumns, goCursorList)
+    html_content = create_html_plots(config.htmlColumns, plots, rank, rankName)
+    html_content_cursors = genCursorHTML(config.htmlCursorColumns, goCursorList, rank, rankName)
     
     # Create Dropdown Content for the Navbar
     idx = 0
@@ -670,7 +743,7 @@ def create_html(plots: List[go.Figure], goCursorList: List[go.Figure], path: str
         file.write(full_html_content)
 
 
-def create_html_plots(columns, plots):
+def create_html_plots(columns, plots, rank, rankName):
     if columns in (1,2,3):
         figur_links = '<div style="text-align: left; margin-top: 1px;">'
         figur_links += '<h2><div id="Figures">Figures:</div></h2><br>'
@@ -689,16 +762,27 @@ def create_html_plots(columns, plots):
     for i in range(columns):
         html_content += f'<th style"width:{round(100/columns)}%"> &nbsp; </th>'
     html_content += '<tr>'
-    for i, p in enumerate(plots):
-        plot_title: str = p['layout']['title']['text']  # type: ignore
+    for i, plot in enumerate(plots):
+        plot_title: str = plot['layout']['title']['text']  # type: ignore
         plot_ref = plot_title.replace('$','') # For future use with MathJax
 
         if ((i+1) % columns) == 1:
             html_content += '<tr>'
-        html_content += f'<td><div id="{plot_ref}">' + p.to_html(full_html=False,
-                                                                   include_plotlyjs='cdn',
-                                                                   include_mathjax='cdn',
-                                                                   default_width='100%') + '</div></td>'  # type: ignore
+        plot_png_filename = f'Rank_{rank}-{rankName}-Plot-{plot_ref}'
+        plot_config = {'toImageButtonOptions': {'filename': plot_png_filename,  # Unique filename for this plot
+                                                'format': 'png',                  # Default download format
+                                                'scale': 2                        # Optional: Resolution scale for download (2 for 2x)
+                                               },
+                       'displayModeBar': True, # Ensure the modebar is visible for this plot
+                       'displaylogo': True    # Optional: Hide Plotly logo for this plot
+                       # Add any other plot-specific config options here
+                      }
+        plot_html = plot.to_html(full_html=False,
+                                 include_plotlyjs='cdn',
+                                 include_mathjax='cdn',
+                                 default_width='100%',
+                                 config=plot_config)
+        html_content += f'<td><div id="{plot_ref}">' + plot_html + '</div></td>'  # type: ignore
         if ((i+1) % columns) == 0:
             html_content += '</tr>'
 
