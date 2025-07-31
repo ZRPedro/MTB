@@ -25,7 +25,7 @@ def genIdealResults(result, resultData, settingDict, caseDf, pscadInitTime):
     
     # Use PSCAD result for calculating the ideal response
     if result.typ in (ResultType.EMT_INF, ResultType.EMT_PSOUT, ResultType.EMT_CSV, ResultType.EMT_ZIP):
-        idealData = resultData.rename(columns=dict(zip(resultData.columns, [val.split('\\')[-1] for val in resultData.columns])), inplace=False) # Don't set inplace=True, it will also change the origional DataFrame
+        idealData = resultData.rename(columns=dict(zip(resultData.columns, [val.split('\\')[-1] for val in resultData.columns])), inplace=False) # Don't set inplace=True, it will also change the original DataFrame
         idealData.time = idealData.time - pscadInitTime
         # Active Power Ramping cases
         if 'P_step' in caseDf['Case']['Name'].squeeze():
@@ -58,6 +58,7 @@ def genIdealResults(result, resultData, settingDict, caseDf, pscadInitTime):
             Td = 0.5            # delay time [s]
             trise = 1           # rise time [s]
             fc = 0.35/trise     # cut off frequency [Hz]
+            
             idealData['P_pu_PoC_Td'] = delay(idealData.P_pu_PoC, Td, Ts)        # Add new column for the delayed ideal signal
             idealData['P_pu_PoC_Td_LPF'] = lpf(idealData.P_pu_PoC, fc, 1/Ts)    # Add new column for the filtered ideal signal
             
