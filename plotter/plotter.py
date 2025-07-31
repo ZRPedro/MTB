@@ -118,43 +118,10 @@ def mapResultFiles(config: ReadConfig) -> Dict[int, List[Result]]:
     return results
 
 
-def colorMap(results: Dict[int, List[Result]]) -> Dict[str, List[str]]:
-    '''
-    Select colors for the given projects. Return a dictionary with the project name as key and a list of colors as value.
-    '''
-    colors = ['#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#f032e6', '#bfef45',
-              '#fabed4', '#469990', '#dcbeff', '#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1',
-              '#000075', '#a9a9a9', '#000000']
-
-    projects: Set[str] = set()
-
-    for rank in results.keys():
-        for result in results[rank]:
-            projects.add(result.shorthand)
-
-    cMap: Dict[str, List[str]] = dict()
-
-    if len(list(projects)) > 2:
-        i = 0
-        for p in list(projects):
-            cMap[p] = [colors[i % len(colors)]] * 3
-            i += 1
-        return cMap
-    else:
-        i = 0
-        for p in list(projects):
-            cMap[p] = colors[i:i + 3]
-            i += 3
-    cMap['ideal'] = ['#02525e', '#028b76', '#00847c']
-    
-    return cMap
-
-
 def addResults(plots: List[go.Figure],
                result, # result object
                resultData: pd.DataFrame,
                figures: List[Figure],
-               colors: Dict[str, List[str]],
                nColumns: int,
                pfFlatTIme: float,
                pscadInitTime: float,
@@ -162,7 +129,22 @@ def addResults(plots: List[go.Figure],
                caseDf # case MTB setting
                ) -> None:
     '''
-    Add results for a case/rank to to a set of plots or a single subplot.
+    Adds simulation results for a specific case/rank to a set of Plotly figures or a single subplot.
+
+    Parameters:
+        plots (List[go.Figure]): List of Plotly figures to which results will be added.
+        result: Result object containing metadata and file information for the simulation result.
+        resultData (pd.DataFrame): DataFrame containing the simulation result data.
+        figures (List[Figure]): List of Figure objects specifying plot configuration.
+        colors (Dict[str, List[str]]): Dictionary mapping project names to color lists.
+        nColumns (int): Number of columns for subplot arrangement.
+        pfFlatTIme (float): Time offset for PowerFactory RMS results.
+        pscadInitTime (float): Time offset for PSCAD EMT results.
+        settingDict: Dictionary of project settings.
+        caseDf: DataFrame containing MTB case settings for the current rank.
+
+    Returns:
+        None
     '''
 
     SUBPLOT = (len(plots) == 1) # Check if output should be a subplot
@@ -271,6 +253,16 @@ def add_scatterplot_for_result(colPos, colors, dash, displayName, SUBPLOT, plotl
 
 
 def genCursorPlotlyTables(ranksCursor, dfCursorsList):
+    '''
+    Generates Plotly tables for cursor data.
+
+    Parameters:
+        ranksCursor (List[Cursor]): List of Cursor objects containing cursor data.
+        dfCursorsList (List[pd.DataFrame]): List of DataFrames containing cursor metrics for each rank.
+    
+    Returns:
+        List[go.Figure]: A list of Plotly figures, each containing a table for the corresponding cursor.
+    '''
     goCursorList = []
 
     EMPIRICAL_HEADER_ROW_HEIGHT_PX = 35  # Measured height for a header row (font size 10)
@@ -356,6 +348,10 @@ def genCursorPlotlyTables(ranksCursor, dfCursorsList):
 
 
 def genCursorPdf(rank, rankName, ranksCursor, dfCursorsList, nColumns, figurePath):
+    '''
+    Generates a PDF with cursor metrics for the given rank.
+    TODO: Add support for multiple A4 page outputs in the PDF.
+    '''
     row_col_specs = []
     rows=ceil(len(ranksCursor)/nColumns)
     for i in range(rows):
@@ -392,6 +388,9 @@ def genCursorPdf(rank, rankName, ranksCursor, dfCursorsList, nColumns, figurePat
 
     
 def genCursorHTML(htmlCursorColumns, goCursorList, rank, rankName):
+    '''
+    Generates HTML for cursor plots, including a table of contents with links to each cursor plot.
+    '''
     html = '<h2><div id="Cursors">Cursors:</div></h2><br>'
     html += '<div style="text-align: left; margin-top: 1px;">'
     for goCursor in goCursorList:
@@ -435,7 +434,6 @@ def drawPlot(rank: int,
              resultDict: Dict[int, List[Result]],
              figureDict: Dict[int, List[Figure]],
              casesDf, # Pandas DataFrame
-             colorMap: Dict[str, List[str]],
              cursorDict: List[Cursor],
              settingDict: Dict[str, str],
              config: ReadConfig):
@@ -478,10 +476,10 @@ def drawPlot(rank: int,
             continue
 
         if config.genHTML:
-            addResults(htmlPlots, result, resultData, figureList, colorMap,
+            addResults(htmlPlots, result, resultData, figureList,
                        config.htmlColumns, config.pfFlatTIme, config.pscadInitTime, settingDict, caseDf)
         if config.genImage:
-            addResults(imagePlots, result, resultData, figureList, colorMap,
+            addResults(imagePlots, result, resultData, figureList,
                        config.imageColumns, config.pfFlatTIme, config.pscadInitTime, settingDict, caseDf)
         if len(ranksCursor) > 0:
             addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, config.pfFlatTIme, config.pscadInitTime, settingDict,  caseDf)
@@ -568,7 +566,9 @@ def setupPlotLayout(rankName, config, figureList, htmlPlots, imagePlots, rank):
 
 
 def create_css(resultsDir):
-
+    '''
+    Creates a CSS file for the HTML output.
+    '''
     css_path = join(resultsDir, "mtb.css")
     
     css_content = r'''body {
@@ -810,9 +810,7 @@ def main() -> None:
     caseGroup = settingDict['Casegroup']
     casesDf = pd.read_excel(config.optionalCasesheet, sheet_name=f'{caseGroup} cases', header=[0, 1])
     casesDf = casesDf.iloc[:, :60]     #Limit the DataFrame to the first 60 columns
-    
-    colorSchemeMap = colorMap(resultDict)
-    
+       
     if not exists(config.resultsDir):
         makedirs(config.resultsDir)
 
@@ -823,9 +821,9 @@ def main() -> None:
     for rank in resultDict.keys():
         if config.threads > 1:
             threads.append(Thread(target=drawPlot,
-                                  args=(rank, resultDict, figureDict, casesDf, colorSchemeMap, cursorDict, settingDict, config)))
+                                  args=(rank, resultDict, figureDict, casesDf, cursorDict, settingDict, config)))
         else:
-            drawPlot(rank, resultDict, figureDict, casesDf, colorSchemeMap, cursorDict, settingDict, config)
+            drawPlot(rank, resultDict, figureDict, casesDf, cursorDict, settingDict, config)
 
     NoT = len(threads)
     if NoT > 0:

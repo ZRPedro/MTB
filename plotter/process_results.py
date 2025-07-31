@@ -1,7 +1,7 @@
 from Result import ResultType
 
 
-def getColNames(rawSigName,resultType):
+def getColNames(rawSigName, resultType):
     '''
     Translate the signal names used in figureSetup.csv and cursorSetup.csv into the actual signal names used in the various result type files
     '''
