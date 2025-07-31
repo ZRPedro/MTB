@@ -8,7 +8,7 @@ import re
 import pandas as pd
 from plotly.subplots import make_subplots  # type: ignore
 import plotly.graph_objects as go  # type: ignore
-from typing import List, Dict, Union, Tuple, Set
+from typing import List, Dict, Union, Tuple
 from sampling_functions import downSample
 from threading import Thread, Lock
 import time
@@ -175,7 +175,7 @@ def addResults(plots: List[go.Figure],
             x_value = ideal['data']['time']
             y_value = ideal['data'][ideal['signals'][i]]
             x_value, y_value = downSample(x_value, y_value, downsampling_method, figure.gradient_threshold)
-            add_scatterplot_for_result(colPos, colors, 'dash', 'ideal:'+ideal['signals'][i], SUBPLOT, plotlyFigure, 'ideal', rowPos,
+            add_scatterplot_for_result(colPos, 'dash', 'ideal:'+ideal['signals'][i], SUBPLOT, plotlyFigure, 'ideal', rowPos,
                                        0, x_value, y_value)
             
         traces = 0
@@ -188,14 +188,14 @@ def addResults(plots: List[go.Figure],
                 x_value = resultData[timeColName] - timeoffset  # type: ignore
                 y_value = resultData[sigColName]  # type: ignore
                 x_value, y_value = downSample(x_value, y_value, downsampling_method, figure.gradient_threshold)
-                add_scatterplot_for_result(colPos, colors, 'solid', sigDispName, SUBPLOT, plotlyFigure, result.shorthand, rowPos,
+                add_scatterplot_for_result(colPos, 'solid', sigDispName, SUBPLOT, plotlyFigure, result.shorthand, rowPos,
                                            traces, x_value, y_value)
 
                 # plot_cursor_functions.add_annotations(x_value, y_value, plotlyFigure)
                 traces += 1
             elif sigColName != '' and result.typ != ResultType.EMT_CSV: # Temporary fix for ideal output result type files where not all signals are present
                 print(f'Signal "{rawSigName}" not recognized in resultfile: {result.fullpath}')
-                add_scatterplot_for_result(colPos, colors, 'solid', f'{sigDispName} (Unknown)', SUBPLOT, plotlyFigure, result.shorthand, rowPos,
+                add_scatterplot_for_result(colPos, 'solid', f'{sigDispName} (Unknown)', SUBPLOT, plotlyFigure, result.shorthand, rowPos,
                                            traces, None, None)
                 traces += 1
         
@@ -225,7 +225,7 @@ def update_y_and_x_axis(colPos, figure, nColumns, plotlyFigure, rowPos):
         )
 
 
-def add_scatterplot_for_result(colPos, colors, dash, displayName, SUBPLOT, plotlyFigure, resultName, rowPos, traces, x_value,
+def add_scatterplot_for_result(colPos, dash, displayName, SUBPLOT, plotlyFigure, resultName, rowPos, traces, x_value,
                                y_value):
     if not SUBPLOT:
         plotlyFigure.add_trace(  # type: ignore
@@ -243,7 +243,6 @@ def add_scatterplot_for_result(colPos, colors, dash, displayName, SUBPLOT, plotl
             go.Scatter(
                 x=x_value,
                 y=y_value,
-                #line_color=colors[resultName][traces],
                 name=displayName,
                 legendgroup=resultName,
                 showlegend=True
