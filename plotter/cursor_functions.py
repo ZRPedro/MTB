@@ -19,7 +19,7 @@ def getTimeIntervals(time_ranges):
     
 def setupCursorDataFrame(ranksCursor):
     '''
-    Setup the list of cursor dataframes
+    Setup the list of cursor DataFrames
     '''
     dfCursorsList = []
     for cursor in ranksCursor:
@@ -38,6 +38,29 @@ def setupCursorDataFrame(ranksCursor):
 def getCursorSignals(rawSigNames, result, resultData, pfFlatTIme, pscadInitTime):
     '''
     Make a DataFrame with all the signals required for the cursor functions
+    This DataFrame is created with only a cursor time range column as the first column at first.
+    This cursor time range column repeats the time ranges for each cursor function, i.e. if there
+    are 5 time ranges, and 3 cursor functions, then the time range column will have 15 rows.
+    The cursor metric columns , i.e. min, max, mean, etc. for each signal for the set of cursor
+    time ranges will be added, and then appended, once they are calculated
+
+    Parameters
+    ----------
+    rawSigNames : list
+        List of raw signal names to include in the DataFrame.
+    result : Result
+        The result object containing metadata about the signals.
+    resultData : DataFrame
+        The DataFrame containing the actual signal data.
+    pfFlatTIme : float
+        The PowerFactory flat time offset.
+    pscadInitTime : float
+        The PSCAD initialization time offset.
+
+    Returns
+    -------
+    DataFrame
+        A DataFrame containing the required cursor signals.
     '''
     cursorSignalsDf = pd.DataFrame()
     
@@ -361,10 +384,10 @@ def cursorRiseFallTime(cursorSignalsDf, time_interval):
         y1 = y.iloc[-1]     # Cursor end y value
         dy = y1 - y0        # Difference in y values
         
-        if dy > 0:          # Rise time
-            mask = (y >= (y0 + 0.1*dy)) & (y <= (y0 + 0.9*dy)) # The 10% to 90% rise value mask
-        else:               # Fall time
-            mask = (y <= (y0 + 0.1*dy)) & (y >= (y0 + 0.9*dy)) # The 10% to 90% fall value mask
+        if dy > 0:                                              # Rise time
+            mask = (y >= (y0 + 0.1*dy)) & (y <= (y0 + 0.9*dy))  # The 10% to 90% rise value mask
+        else:                                                   # Fall time
+            mask = (y <= (y0 + 0.1*dy)) & (y >= (y0 + 0.9*dy))  # The 10% to 90% fall value mask
         
         t = t[mask]         # Get the rise/fall time range values
         
@@ -381,7 +404,7 @@ def cursorRiseFallTime(cursorSignalsDf, time_interval):
 
 def cursorSettlingTime(cursorSignalsDf, time_interval, tol=2):
     '''
-    Calculate the settling time of a signal until comes within 2% of the final value over a time interval 
+    Calculate the settling time of a signal until comes within tol% of the final value over a time interval
     '''
     if len(cursorSignalsDf.columns) >=2:
         t = cursorSignalsDf[cursorSignalsDf.columns[0]].copy()
@@ -413,6 +436,7 @@ def cursorSettlingTime(cursorSignalsDf, time_interval, tol=2):
 def cursorPeakOvershoot(cursorSignalsDf, time_interval):
     '''
     Calculate the peak overshoot percentage and damping value of a signal over a time interval
+    The overshoot is expressed as a percentage of the final value of the signal.
     '''
     if len(cursorSignalsDf.columns) >=2:
         t = cursorSignalsDf[cursorSignalsDf.columns[0]].copy()
@@ -436,8 +460,8 @@ def cursorPeakOvershoot(cursorSignalsDf, time_interval):
         else:                               # Negative step
             if y.min() < y1:                # Check if there is a negative overshoot
                 yOSRatio = np.abs(y.min()-y1)/dy
-            
-        # Find the corresponding damption ratio
+
+        # Find the corresponding second order damping ratio estimate
         if yOSRatio > 0.0:                  # Check if there is an overshoot
             A = np.log(yOSRatio)/np.pi
             zeta = np.sqrt(A**2/(1+A**2))
@@ -454,6 +478,20 @@ def cursorPeakOvershoot(cursorSignalsDf, time_interval):
 def cursorFSMSlope(cursorSignalsDf, time_interval, settingDict):
     '''
     Calculate the FSM slope of a signal over a time interval
+    The slope is calculated as the change in frequency (f) over the change in power (P)
+    The slope is expressed as a percentage of the nominal frequency (fn) and the reference power (Pref)
+    The slope is only activated after the FSM deadband is reached, 
+    i.e. the FSM deadband is added to the nominal frequency (fn) for positive frequency changes and subtracted for negative frequency changes.
+
+    The slope is calculated as:
+        df = fnew - fn + db if df < 0 else fnew - fn - db
+        dP/dF = -100 * (df/fn) * (Pref/dP)
+
+    where:
+        dP = change in power (P)
+        dF = change in frequency (f)
+        fn = nominal frequency (f) = 50 Hz
+        Pref = reference power (P) = P at the start of the cursor interval
     '''
     if len(cursorSignalsDf.columns) >=3:
         t = cursorSignalsDf[cursorSignalsDf.columns[0]].copy()
@@ -499,6 +537,16 @@ def cursorFSMSlope(cursorSignalsDf, time_interval, settingDict):
 def cursoLFSMSlope(cursorSignalsDf, time_interval, settingDict):
     '''
     Calculate the FSM slope of a signal over a time interval
+    The slope is calculated as the change in frequency (f) over the change in power (P)
+    The slope is expressed as a percentage of the nominal frequency (fn) and the reference power (Pref)
+
+    The slope is calculated as:
+        dP/dF = -100 * (dF/fn) * (Pref/dP)
+    where:
+        dP = change in power (P)    
+        dF = change in frequency (f)
+        fn = nominal frequency (f) = 50 Hz
+        Pref = reference power (P) = P at the start of the cursor interval
     '''
     if len(cursorSignalsDf.columns) >=3:
         t = cursorSignalsDf[cursorSignalsDf.columns[0]].copy()
@@ -546,7 +594,18 @@ def cursoLFSMSlope(cursorSignalsDf, time_interval, settingDict):
 
 def cursorQUSlope(cursorSignalsDf, time_interval, caseDf):
     '''
+    Calculate the Q(U) slope of a signal over a time interval
+    The slope is calculated as the change in reactive power (Q) over the change in voltage (U)
+    The slope is expressed as a percentage of the nominal reactive power (Qnom) and the nominal voltage (Uref)
+
+    The slope is calculated as:
+        dQ/dU = -100 * (dU/Uref) * (Qnom/dQ)
     
+    where:
+        dQ = change in reactive power (Q)
+        dU = change in voltage (U)
+        Uref = nominal voltage (U)
+        Qnom = nominal reactive power (Q) = 0.33 pu (as per the standard)
     '''
     if len(cursorSignalsDf.columns) >=3:
         t = cursorSignalsDf[cursorSignalsDf.columns[0]].copy()
