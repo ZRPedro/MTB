@@ -35,12 +35,12 @@ def genIdealResults(result, resultData, settingDict, caseDf, pscadInitTime):
             Pstep = caseDf['Event 1']['X1'].squeeze()
             assert caseDf['Event 1']['X2'].squeeze() == 0.0
             
-            idealData.P_pu_PoC = pd.Series([idealPramp(Pref=P0, Tstep=Tstep, Pstep=Pstep, t=t) for t in idealData.time])
+            idealData['P_pu_PoC'] = pd.Series([idealPramp(Pref=P0, Tstep=Tstep, Pstep=Pstep, t=t) for t in idealData.time])
 
             returnDict = {'figs': ['Ppoc'], 'signals': ['P_pu_PoC'], 'data': idealData}
 
         # LFSM, FSM & RoCoF cases    
-        elif  'FSM' in caseDf['Case']['Name'].squeeze() or 'RoCoF' in caseDf['Case']['Name'].squeeze():
+        elif  'FSM' or 'RoCoF' in caseDf['Case']['Name'].squeeze():
             DK = 1 if settingDict['Area']=='DK1' else 2                         # DK area, either 1 or 2
             s_fsm = settingDict['FSM droop']                                    # FSM droop in [%]
             db = settingDict['FSM deadband']                                    # FSM deadband in [Hz]
@@ -70,6 +70,7 @@ def genIdealResults(result, resultData, settingDict, caseDf, pscadInitTime):
             U0 = caseDf['Initial Settings']['U0'].squeeze()                     # Initial voltage reference, U0
             s_V_droop = settingDict['V droop']
             Qref0 = 0
+            assert caseDf['Initial Settings']['Qmode'].squeeze() == 'Q(U)'
             
             # Only apply from t >= 0
             mask = idealData['time'] >= 0            
