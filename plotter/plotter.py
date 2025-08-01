@@ -125,7 +125,7 @@ def addResults(plots: List[go.Figure],
                nColumns: int,
                pfFlatTIme: float,
                pscadInitTime: float,
-               settingDict, # project settings
+               settingsDict, # project settings
                caseDf # case MTB setting
                ) -> None:
     '''
@@ -140,7 +140,7 @@ def addResults(plots: List[go.Figure],
         nColumns (int): Number of columns for subplot arrangement.
         pfFlatTIme (float): Time offset for PowerFactory RMS results.
         pscadInitTime (float): Time offset for PSCAD EMT results.
-        settingDict: Dictionary of project settings.
+        settingsDict: Dictionary of project settings.
         caseDf: DataFrame containing MTB case settings for the current rank.
 
     Returns:
@@ -149,7 +149,7 @@ def addResults(plots: List[go.Figure],
 
     SUBPLOT = (len(plots) == 1) # Check if output should be a subplot
     
-    ideal = genIdealResults(result, resultData, settingDict,  caseDf, pscadInitTime)
+    ideal = genIdealResults(result, resultData, settingsDict,  caseDf, pscadInitTime)
     
     rowPos = 1
     colPos = 1
@@ -434,7 +434,7 @@ def drawPlot(rank: int,
              figureDict: Dict[int, List[Figure]],
              casesDf, # Pandas DataFrame
              cursorDict: List[Cursor],
-             settingDict: Dict[str, str],
+             settingsDict: Dict[str, str],
              config: ReadConfig):
     '''
     Draws plots for html and static image export.    
@@ -476,12 +476,12 @@ def drawPlot(rank: int,
 
         if config.genHTML:
             addResults(htmlPlots, result, resultData, figureList,
-                       config.htmlColumns, config.pfFlatTIme, config.pscadInitTime, settingDict, caseDf)
+                       config.htmlColumns, config.pfFlatTIme, config.pscadInitTime, settingsDict, caseDf)
         if config.genImage:
             addResults(imagePlots, result, resultData, figureList,
-                       config.imageColumns, config.pfFlatTIme, config.pscadInitTime, settingDict, caseDf)
+                       config.imageColumns, config.pfFlatTIme, config.pscadInitTime, settingsDict, caseDf)
         if len(ranksCursor) > 0:
-            addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, config.pfFlatTIme, config.pscadInitTime, settingDict,  caseDf)
+            addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, config.pfFlatTIme, config.pscadInitTime, settingsDict,  caseDf)
     
     goCursorList = genCursorPlotlyTables(ranksCursor, dfCursorsList)
     
@@ -491,7 +491,7 @@ def drawPlot(rank: int,
 
     if config.genImage:
         # Cursor plots are not currently supported for image export and commented out
-        create_image_plots(config, figureList, figurePath, imagePlots)
+        #create_image_plots(config, figureList, figurePath, imagePlots)
         #genCursorPdf(rank, rankName, ranksCursor, dfCursorsList, config.imageCursorColumns, figurePath)
         print(f'Exported plot for Rank {rank} to {figurePath}.{config.imageFormat}')
 
@@ -805,8 +805,8 @@ def main() -> None:
     figureDict = readFigureSetup('figureSetup.csv')
     cursorDict = readCursorSetup('cursorSetup.csv')
     settingsDf = pd.read_excel(config.optionalCasesheet, sheet_name='Settings', header=0)     #Read the 'Settings' sheet 
-    settingDict = dict(zip(settingsDf['Name'],settingsDf['Value']))
-    caseGroup = settingDict['Casegroup']
+    settingsDict = dict(zip(settingsDf['Name'],settingsDf['Value']))
+    caseGroup = settingsDict['Casegroup']
     casesDf = pd.read_excel(config.optionalCasesheet, sheet_name=f'{caseGroup} cases', header=[0, 1])
     casesDf = casesDf.iloc[:, :60]     #Limit the DataFrame to the first 60 columns
        
@@ -820,9 +820,9 @@ def main() -> None:
     for rank in resultDict.keys():
         if config.threads > 1:
             threads.append(Thread(target=drawPlot,
-                                  args=(rank, resultDict, figureDict, casesDf, cursorDict, settingDict, config)))
+                                  args=(rank, resultDict, figureDict, casesDf, cursorDict, settingsDict, config)))
         else:
-            drawPlot(rank, resultDict, figureDict, casesDf, cursorDict, settingDict, config)
+            drawPlot(rank, resultDict, figureDict, casesDf, cursorDict, settingsDict, config)
 
     NoT = len(threads)
     if NoT > 0:
