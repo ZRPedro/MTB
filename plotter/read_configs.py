@@ -29,11 +29,7 @@ class ReadConfig:
         self.imageFormat = parsedConf['imageFormat']
         self.threads = parsedConf.getint('threads')
         assert self.threads > 0
-        self.pfFlatTIme = parsedConf.getfloat('pfFlatTime')
-        assert self.pfFlatTIme >= 0.1
-        self.pscadInitTime = parsedConf.getfloat('pscadInitTime')
-        assert self.pscadInitTime >= 1.0
-        self.optionalCasesheet = parsedConf['optionalCasesheet']
+        self.testcaseSheet = parsedConf['testcaseSheet']
         self.simDataDirs : List[Tuple[str, str]] = list()
         simPaths = cp.items('Simulation data paths')
         for name, path in simPaths:

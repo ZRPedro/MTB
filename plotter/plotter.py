@@ -123,8 +123,6 @@ def addResults(plots: List[go.Figure],
                resultData: pd.DataFrame,
                figures: List[Figure],
                nColumns: int,
-               pfFlatTIme: float,
-               pscadInitTime: float,
                settingsDict, # project settings
                caseDf # case MTB setting
                ) -> None:
@@ -138,8 +136,6 @@ def addResults(plots: List[go.Figure],
         figures (List[Figure]): List of Figure objects specifying plot configuration.
         colors (Dict[str, List[str]]): Dictionary mapping project names to color lists.
         nColumns (int): Number of columns for subplot arrangement.
-        pfFlatTIme (float): Time offset for PowerFactory RMS results.
-        pscadInitTime (float): Time offset for PSCAD EMT results.
         settingsDict: Dictionary of project settings.
         caseDf: DataFrame containing MTB case settings for the current rank.
 
@@ -148,6 +144,9 @@ def addResults(plots: List[go.Figure],
     '''
 
     SUBPLOT = (len(plots) == 1) # Check if output should be a subplot
+    
+    pfFlatTIme = settingsDict['PF flat time']
+    pscadInitTime = settingsDict['PSCAD Initialization time']
     
     ideal = genIdealResults(result, resultData, settingsDict,  caseDf, pscadInitTime)
     
@@ -476,12 +475,12 @@ def drawPlot(rank: int,
 
         if config.genHTML:
             addResults(htmlPlots, result, resultData, figureList,
-                       config.htmlColumns, config.pfFlatTIme, config.pscadInitTime, settingsDict, caseDf)
+                       config.htmlColumns, settingsDict, caseDf)
         if config.genImage:
             addResults(imagePlots, result, resultData, figureList,
-                       config.imageColumns, config.pfFlatTIme, config.pscadInitTime, settingsDict, caseDf)
+                       config.imageColumns, settingsDict, caseDf)
         if len(ranksCursor) > 0:
-            addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, config.pfFlatTIme, config.pscadInitTime, settingsDict,  caseDf)
+            addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDict,  caseDf)
     
     goCursorList = genCursorPlotlyTables(ranksCursor, dfCursorsList)
     
@@ -804,10 +803,10 @@ def main() -> None:
     resultDict = mapResultFiles(config)
     figureDict = readFigureSetup('figureSetup.csv')
     cursorDict = readCursorSetup('cursorSetup.csv')
-    settingsDf = pd.read_excel(config.optionalCasesheet, sheet_name='Settings', header=0)     #Read the 'Settings' sheet 
+    settingsDf = pd.read_excel(config.testcaseSheet, sheet_name='Settings', header=0)     #Read the 'Settings' sheet 
     settingsDict = dict(zip(settingsDf['Name'],settingsDf['Value']))
     caseGroup = settingsDict['Casegroup']
-    casesDf = pd.read_excel(config.optionalCasesheet, sheet_name=f'{caseGroup} cases', header=[0, 1])
+    casesDf = pd.read_excel(config.testcaseSheet, sheet_name=f'{caseGroup} cases', header=[0, 1])
     casesDf = casesDf.iloc[:, :60]     #Limit the DataFrame to the first 60 columns
        
     if not exists(config.resultsDir):

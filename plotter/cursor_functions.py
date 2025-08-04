@@ -85,7 +85,7 @@ def getCursorSignals(rawSigNames, result, resultData, pfFlatTIme, pscadInitTime)
     return cursorSignalsDf
 
 
-def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, pfFlatTIme, pscadInitTime, settingDict, caseDf):
+def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDict, caseDf):
     '''
     This is the main function from where all the cursor functions are called 
     and which add the cursor function result to a list of DatafFrames from
@@ -120,7 +120,7 @@ def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, pfFlatTIme,
         PowerFactory flat time
     pscadInitTime : Float
         PSCAD initialisation time
-    settingDict : Dictionary 
+    settingsDict : Dictionary 
         All the 'Settings' from the the testcases.xlsx, 'Setting' sheet, e.g.
         'Area' (DK1 | DK2), 'FSM droop', etc.
     caseDf : DataFrame
@@ -132,6 +132,9 @@ def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, pfFlatTIme,
     None.
 
     '''
+    pfFlatTIme = settingsDict['PF flat time']
+    pscadInitTime = settingsDict['PSCAD Initialization time']
+    
     for i, cursor in enumerate(ranksCursor):
         if result.typ == ResultType.RMS:
             rawSigNames = cursor.rms_signals
@@ -167,9 +170,9 @@ def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, pfFlatTIme,
                     elif option.name == 'OVERSHOOT':
                         cursorMetricData.append(cursorPeakOvershoot(cursorSignalsDf, time_interval))
                     elif option.name == 'FSM_SLOPE':
-                        cursorMetricData.append(cursorFSMSlope(cursorSignalsDf, time_interval, settingDict))
+                        cursorMetricData.append(cursorFSMSlope(cursorSignalsDf, time_interval, settingsDict))
                     elif option.name == 'LFSM_SLOPE':
-                        cursorMetricData.append(cursoLFSMSlope(cursorSignalsDf, time_interval, settingDict))
+                        cursorMetricData.append(cursoLFSMSlope(cursorSignalsDf, time_interval, settingsDict))
                     elif option.name == 'QU_SLOPE':
                         cursorMetricData.append(cursorQUSlope(cursorSignalsDf, time_interval, caseDf))
                     else:
@@ -475,7 +478,7 @@ def cursorPeakOvershoot(cursorSignalsDf, time_interval):
     return cursorMetricText
 
 
-def cursorFSMSlope(cursorSignalsDf, time_interval, settingDict):
+def cursorFSMSlope(cursorSignalsDf, time_interval, settingsDict):
     '''
     Calculate the FSM slope of a signal over a time interval
     The slope is calculated as the change in frequency (f) over the change in power (P)
@@ -505,7 +508,7 @@ def cursorFSMSlope(cursorSignalsDf, time_interval, settingDict):
             f = f[mask]
         
         fn = 50                                 # Nominal frequency [Hz]
-        db = float(settingDict['FSM deadband']) # FSM deadband in [Hz]
+        db = float(settingsDict['FSM deadband']) # FSM deadband in [Hz]
                 
         if np.abs(fn-f.iloc[0]) < 0.01:
             fnew = f.iloc[-1]   # Assume new f at the end of the cursor interval
@@ -534,7 +537,7 @@ def cursorFSMSlope(cursorSignalsDf, time_interval, settingDict):
     return cursorMetricText
 
 
-def cursoLFSMSlope(cursorSignalsDf, time_interval, settingDict):
+def cursoLFSMSlope(cursorSignalsDf, time_interval, settingsDict):
     '''
     Calculate the FSM slope of a signal over a time interval
     The slope is calculated as the change in frequency (f) over the change in power (P)
@@ -560,7 +563,7 @@ def cursoLFSMSlope(cursorSignalsDf, time_interval, settingDict):
             f = f[mask]
         
         fn = 50                                     # Nominal frequency [Hz]
-        DK = 1 if settingDict['Area']=='DK1' else 2 # DK area, either 1 or 2
+        DK = 1 if settingsDict['Area']=='DK1' else 2 # DK area, either 1 or 2
                 
         if np.abs(fn-f.iloc[0]) > 0.01:
             fnew = f.iloc[0]
