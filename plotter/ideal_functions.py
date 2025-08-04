@@ -40,7 +40,7 @@ def genIdealResults(result, resultData, settingDict, caseDf, pscadInitTime):
             returnDict = {'figs': ['Ppoc'], 'signals': ['P_pu_PoC'], 'data': idealData}
 
         # LFSM, FSM & RoCoF cases    
-        elif  'FSM' or 'RoCoF' in caseDf['Case']['Name'].squeeze():
+        elif  'FSM' in caseDf['Case']['Name'].squeeze() or 'RoCoF'in caseDf['Case']['Name'].squeeze():
             DK = 1 if settingDict['Area']=='DK1' else 2                         # DK area, either 1 or 2
             s_fsm = settingDict['FSM droop']                                    # FSM droop in [%]
             db = settingDict['FSM deadband']                                    # FSM deadband in [Hz]
