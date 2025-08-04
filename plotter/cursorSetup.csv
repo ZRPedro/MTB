@@ -228,10 +228,10 @@ Active power;64;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 0.05, 0.05, 0.15
 Reactive power;64;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 0.05, 0.05, 0.15, 0.15, 0.9, 0.9, 1.9, 1.9, 3.9, 3.9, 4.9, 4.9
 Active current;64;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 0.05, 0.05, 0.15, 0.15, 0.9, 0.9, 1.9, 1.9, 3.9, 3.9, 4.9, 4.9
 Reactive current;64;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 0.05, 0.05, 0.15, 0.15, 0.9, 0.9, 1.9, 1.9, 3.9, 3.9, 4.9, 4.9
-Active power;65;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 0.2498, 0.2498, 0.2499, 0.2499, 0.25, 0.25, 1.5, 1.5
-Reactive power;65;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 0.2498, 0.2498, 0.2499, 0.2499, 0.25, 0.25, 1.5, 1.5
-Active current;65;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 0.2498, 0.2498, 0.2499, 0.2499, 0.25, 0.25, 1.5, 1.5
-Reactive current;65;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 0.2498, 0.2498, 0.2499, 0.2499, 0.25, 0.25, 1.5, 1.5
+Active power;65;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 0.15, , 0.15, 1.5, 1.5
+Reactive power;65;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 0.15, , 0.15, 1.5, 1.5
+Active current;65;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 0.15, , 0.15, 1.5, 1.5
+Reactive current;65;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 0.15, , 0.15, 1.5, 1.5
 Active power;66;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 5.0, 5.0, 60.0, 60.0
 Reactive power;66;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 5.0, 5.0, 60.0, 60.0
 Active current;66;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 5.0, 5.0, 60.0, 60.0
