@@ -18,22 +18,17 @@ class ReadConfig:
         self.resultsDir = parsedConf['resultsDir']
         self.genHTML = parsedConf.getboolean('genHTML')
         self.genImage = parsedConf.getboolean('genImage')
+        self.genCursorPDF = parsedConf.getboolean('genCursorPDF')
         self.htmlColumns = parsedConf.getint('htmlColumns')
         assert self.htmlColumns > 0 or not self.genHTML
         self.imageColumns = parsedConf.getint('imageColumns')
         assert self.imageColumns > 0 or not self.genImage
         self.htmlCursorColumns = parsedConf.getint('htmlCursorColumns')
         assert self.htmlCursorColumns > 0 or not self.genHTML
-        self.imageCursorColumns = parsedConf.getint('imageCursorColumns')
-        assert self.imageCursorColumns > 0 or not self.genImage
         self.imageFormat = parsedConf['imageFormat']
         self.threads = parsedConf.getint('threads')
         assert self.threads > 0
-        self.pfFlatTIme = parsedConf.getfloat('pfFlatTime')
-        assert self.pfFlatTIme >= 0.1
-        self.pscadInitTime = parsedConf.getfloat('pscadInitTime')
-        assert self.pscadInitTime >= 1.0
-        self.optionalCasesheet = parsedConf['optionalCasesheet']
+        self.testcaseSheet = parsedConf['testcaseSheet']
         self.simDataDirs : List[Tuple[str, str]] = list()
         simPaths = cp.items('Simulation data paths')
         for name, path in simPaths:
@@ -96,14 +91,10 @@ def readCursorSetup(filePath: str) -> List[Cursor]:
     with open(filePath, newline='') as setupFile:
         setupReader = csv.DictReader(setupFile, delimiter=';')
         for row in setupReader:
-            row['cursor_options'] = list(
-                set([CursorType.from_string(str(item.strip())) for item in row.get('cursor_options', '').split(',') if item.strip() != '']))
-            row['emt_signals'] = list(
-                set([str(item.strip()) for item in row.get('emt_signals', '').split(',') if item.strip() != '']))
-            row['rms_signals'] = list(
-                set([str(item.strip()) for item in row.get('rms_signals', '').split(',') if item.strip() != '']))
-            row['time_ranges'] = list(
-                set([float(item.strip()) for item in row.get('time_ranges', '').split(',') if item.strip() != '']))
+            row['cursor_options'] = [CursorType.from_string(str(item.strip())) for item in row.get('cursor_options', '').split(',') if item.strip() != '']
+            row['emt_signals'] = [str(item.strip()) for item in row.get('emt_signals', '').split(',') if item.strip() != '']
+            row['rms_signals'] = [str(item.strip()) for item in row.get('rms_signals', '').split(',') if item.strip() != '']
+            row['time_ranges'] = [float(item.strip()) for item in row.get('time_ranges', '').split(',') if item.strip() != '']
             setup.append(row)
 
     rankList: List[Cursor] = list()
