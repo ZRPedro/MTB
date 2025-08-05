@@ -2,7 +2,7 @@
 Minimal script to plot simulation results from PSCAD and PowerFactory.
 '''
 from __future__ import annotations
-from os import listdir, makedirs
+from os import listdir, makedirs, remove
 from os.path import abspath, join, split, exists
 import re
 import pandas as pd
@@ -23,6 +23,7 @@ from process_results import getColNames, getUniqueEmtSignals
 from process_psout import getSignals
 from cursor_functions import setupCursorDataFrame, addCursorMetrics
 from ideal_functions import genIdealResults
+from pypdf import PdfWriter
 
 try:
     LOG_FILE = open('plotter.log', 'w')
@@ -198,15 +199,15 @@ def addResults(plots: List[go.Figure],
                                            traces, None, None)
                 traces += 1
         
-        update_y_and_x_axis(colPos, figure, nColumns, plotlyFigure, rowPos)
+        update_y_and_x_axis(figure, plotlyFigure, SUBPLOT, rowPos, colPos)
 
 
-def update_y_and_x_axis(colPos, figure, nColumns, plotlyFigure, rowPos):
-    if nColumns in (1,2,3):
+def update_y_and_x_axis(figure, plotlyFigure, SUBPLOT, rowPos, colPos):
+    if not SUBPLOT:
         yaxisTitle = f'[{figure.units}]'
     else:
-        yaxisTitle = f'{figure.title}[{figure.units}]'
-    if nColumns in (1,2,3):
+        yaxisTitle = f'{figure.title} [{figure.units}]'
+    if not SUBPLOT:
         plotlyFigure.update_xaxes(  # type: ignore
             title_text='Time[s]'
         )
@@ -345,45 +346,6 @@ def genCursorPlotlyTables(ranksCursor, dfCursorsList):
     return goCursorList    
 
 
-def genCursorPdf(rank, rankName, ranksCursor, dfCursorsList, nColumns, figurePath):
-    '''
-    Generates a PDF with cursor metrics for the given rank.
-    TODO: Add support for multiple A4 page outputs in the PDF.
-    '''
-    row_col_specs = []
-    rows=ceil(len(ranksCursor)/nColumns)
-    for i in range(rows):
-        row_spec =[]
-        for j in range(nColumns):
-            row_spec.append({"type": "table"}) # default for 1 column
-        row_col_specs.append(row_spec)        
-    fig = make_subplots(
-            rows=ceil(len(ranksCursor)/nColumns), cols=nColumns,
-            vertical_spacing=0.03,
-            specs=row_col_specs)
-    total_number_of_rows = 0
-    for i, cursor in enumerate(ranksCursor):
-        total_number_of_rows += len(dfCursorsList[i])
-        fig.add_trace(go.Table(header=dict(values=list(dfCursorsList[i].columns),
-                                           fill_color='#00847c',
-                                           font=dict(size=10, color='#ffffff'),
-                                           align='left'),
-                               cells=dict(values=[dfCursorsList[i][f'{column}'] for column in dfCursorsList[i].columns],
-                                          fill_color='#d8d8d8',
-                                          font=dict(size=10, color='#02525e'),
-                                          align='left'),
-                               ),
-                               row=ceil((i+1)/nColumns),
-                               col=(i % nColumns)+1
-                     )
-    fig.update_layout(
-        showlegend=False,
-        title_text=f"Cursor Metric Data for Rank {rank}: {rankName}",
-        margin=dict(t=50, l=50, r=50, b=50)
-        )
-    cursor_path = figurePath + "_cursor"
-    fig.write_image(f'{cursor_path}.pdf', height=50*total_number_of_rows, width=800*nColumns)    
-
     
 def genCursorHTML(htmlCursorColumns, goCursorList, rank, rankName):
     '''
@@ -426,6 +388,26 @@ def genCursorHTML(htmlCursorColumns, goCursorList, rank, rankName):
     html += '</table>'
     
     return html
+
+
+def genCursorPDF(goCursorList, rank, rankName, cursorPath):
+    '''
+    Generates PDF for cursor plots
+    '''
+    cursor_pdf_filenames = []
+    for i, goCursor in enumerate(goCursorList):
+        cursor_pdf_filename = f'{cursorPath}_{i:02d}.pdf'
+        cursor_pdf_filenames.append(cursor_pdf_filename)
+        goCursor.write_image(cursor_pdf_filename)
+        
+    merger = PdfWriter()
+
+    for pdf in cursor_pdf_filenames:
+        merger.append(pdf)
+        remove(pdf)
+    
+    merger.write(f'{cursorPath}.pdf')
+    merger.close()
 
 
 def drawPlot(rank: int,
@@ -474,11 +456,9 @@ def drawPlot(rank: int,
             continue
 
         if config.genHTML:
-            addResults(htmlPlots, result, resultData, figureList,
-                       config.htmlColumns, settingsDict, caseDf)
+            addResults(htmlPlots, result, resultData, figureList, config.htmlColumns, settingsDict, caseDf)
         if config.genImage:
-            addResults(imagePlots, result, resultData, figureList,
-                       config.imageColumns, settingsDict, caseDf)
+            addResults(imagePlots, result, resultData, figureList, config.imageColumns, settingsDict, caseDf)
         if len(ranksCursor) > 0:
             addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDict,  caseDf)
     
@@ -489,10 +469,13 @@ def drawPlot(rank: int,
         print(f'Exported plot for Rank {rank} to {figurePath}.html')
 
     if config.genImage:
-        # Cursor plots are not currently supported for image export and commented out
-        #create_image_plots(config, figureList, figurePath, imagePlots)
-        #genCursorPdf(rank, rankName, ranksCursor, dfCursorsList, config.imageCursorColumns, figurePath)
+        create_image_plots(config, figureList, figurePath, imagePlots)
         print(f'Exported plot for Rank {rank} to {figurePath}.{config.imageFormat}')
+
+    if config.genCursorPDF:
+        cursorPath = figurePath+'_cursor'
+        genCursorPDF(goCursorList, rank, rankName, cursorPath)
+        print(f'Exported cursors for Rank {rank} to {cursorPath}.pdf')
 
     print(f'Plot for Rank {rank} done.')
 

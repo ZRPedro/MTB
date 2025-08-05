@@ -18,14 +18,13 @@ class ReadConfig:
         self.resultsDir = parsedConf['resultsDir']
         self.genHTML = parsedConf.getboolean('genHTML')
         self.genImage = parsedConf.getboolean('genImage')
+        self.genCursorPDF = parsedConf.getboolean('genCursorPDF')
         self.htmlColumns = parsedConf.getint('htmlColumns')
         assert self.htmlColumns > 0 or not self.genHTML
         self.imageColumns = parsedConf.getint('imageColumns')
         assert self.imageColumns > 0 or not self.genImage
         self.htmlCursorColumns = parsedConf.getint('htmlCursorColumns')
         assert self.htmlCursorColumns > 0 or not self.genHTML
-        self.imageCursorColumns = parsedConf.getint('imageCursorColumns')
-        assert self.imageCursorColumns > 0 or not self.genImage
         self.imageFormat = parsedConf['imageFormat']
         self.threads = parsedConf.getint('threads')
         assert self.threads > 0

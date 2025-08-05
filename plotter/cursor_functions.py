@@ -17,6 +17,7 @@ def getTimeIntervals(time_ranges):
         time_intervals.append((time_ranges[-1],))
     return time_intervals
     
+
 def setupCursorDataFrame(ranksCursor):
     '''
     Setup the list of cursor DataFrames
