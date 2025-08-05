@@ -462,8 +462,8 @@ def drawPlot(rank: int,
         if len(ranksCursor) > 0:
             addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDict,  caseDf)
     
-    goCursorList = genCursorPlotlyTables(ranksCursor, dfCursorsList)
-    
+    goCursorList = genCursorPlotlyTables(ranksCursor, dfCursorsList) if len(ranksCursor) > 0 else []  
+     
     if config.genHTML:
         create_html(htmlPlots, goCursorList, figurePath, rankName if rankName is not None else "", rank, config, rankList)
         print(f'Exported plot for Rank {rank} to {figurePath}.html')
@@ -472,7 +472,7 @@ def drawPlot(rank: int,
         create_image_plots(config, figureList, figurePath, imagePlots)
         print(f'Exported plot for Rank {rank} to {figurePath}.{config.imageFormat}')
 
-    if config.genCursorPDF:
+    if config.genCursorPDF and len(goCursorList)>0:
         cursorPath = figurePath+'_cursor'
         genCursorPDF(goCursorList, rank, rankName, cursorPath)
         print(f'Exported cursors for Rank {rank} to {cursorPath}.pdf')
@@ -644,7 +644,7 @@ def create_html(plots: List[go.Figure], goCursorList: List[go.Figure], path: str
     source_list += '</div>'
 
     html_content = create_html_plots(config.htmlColumns, plots, rank, rankName)
-    html_content_cursors = genCursorHTML(config.htmlCursorColumns, goCursorList, rank, rankName)
+    html_content_cursors = genCursorHTML(config.htmlCursorColumns, goCursorList, rank, rankName) if len(goCursorList) > 0 else ''
     
     # Create Dropdown Content for the Navbar
     idx = 0
