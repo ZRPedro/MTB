@@ -150,7 +150,9 @@ def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDic
             cursorMetricData = []                
             for option in cursor.cursor_options:
                 for time_interval in getTimeIntervals(cursor.time_ranges):
-                    if option.name == 'MIN':
+                    if option.name == 'INST':
+                        cursorMetricData.append(cursorInst(cursorSignalsDf, time_interval))
+                    elif option.name == 'MIN':
                         cursorMetricData.append(cursorMin(cursorSignalsDf, time_interval))
                     elif option.name == 'MAX':
                         cursorMetricData.append(cursorMax(cursorSignalsDf, time_interval))
@@ -182,6 +184,38 @@ def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDic
             dfCursorsList[i][cursorSignalsDf.columns[1]] = cursorMetricData # Add column to cursor DataFrame, using the first cursor signal display name
 
 
+def cursorInst(cursorSignalsDf, time_interval):
+    '''
+    Determine the closest signal value to the start and end value of the time interval
+    '''
+    if len(cursorSignalsDf.columns) >=2:
+        t = cursorSignalsDf[cursorSignalsDf.columns[0]].copy()
+        y = cursorSignalsDf[cursorSignalsDf.columns[1]].copy()
+        
+        if len(time_interval) > 0:
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            t = t[mask]
+            y = y[mask]
+        
+        t0_diff = np.abs(t-time_interval[0])
+        t1_diff = np.abs(t-time_interval[1])
+        
+        idx0 = t0_diff.idxmin()
+        idx1 = t1_diff.idxmin()
+        
+        t0 = t0_diff.loc[idx0]
+        t1 = t0_diff.loc[idx1]
+        
+        y0 = y.loc[idx0]
+        y1 = y.loc[idx1]
+
+        cursorMetricText = f"Inst: y({t0:.3f}) = {y0:.3f}, y({t1:.3f}) = {y1:.3f}<br>"
+    else:
+        cursorMetricText = "Inst: error<br>"
+    
+    return cursorMetricText
+    
+
 def cursorMin(cursorSignalsDf, time_interval):
     '''
     Calculate the minimum value of a signal over a time interval
@@ -191,7 +225,7 @@ def cursorMin(cursorSignalsDf, time_interval):
         y = cursorSignalsDf[cursorSignalsDf.columns[1]].copy()
         
         if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t < time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
             t = t[mask]
             y = y[mask]
             
@@ -218,7 +252,7 @@ def cursorMax(cursorSignalsDf, time_interval):
         y = cursorSignalsDf[cursorSignalsDf.columns[1]].copy()
         
         if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t < time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
             t = t[mask]
             y = y[mask]
             
@@ -245,7 +279,7 @@ def cursorMean(cursorSignalsDf, time_interval):
         y = cursorSignalsDf[cursorSignalsDf.columns[1]].copy()
         
         if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t < time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
             t = t[mask]
             y = y[mask]
     
@@ -269,7 +303,7 @@ def cursorGradMin(cursorSignalsDf, time_interval):
         y = cursorSignalsDf[cursorSignalsDf.columns[1]].copy()
         
         if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t < time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
             t = t[mask]
             y = y[mask]
     
@@ -294,7 +328,7 @@ def cursorGradMean(cursorSignalsDf, time_interval):
         y = cursorSignalsDf[cursorSignalsDf.columns[1]].copy()
         
         if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t < time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
             t = t[mask]
             y = y[mask]
             
@@ -319,7 +353,7 @@ def cursorGradMax(cursorSignalsDf, time_interval):
         y = cursorSignalsDf[cursorSignalsDf.columns[1]].copy()
         
         if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t < time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
             t = t[mask]
             y = y[mask]
     
@@ -344,7 +378,7 @@ def cursorResponseDelay(cursorSignalsDf, time_interval):
         y = cursorSignalsDf[cursorSignalsDf.columns[1]].copy()
         
         if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t < time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
             t = t[mask]
             y = y[mask]
      
@@ -379,7 +413,7 @@ def cursorRiseFallTime(cursorSignalsDf, time_interval):
         y = cursorSignalsDf[cursorSignalsDf.columns[1]].copy()
         
         if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t < time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
             t = t[mask]
             y = y[mask]
      
@@ -415,7 +449,7 @@ def cursorSettlingTime(cursorSignalsDf, time_interval, tol=2):
         y = cursorSignalsDf[cursorSignalsDf.columns[1]].copy()
         
         if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t < time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
             t = t[mask]
             y = y[mask]
      
@@ -447,7 +481,7 @@ def cursorPeakOvershoot(cursorSignalsDf, time_interval):
         y = cursorSignalsDf[cursorSignalsDf.columns[1]].copy()
         
         if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t < time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
             t = t[mask]
             y = y[mask]
             
@@ -503,7 +537,7 @@ def cursorFSMSlope(cursorSignalsDf, time_interval, settingsDict):
         f = cursorSignalsDf[cursorSignalsDf.columns[2]].copy()
         
         if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t < time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
             t = t[mask]
             p = p[mask]
             f = f[mask]
@@ -558,7 +592,7 @@ def cursoLFSMSlope(cursorSignalsDf, time_interval, settingsDict):
         f = cursorSignalsDf[cursorSignalsDf.columns[2]].copy()
         
         if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t < time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
             t = t[mask]
             p = p[mask]
             f = f[mask]
@@ -617,7 +651,7 @@ def cursorQUSlope(cursorSignalsDf, time_interval, caseDf):
         u = cursorSignalsDf[cursorSignalsDf.columns[2]].copy()
 
         if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t < time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
             t = t[mask]
             q = q[mask]
             u = u[mask]

@@ -398,7 +398,7 @@ def genCursorPDF(goCursorList, rank, rankName, cursorPath):
     for i, goCursor in enumerate(goCursorList):
         cursor_pdf_filename = f'{cursorPath}_{i:02d}.pdf'
         cursor_pdf_filenames.append(cursor_pdf_filename)
-        goCursor.write_image(cursor_pdf_filename)
+        goCursor.write_image(cursor_pdf_filename, width=1000)
         
     merger = PdfWriter()
 

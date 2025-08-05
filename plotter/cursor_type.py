@@ -1,6 +1,7 @@
 from enum import Enum
 
 class CursorType(Enum):
+    INST       = 0
     MIN        = 1
     MAX        = 2
     MEAN       = 3    
