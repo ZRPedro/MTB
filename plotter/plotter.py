@@ -462,6 +462,7 @@ def drawPlot(rank: int,
         if len(ranksCursor) > 0:
             addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDict,  caseDf)
     
+    
     goCursorList = genCursorPlotlyTables(ranksCursor, dfCursorsList) if len(ranksCursor) > 0 else []  
      
     if config.genHTML:
