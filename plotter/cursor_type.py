@@ -1,20 +1,22 @@
 from enum import Enum
 
 class CursorType(Enum):
-    INST       = 0
-    MIN        = 1
-    MAX        = 2
-    MEAN       = 3    
-    GRAD_MIN   = 4
-    GRAD_MAX   = 5
-    GRAD_MEAN  = 6
-    RESPONSE   = 7
-    RISE_FALL  = 8
-    SETTLING   = 9
-    OVERSHOOT  = 10
-    FSM_SLOPE  = 11
-    LFSM_SLOPE = 12
-    QU_SLOPE   = 13
+    START      = 0
+    END        = 1
+    DELTA      = 2
+    MIN        = 3
+    MAX        = 4
+    MEAN       = 5    
+    GRAD_MIN   = 6
+    GRAD_MAX   = 7
+    GRAD_MEAN  = 8
+    RESPONSE   = 9
+    RISE_FALL  = 10
+    SETTLING   = 11
+    OVERSHOOT  = 12
+    FSM_SLOPE  = 13
+    LFSM_SLOPE = 14
+    QU_SLOPE   = 15
 
     @classmethod
     def from_string(cls, string : str):

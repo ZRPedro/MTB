@@ -150,8 +150,12 @@ def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDic
             cursorMetricData = []                
             for option in cursor.cursor_options:
                 for time_interval in getTimeIntervals(cursor.time_ranges):
-                    if option.name == 'INST':
-                        cursorMetricData.append(cursorInst(cursorSignalsDf, time_interval))
+                    if option.name == 'START':
+                        cursorMetricData.append(cursorStart(cursorSignalsDf, time_interval))
+                    elif option.name == 'END':
+                       cursorMetricData.append(cursorEnd(cursorSignalsDf, time_interval))
+                    elif option.name == 'DELTA':
+                       cursorMetricData.append(cursorDelta(cursorSignalsDf, time_interval))
                     elif option.name == 'MIN':
                         cursorMetricData.append(cursorMin(cursorSignalsDf, time_interval))
                     elif option.name == 'MAX':
@@ -184,7 +188,7 @@ def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDic
             dfCursorsList[i][cursorSignalsDf.columns[1]] = cursorMetricData # Add column to cursor DataFrame, using the first cursor signal display name
 
 
-def cursorInst(cursorSignalsDf, time_interval):
+def cursorStart(cursorSignalsDf, time_interval):
     '''
     Determine the closest signal value to the start and end value of the time interval
     '''
@@ -197,21 +201,59 @@ def cursorInst(cursorSignalsDf, time_interval):
             t = t[mask]
             y = y[mask]
         
-        t0_diff = np.abs(t-time_interval[0])
-        t1_diff = np.abs(t-time_interval[1])
-        
-        idx0 = t0_diff.idxmin()
-        idx1 = t1_diff.idxmin()
-        
-        t0 = t0_diff.loc[idx0]
-        t1 = t0_diff.loc[idx1]
-        
-        y0 = y.loc[idx0]
-        y1 = y.loc[idx1]
+        t0 = t.iloc[0]      # Cursor start t value
+        y0 = y.iloc[0]      # Cursor start y value
 
-        cursorMetricText = f"Inst: y({t0:.3f}) = {y0:.3f}, y({t1:.3f}) = {y1:.3f}<br>"
+        cursorMetricText = f"Start: y({t0:.3f}) = {y0:.3f}"
     else:
-        cursorMetricText = "Inst: error<br>"
+        cursorMetricText = "Inst: error"
+    
+    return cursorMetricText
+    
+
+def cursorEnd(cursorSignalsDf, time_interval):
+    '''
+    Determine the closest signal value to the start and end value of the time interval
+    '''
+    if len(cursorSignalsDf.columns) >=2:
+        t = cursorSignalsDf[cursorSignalsDf.columns[0]].copy()
+        y = cursorSignalsDf[cursorSignalsDf.columns[1]].copy()
+        
+        if len(time_interval) > 0:
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            t = t[mask]
+            y = y[mask]
+        
+        t1 = y.iloc[-1]     # Cursor end t value
+        y1 = y.iloc[-1]     # Cursor end y value
+
+        cursorMetricText = f"End: y({t1:.3f}) = {y1:.3f}"
+    else:
+        cursorMetricText = "Inst: error"
+    
+    return cursorMetricText
+    
+
+def cursorDelta(cursorSignalsDf, time_interval):
+    '''
+    Determine the closest signal value to the start and end value of the time interval
+    '''
+    if len(cursorSignalsDf.columns) >=2:
+        t = cursorSignalsDf[cursorSignalsDf.columns[0]].copy()
+        y = cursorSignalsDf[cursorSignalsDf.columns[1]].copy()
+        
+        if len(time_interval) > 0:
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            t = t[mask]
+            y = y[mask]
+        
+        y0 = y.iloc[0]      # Cursor start y value
+        y1 = y.iloc[-1]     # Cursor end y value
+        dy = y1 - y0        # Difference in y values
+
+        cursorMetricText = f"Delta: \u0394y = {dy:.3f}"
+    else:
+        cursorMetricText = "Inst: error"
     
     return cursorMetricText
     
@@ -236,9 +278,9 @@ def cursorMin(cursorSignalsDf, time_interval):
         t_min = t[y.idxmin()]  # x-value where y is minimum
     
         # Construct the text
-        cursorMetricText = f"Min: {y_min:.3f} at t = {t_min:.3f} s<br>"
+        cursorMetricText = f"Min: {y_min:.3f} at t = {t_min:.3f} s"
     else:
-        cursorMetricText = "Min: error<br>"
+        cursorMetricText = "Min: error"
     
     return cursorMetricText
 
@@ -263,9 +305,9 @@ def cursorMax(cursorSignalsDf, time_interval):
         t_max = t[y.idxmax()]  # x-value where y is maximum
     
         # Construct the text
-        cursorMetricText = f"Max: {y_max:.3f} at t = {t_max:.3f} s<br>"
+        cursorMetricText = f"Max: {y_max:.3f} at t = {t_max:.3f} s"
     else:
-        cursorMetricText = "Max: error<br>"
+        cursorMetricText = "Max: error"
     
     return cursorMetricText
 
@@ -287,9 +329,9 @@ def cursorMean(cursorSignalsDf, time_interval):
         y_mean = y.mean()
     
         # Construct the text
-        cursorMetricText = f"Mean: {y_mean:.3f}<br>"
+        cursorMetricText = f"Mean: {y_mean:.3f}"
     else:
-        cursorMetricText = "Mean: error<br>"
+        cursorMetricText = "Mean: error"
 
     return cursorMetricText
 
@@ -312,9 +354,9 @@ def cursorGradMin(cursorSignalsDf, time_interval):
         y_grad_min = y_grad.min()*60
         
         # Construct the text
-        cursorMetricText = f"Grad (min): {y_grad_min:.3f} pu/min<br>"
+        cursorMetricText = f"Grad (min): {y_grad_min:.3f} pu/min"
     else:
-        cursorMetricText = "Grad (min): error<br>"
+        cursorMetricText = "Grad (min): error"
 
     return cursorMetricText
 
@@ -337,9 +379,9 @@ def cursorGradMean(cursorSignalsDf, time_interval):
         y_grad_mean = y_grad.mean()*60
         
         # Construct the text
-        cursorMetricText = f"Grad (mean): {y_grad_mean:.3f} pu/min<br>"
+        cursorMetricText = f"Grad (mean): {y_grad_mean:.3f} pu/min"
     else:
-        cursorMetricText = "Grad (mean): error<br>"
+        cursorMetricText = "Grad (mean): error"
 
     return cursorMetricText
 
@@ -362,9 +404,9 @@ def cursorGradMax(cursorSignalsDf, time_interval):
         y_grad_max = y_grad.max()*60
         
         # Construct the text
-        cursorMetricText = f"Grad (max): {y_grad_max:.3f} pu/min<br>"
+        cursorMetricText = f"Grad (max): {y_grad_max:.3f} pu/min"
     else:
-        cursorMetricText = "Grad (max): error<br>"
+        cursorMetricText = "Grad (max): error"
 
     return cursorMetricText
 
@@ -397,9 +439,9 @@ def cursorResponseDelay(cursorSignalsDf, time_interval):
         t_response = t.max() - t.min()      # Get the rise/fall time      
     
         # Construct the text
-        cursorMetricText = f"Response delay: {t_response:.3f} s<br>"
+        cursorMetricText = f"Response delay: {t_response:.3f} s"
     else:
-        cursorMetricText = "Response delay: error<br>"
+        cursorMetricText = "Response delay: error"
 
     return cursorMetricText
 
@@ -433,9 +475,9 @@ def cursorRiseFallTime(cursorSignalsDf, time_interval):
     
         # Construct the text
         labelRiseOrFall = 'Rise time' if dy > 0 else 'Fall time'
-        cursorMetricText = f"{labelRiseOrFall}: {tRiseFall:.3f} s<br>"
+        cursorMetricText = f"{labelRiseOrFall}: {tRiseFall:.3f} s"
     else:
-        cursorMetricText = "Rise/Fall time: error<br>"
+        cursorMetricText = "Rise/Fall time: error"
 
     return cursorMetricText
 
@@ -464,9 +506,9 @@ def cursorSettlingTime(cursorSignalsDf, time_interval, tol=2):
         tSettling = t[mask].max() - t0          # Get the settling time      
     
         # Construct the text
-        cursorMetricText = f"Settling time: {tSettling:.3f} s<br>"
+        cursorMetricText = f"Settling time: {tSettling:.3f} s"
     else:
-        cursorMetricText = "Settling time: error<br>"
+        cursorMetricText = "Settling time: error"
 
     return cursorMetricText
 
@@ -506,9 +548,9 @@ def cursorPeakOvershoot(cursorSignalsDf, time_interval):
         else:
             zeta = 1.0                      # Else set zeta to 1.0
         # Construct the text
-        cursorMetricText = f"Overshoot: {yOSRatio*100:.2f} % (\u03B6 \u2248 {zeta:.3f})<br>"
+        cursorMetricText = f"Overshoot: {yOSRatio*100:.2f} % (\u03B6 \u2248 {zeta:.3f})"
     else:
-        cursorMetricText = "Overshoot: error<br>"
+        cursorMetricText = "Overshoot: error"
     
     return cursorMetricText
 
@@ -565,9 +607,9 @@ def cursorFSMSlope(cursorSignalsDf, time_interval, settingsDict):
                 fsmSlope = -100*(fnew-fn-db)/(fn*(Pnew-Pref))
         
         # Construct the text
-        cursorMetricText = f"FSM slope: {fsmSlope:.2f}%<br>"
+        cursorMetricText = f"FSM slope: {fsmSlope:.2f}%"
     else:
-        cursorMetricText = "FSM slope: error<br>"
+        cursorMetricText = "FSM slope: error"
 
     return cursorMetricText
 
@@ -615,7 +657,7 @@ def cursoLFSMSlope(cursorSignalsDf, time_interval, settingsDict):
             f1 = 50.5 if fnew > fn else 49.5
         else:
             print('"DK" can either be "1" or "2"!')
-            cursorMetricText = "LFSM slope: error<br>"
+            cursorMetricText = "LFSM slope: error"
         
         if Pnew == Pref:
             lfsmSlope = np.inf
@@ -623,9 +665,9 @@ def cursoLFSMSlope(cursorSignalsDf, time_interval, settingsDict):
             lfsmSlope = -100*(fnew-f1)/(fn*(Pnew-Pref))
               
         # Construct the text
-        cursorMetricText = f"LFSM slope: {lfsmSlope:.2f}%<br>"
+        cursorMetricText = f"LFSM slope: {lfsmSlope:.2f}%"
     else:
-        cursorMetricText = "LFSM slope: error<br>"
+        cursorMetricText = "LFSM slope: error"
 
     return cursorMetricText
 
@@ -665,9 +707,9 @@ def cursorQUSlope(cursorSignalsDf, time_interval, caseDf):
         dquSlope = -100*du/Uref*Qnom/dq
         
         # Construct the text
-        cursorMetricText = f"Q(U) slope: {dquSlope:.2f}%<br>"
+        cursorMetricText = f"Q(U) slope: {dquSlope:.2f}%"
     else:
-        cursorMetricText = "Q(U) slope: error<br>"
+        cursorMetricText = "Q(U) slope: error"
 
     return cursorMetricText
     
