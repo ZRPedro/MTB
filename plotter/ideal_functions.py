@@ -161,7 +161,7 @@ def delay(x, Td, Ts):
 
 def idealPramp(Pref, Tstep, Pstep, t):
     '''
-    This function calculates the ideal or maximum on rates of change of 
+    This function calculates the ideal or maximum rates of change of 
     active power output (Pramp) in both an up and down direction of for 
     a change in the active power reference for power-generating modules
     based on RfG (EU) 2016/631, 15.6 (e) NC 2025 (Version 4)
