@@ -108,7 +108,7 @@ def mapResultFiles(config: ReadConfig) -> Dict[int, List[Result]]:
         assert projectName is not None
         assert bulkName is not None
         assert fullpath is not None
-
+        
         newResult = Result(typ, rank, projectName, bulkName, fullpath, group)
 
         if rank in results.keys():
@@ -125,7 +125,8 @@ def addResults(plots: List[go.Figure],
                figures: List[Figure],
                nColumns: int,
                settingsDict, # project settings
-               caseDf # case MTB setting
+               caseDf, # case MTB setting
+               genIdeal: bool
                ) -> None:
     '''
     Adds simulation results for a specific case/rank to a set of Plotly figures or a single subplot.
@@ -149,7 +150,7 @@ def addResults(plots: List[go.Figure],
     pfFlatTIme = settingsDict['PF flat time']
     pscadInitTime = settingsDict['PSCAD Initialization time']
     
-    ideal = genIdealResults(result, resultData, settingsDict,  caseDf, pscadInitTime)
+    if genIdeal: ideal = genIdealResults(result, resultData, settingsDict,  caseDf, pscadInitTime)
     
     rowPos = 1
     colPos = 1
@@ -169,15 +170,16 @@ def addResults(plots: List[go.Figure],
         timeColName = 'time' if result.typ in (ResultType.EMT_INF, ResultType.EMT_PSOUT, ResultType.EMT_CSV, ResultType.EMT_ZIP) else resultData.columns[0]
         timeoffset = pfFlatTIme if result.typ == ResultType.RMS else pscadInitTime
 
-        # Add ideal result plots
-        if figure.title in ideal['figs']:
-            i = ideal['figs'].index(figure.title) # Get the index value for the figure.title in the ideal results
-            x_value = ideal['data']['time']
-            y_value = ideal['data'][ideal['signals'][i]]
-            x_value, y_value = downSample(x_value, y_value, downsampling_method, figure.gradient_threshold)
-            add_scatterplot_for_result(colPos, 'dash', 'ideal:'+ideal['signals'][i], SUBPLOT, plotlyFigure, 'ideal', rowPos,
-                                       0, x_value, y_value)
-            
+        if genIdeal:        
+            # Add ideal result plots
+            if figure.title in ideal['figs']:
+                i = ideal['figs'].index(figure.title) # Get the index value for the figure.title in the ideal results
+                x_value = ideal['data']['time']
+                y_value = ideal['data'][ideal['signals'][i]]
+                x_value, y_value = downSample(x_value, y_value, downsampling_method, figure.gradient_threshold)
+                add_scatterplot_for_result(colPos, 'dash', 'ideal:'+ideal['signals'][i], SUBPLOT, plotlyFigure, 'ideal', rowPos,
+                                           0, x_value, y_value)
+                
         traces = 0
         for sig in range(1, 4):
             signalKey = result.typ.name.lower().split('_')[0]
@@ -456,9 +458,9 @@ def drawPlot(rank: int,
             continue
 
         if config.genHTML:
-            addResults(htmlPlots, result, resultData, figureList, config.htmlColumns, settingsDict, caseDf)
+            addResults(htmlPlots, result, resultData, figureList, config.htmlColumns, settingsDict, caseDf, config.genIdeal)
         if config.genImage:
-            addResults(imagePlots, result, resultData, figureList, config.imageColumns, settingsDict, caseDf)
+            addResults(imagePlots, result, resultData, figureList, config.imageColumns, settingsDict, caseDf, config.genIdeal)
         if len(ranksCursor) > 0:
             addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDict,  caseDf)
     
