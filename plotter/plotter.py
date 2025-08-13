@@ -8,7 +8,7 @@ import re
 import pandas as pd
 from plotly.subplots import make_subplots  # type: ignore
 import plotly.graph_objects as go  # type: ignore
-from typing import List, Dict, Union, Tuple
+from typing import List, Dict, Union, Tuple, Set
 from sampling_functions import downSample
 from threading import Thread, Lock
 import time
@@ -108,7 +108,7 @@ def mapResultFiles(config: ReadConfig) -> Dict[int, List[Result]]:
         assert projectName is not None
         assert bulkName is not None
         assert fullpath is not None
-        
+
         newResult = Result(typ, rank, projectName, bulkName, fullpath, group)
 
         if rank in results.keys():
@@ -117,6 +117,39 @@ def mapResultFiles(config: ReadConfig) -> Dict[int, List[Result]]:
             results[rank] = [newResult]
 
     return results
+
+
+def colorMap(results: Dict[int, List[Result]]) -> Dict[str, List[str]]:
+    '''
+    Select colors for the given projects. Return a dictionary with the project name as key and a list of colors as value.
+    '''
+    colors = ['#e6194B', '#3cb44b', "#ffe119", '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#f032e6', '#bfef45',
+              '#fabed4', '#469990', '#dcbeff', '#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1',
+              '#000075', '#a9a9a9', '#000000']
+
+    projects: Set[str] = set()
+
+    for rank in results.keys():
+        for result in results[rank]:
+            projects.add(result.shorthand)
+
+    cMap: Dict[str, List[str]] = dict()
+
+    if len(list(projects)) > 2:
+        i = 0
+        for p in list(projects):
+            cMap[p] = [colors[i % len(colors)]] * 3
+            i += 1
+        return cMap
+    else:
+        i = 0
+        for p in list(projects):
+            cMap[p] = colors[i:i + 3]
+            i += 3
+            
+    cMap['ideal'] = ["#02525e", "#00847c"]
+    
+    return cMap
 
 
 def addResults(plots: List[go.Figure],
@@ -177,9 +210,9 @@ def addResults(plots: List[go.Figure],
                 x_value = ideal['data']['time']
                 y_value = ideal['data'][ideal['signals'][i]]
                 x_value, y_value = downSample(x_value, y_value, downsampling_method, figure.gradient_threshold)
-                add_scatterplot_for_result(colPos, 'dash', 'ideal:'+ideal['signals'][i], SUBPLOT, plotlyFigure, 'ideal', rowPos,
-                                           0, x_value, y_value)
-                
+                add_scatterplot_for_result(colPos, 'dash', colors, 'ideal:'+ideal['signals'][i], SUBPLOT, plotlyFigure, 'ideal', rowPos,
+                                        0, x_value, y_value)
+            
         traces = 0
         for sig in range(1, 4):
             signalKey = result.typ.name.lower().split('_')[0]
@@ -190,14 +223,14 @@ def addResults(plots: List[go.Figure],
                 x_value = resultData[timeColName] - timeoffset  # type: ignore
                 y_value = resultData[sigColName]  # type: ignore
                 x_value, y_value = downSample(x_value, y_value, downsampling_method, figure.gradient_threshold)
-                add_scatterplot_for_result(colPos, 'solid', sigDispName, SUBPLOT, plotlyFigure, result.shorthand, rowPos,
+                add_scatterplot_for_result(colPos, 'solid', colors, sigDispName, SUBPLOT, plotlyFigure, result.shorthand, rowPos,
                                            traces, x_value, y_value)
 
                 # plot_cursor_functions.add_annotations(x_value, y_value, plotlyFigure)
                 traces += 1
-            elif sigColName != '' and result.typ != ResultType.EMT_CSV: # Temporary fix for ideal output result type files where not all signals are present
+            elif sigColName != '':
                 print(f'Signal "{rawSigName}" not recognized in resultfile: {result.fullpath}')
-                add_scatterplot_for_result(colPos, 'solid', f'{sigDispName} (Unknown)', SUBPLOT, plotlyFigure, result.shorthand, rowPos,
+                add_scatterplot_for_result(colPos, 'solid', colors, f'{sigDispName} (Unknown)', SUBPLOT, plotlyFigure, result.shorthand, rowPos,
                                            traces, None, None)
                 traces += 1
         
@@ -227,7 +260,7 @@ def update_y_and_x_axis(figure, plotlyFigure, SUBPLOT, rowPos, colPos):
         )
 
 
-def add_scatterplot_for_result(colPos, dash, displayName, SUBPLOT, plotlyFigure, resultName, rowPos, traces, x_value,
+def add_scatterplot_for_result(colPos, dash, colors, displayName, SUBPLOT, plotlyFigure, resultName, rowPos, traces, x_value,
                                y_value):
     if not SUBPLOT:
         plotlyFigure.add_trace(  # type: ignore
@@ -235,6 +268,7 @@ def add_scatterplot_for_result(colPos, dash, displayName, SUBPLOT, plotlyFigure,
                 x=x_value,
                 y=y_value,
                 line=dict(dash=dash),
+                line_color=colors[resultName][traces],
                 name=displayName,
                 legendgroup=displayName,
                 showlegend=True
@@ -245,6 +279,8 @@ def add_scatterplot_for_result(colPos, dash, displayName, SUBPLOT, plotlyFigure,
             go.Scatter(
                 x=x_value,
                 y=y_value,
+                line=dict(dash=dash),                
+                line_color=colors[resultName][traces],
                 name=displayName,
                 legendgroup=resultName,
                 showlegend=True
@@ -348,6 +384,41 @@ def genCursorPlotlyTables(ranksCursor, dfCursorsList):
     return goCursorList    
 
 
+def genCursorPdf(rank, rankName, ranksCursor, dfCursorsList, nColumns, figurePath):
+    row_col_specs = []
+    rows=ceil(len(ranksCursor)/nColumns)
+    for i in range(rows):
+        row_spec =[]
+        for j in range(nColumns):
+            row_spec.append({"type": "table"}) # default for 1 column
+        row_col_specs.append(row_spec)        
+    fig = make_subplots(
+            rows=ceil(len(ranksCursor)/nColumns), cols=nColumns,
+            vertical_spacing=0.03,
+            specs=row_col_specs)
+    total_number_of_rows = 0
+    for i, cursor in enumerate(ranksCursor):
+        total_number_of_rows += len(dfCursorsList[i])
+        fig.add_trace(go.Table(header=dict(values=list(dfCursorsList[i].columns),
+                                           fill_color='#00847c',
+                                           font=dict(size=10, color='#ffffff'),
+                                           align='left'),
+                               cells=dict(values=[dfCursorsList[i][f'{column}'] for column in dfCursorsList[i].columns],
+                                          fill_color='#d8d8d8',
+                                          font=dict(size=10, color='#02525e'),
+                                          align='left'),
+                               ),
+                               row=ceil((i+1)/nColumns),
+                               col=(i % nColumns)+1
+                     )
+    fig.update_layout(
+        showlegend=False,
+        title_text=f"Cursor Metric Data for Rank {rank}: {rankName}",
+        margin=dict(t=50, l=50, r=50, b=50)
+        )
+    cursor_path = figurePath + "_cursor"
+    fig.write_image(f'{cursor_path}.pdf', height=50*total_number_of_rows, width=800*nColumns)    
+
     
 def genCursorHTML(htmlCursorColumns, goCursorList, rank, rankName):
     '''
@@ -416,6 +487,7 @@ def drawPlot(rank: int,
              resultDict: Dict[int, List[Result]],
              figureDict: Dict[int, List[Figure]],
              casesDf, # Pandas DataFrame
+             colorMap: Dict[str, List[str]],
              cursorDict: List[Cursor],
              settingsDict: Dict[str, str],
              config: ReadConfig):
@@ -458,9 +530,9 @@ def drawPlot(rank: int,
             continue
 
         if config.genHTML:
-            addResults(htmlPlots, result, resultData, figureList, config.htmlColumns, settingsDict, caseDf, config.genIdeal)
+            addResults(htmlPlots, result, resultData, figureList, colorMap, config.htmlColumns, settingsDict, caseDf)
         if config.genImage:
-            addResults(imagePlots, result, resultData, figureList, config.imageColumns, settingsDict, caseDf, config.genIdeal)
+            addResults(imagePlots, result, resultData, figureList, colorMap,config.imageColumns, settingsDict, caseDf)
         if len(ranksCursor) > 0:
             addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDict,  caseDf)
     
@@ -794,7 +866,9 @@ def main() -> None:
     caseGroup = settingsDict['Casegroup']
     casesDf = pd.read_excel(config.testcaseSheet, sheet_name=f'{caseGroup} cases', header=[0, 1])
     casesDf = casesDf.iloc[:, :60]     #Limit the DataFrame to the first 60 columns
-       
+    
+    colorSchemeMap = colorMap(resultDict)
+    
     if not exists(config.resultsDir):
         makedirs(config.resultsDir)
 
@@ -805,9 +879,9 @@ def main() -> None:
     for rank in resultDict.keys():
         if config.threads > 1:
             threads.append(Thread(target=drawPlot,
-                                  args=(rank, resultDict, figureDict, casesDf, cursorDict, settingsDict, config)))
+                                  args=(rank, resultDict, figureDict, casesDf, colorSchemeMap, cursorDict, settingsDict, config)))
         else:
-            drawPlot(rank, resultDict, figureDict, casesDf, cursorDict, settingsDict, config)
+                        drawPlot(rank, resultDict, figureDict, casesDf, colorSchemeMap, cursorDict, settingsDict, config)
 
     NoT = len(threads)
     if NoT > 0:
