@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 import pandas as pd
-from scipy.signal import bilinear, lfilter
+#from scipy.signal import bilinear, lfilter
 from Result import ResultType
 
 
@@ -54,16 +54,16 @@ def genIdealResults(result, resultData, settingDict, caseDf, pscadInitTime):
             idealData.loc[mask, 'P_pu_PoC'] = newPpocSeries
             
             # Adding delay and LP filtering 
-            Ts = idealData.time.iloc[1]-idealData.time.iloc[0]
-            Td = 0.5            # delay time [s]
-            trise = 1           # rise time [s]
-            fc = 0.35/trise     # cut off frequency [Hz]
+            # Ts = idealData.time.iloc[1]-idealData.time.iloc[0]
+            # Td = 0.5            # delay time [s]
+            # trise = 1           # rise time [s]
+            # fc = 0.35/trise     # cut off frequency [Hz]
             
-            idealData['P_pu_PoC_Td'] = delay(idealData.P_pu_PoC, Td, Ts)        # Add new column for the delayed ideal signal
-            idealData['P_pu_PoC_Td_LPF'] = lpf(idealData.P_pu_PoC, fc, 1/Ts)    # Add new column for the filtered ideal signal
+            # idealData['P_pu_PoC_Td'] = delay(idealData.P_pu_PoC, Td, Ts)        # Add new column for the delayed ideal signal
+            # idealData['P_pu_PoC_Td_LPF'] = lpf(idealData.P_pu_PoC, fc, 1/Ts)    # Add new column for the filtered ideal signal
             
-            returnDict = {'figs': ['Ppoc', 'Ppoc', 'Ppoc'], 'signals': ['P_pu_PoC', 'P_pu_PoC_Td', 'P_pu_PoC_Td_LPF'], 'data': idealData}
-            #returnDict = {'figs': ['Ppoc'], 'signals': ['P_pu_PoC'], 'data': idealData}
+            # returnDict = {'figs': ['Ppoc', 'Ppoc', 'Ppoc'], 'signals': ['P_pu_PoC', 'P_pu_PoC_Td', 'P_pu_PoC_Td_LPF'], 'data': idealData}
+            returnDict = {'figs': ['Ppoc'], 'signals': ['P_pu_PoC'], 'data': idealData}
             
         # Q(U) control cases
         elif 'Ucontrol' in caseDf['Case']['Name'].squeeze():
@@ -117,46 +117,46 @@ def genIdealResults(result, resultData, settingDict, caseDf, pscadInitTime):
     return returnDict
 
 
-def lpf(x, fc, fs):
-    '''
-    Simple first order low pass filter with cut off frequency fc and sampling frequency fs
+# def lpf(x, fc, fs):
+#     '''
+#     Simple first order low pass filter with cut off frequency fc and sampling frequency fs
 
-    Parameters:
-        x: input signal 
-        fc: cut off frequency in Hz
-        fs: sampling frequency in Hz
+#     Parameters:
+#         x: input signal 
+#         fc: cut off frequency in Hz
+#         fs: sampling frequency in Hz
     
-    Returns:
-        filtered signal 
-    '''
-    wc = 2*np.pi*fc
-    b, a = bilinear([0, wc], [1, wc], fs)
+#     Returns:
+#         filtered signal 
+#     '''
+#     wc = 2*np.pi*fc
+#     b, a = bilinear([0, wc], [1, wc], fs)
 
-    return lfilter(b, a, x)
+#     return lfilter(b, a, x)
 
 
-def delay(x, Td, Ts):
-    '''
-    Simple signal delay of Td seconds with sampling time Ts
+# def delay(x, Td, Ts):
+#     '''
+#     Simple signal delay of Td seconds with sampling time Ts
 
-    Parameters:
-        x: input signal
-        Td: delay time in seconds
-        Ts: sampling time in seconds
+#     Parameters:
+#         x: input signal
+#         Td: delay time in seconds
+#         Ts: sampling time in seconds
 
-    Returns:
-        delayed signal
-    '''
-    delay_samples = int(round(Td/Ts))
-    b = np.zeros(delay_samples + 1)
-    b[delay_samples] = 1    # For a pure delay of N samples, b = [0, 0, ..., 0, 1] (where 1 is at index N)
-    a = np.array([1.0])     # For an FIR filter (pure delay), a = [1]
+#     Returns:
+#         delayed signal
+#     '''
+#     delay_samples = int(round(Td/Ts))
+#     b = np.zeros(delay_samples + 1)
+#     b[delay_samples] = 1    # For a pure delay of N samples, b = [0, 0, ..., 0, 1] (where 1 is at index N)
+#     a = np.array([1.0])     # For an FIR filter (pure delay), a = [1]
 
-    if delay_samples == 0:
-        return x  # No delay needed, return original signal
+#     if delay_samples == 0:
+#         return x  # No delay needed, return original signal
     
-    # Apply the filter to the input signal
-    return lfilter(b, a, x)
+#     # Apply the filter to the input signal
+#     return lfilter(b, a, x)
 
 
 def idealPramp(Pref, Tstep, Pstep, t):
