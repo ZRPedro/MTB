@@ -109,7 +109,7 @@ def mapResultFiles(config: ReadConfig) -> Dict[int, List[Result]]:
         assert projectName is not None
         assert bulkName is not None
         assert fullpath is not None
-        projectName = 'Solbakke'
+        
         newResult = Result(typ, rank, projectName, bulkName, fullpath, group)
 
         if rank in results.keys():
