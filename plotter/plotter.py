@@ -5,6 +5,7 @@ from __future__ import annotations
 from os import listdir, makedirs, remove
 from os.path import abspath, join, split, exists
 import re
+import numpy as np
 import pandas as pd
 from plotly.subplots import make_subplots  # type: ignore
 import plotly.graph_objects as go  # type: ignore
@@ -108,7 +109,7 @@ def mapResultFiles(config: ReadConfig) -> Dict[int, List[Result]]:
         assert projectName is not None
         assert bulkName is not None
         assert fullpath is not None
-
+        projectName = 'Solbakke'
         newResult = Result(typ, rank, projectName, bulkName, fullpath, group)
 
         if rank in results.keys():
@@ -156,6 +157,7 @@ def addResults(plots: List[go.Figure],
                result, # result object
                resultData: pd.DataFrame,
                figures: List[Figure],
+               colors,
                nColumns: int,
                settingsDict, # project settings
                caseDf, # case MTB setting
@@ -530,9 +532,9 @@ def drawPlot(rank: int,
             continue
 
         if config.genHTML:
-            addResults(htmlPlots, result, resultData, figureList, colorMap, config.htmlColumns, settingsDict, caseDf)
+            addResults(htmlPlots, result, resultData, figureList, colorMap, config.htmlColumns, settingsDict, caseDf, config.genIdeal)
         if config.genImage:
-            addResults(imagePlots, result, resultData, figureList, colorMap,config.imageColumns, settingsDict, caseDf)
+            addResults(imagePlots, result, resultData, figureList, colorMap,config.imageColumns, settingsDict, caseDf, config.genIdeal)
         if len(ranksCursor) > 0:
             addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDict,  caseDf)
     
@@ -866,11 +868,13 @@ def main() -> None:
     caseGroup = settingsDict['Casegroup']
     casesDf = pd.read_excel(config.testcaseSheet, sheet_name=f'{caseGroup} cases', header=[0, 1])
     casesDf = casesDf.iloc[:, :60]     #Limit the DataFrame to the first 60 columns
-    
+
     colorSchemeMap = colorMap(resultDict)
     
     if not exists(config.resultsDir):
         makedirs(config.resultsDir)
+
+    np.seterr(divide='ignore', invalid='ignore') # To ignore RunTimeWarning produced by the downsample_based_on_gradient function
 
     create_css(config.resultsDir)
 
