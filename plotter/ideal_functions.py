@@ -274,6 +274,10 @@ def idealFSM(Pref, f, DK=1, s=10, db=0):
     else:
         Pnew = Pref-100/s*(f-fn-db)/fn*Pn if f>fn+db else Pref        
     
+    # Clamp Pnew to to be not exceed Pref by +/- 10%
+    if Pnew > Pref+0.1*Pn: Pnew = Pref+0.1*Pn
+    if Pnew < Pref-0.1*Pn: Pnew = Pref-0.1*Pn
+    
     return Pnew
 
 
