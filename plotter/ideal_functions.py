@@ -74,7 +74,7 @@ def genIdealResults(result, resultData, settingDict, caseDf, pscadInitTime):
             
             # Only apply from t >= 0
             mask = idealData['time'] >= 0            
-            newQpocSeries = pd.Series([idealQU(Qref=Qref0, Uref=U0, uag=uag, s=s_V_droop) for uag in idealData.loc[mask,'meas_Vag_pu']],
+            newQpocSeries = pd.Series([idealQU(Qref=Qref0, Uref=U0, Upos=Upos, s=s_V_droop) for Upos in idealData.loc[mask,'fft_pos_Vmag_pu']],
                                        index=idealData.loc[mask].index)            
             idealData.loc[mask, 'Q_pu_PoC'] = newQpocSeries
             
@@ -281,24 +281,29 @@ def idealFSM(Pref, f, DK=1, s=10, db=0):
     return Pnew
 
 
-def idealQU(Qref, Uref, uag, s):
+def idealQU(Qref, Uref, Upos, s):
     '''
     This function calculates the value of the reactive power required for voltage control
     mode based on RfG (EU) 2016/631, 21.3 (d) NC 2025 (Version 4)
 
     Parameters:
-        Qref in [pu] -- Qref is the actual Reactive Power output and not the nominal reactive power value
-        Uref in [pu] -- Uref is the actual voltage reference at the point of connection
-        uag in [pu] -- the measured phase to ground voltage at the point of connection    
-        s in [%] -- the voltage droop of the Q(U) control   
+        Qref in [pu] -- the Reactive Power reference (which by default is zero)
+        Uref in [pu] -- the voltage reference at the point of connection
+        Upos in [pu] -- the magnitude of the positive sequence voltage at the point of connection TODO: it should be selectable to be PoC or Terminal (LV/MV ?)    
+        s in [%]     -- the voltage droop of the Q(U) control   
 
     Returns:
         Qnew in [pu] -- the new value of Q at the point of connection
     '''
     Qnom = 0.33
-    du = Uref-uag
-    dq = 100*du/Uref*Qnom/s
-    Qnew = Qref + dq if Qref + dq <= Qnom else Qnom
+    dU = Uref-Upos
+    dQ = 100*dU/Uref*Qnom/s
+    if Qref + dQ > Qnom:
+        Qnew = Qnom
+    elif Qref + dQ < -Qnom:
+       Qnew = -Qnom 
+    else:
+        Qnew = Qref + dQ
         
     return Qnew
 
