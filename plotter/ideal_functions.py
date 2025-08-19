@@ -234,7 +234,9 @@ def idealLFSM(Pref, f, DK=1, FSM=False, s_fsm=10, db=0):
         
     if Pnew > 1.0:
         Pnew = 1.0
-        
+    elif Pnew < 0.0:
+        Pnew = 0.0
+
     return Pnew
 
 
