@@ -180,10 +180,12 @@ def idealPramp(Pref, Tstep, Pstep, t):
         Pramp = Pref if t <= Tstep else m*t + Pref
         Pramp = Pstep if Pramp >= Pstep else Pramp
     else:
-        m = -0.0033
+        m = -0.0033  # pu/s - equivalent to -0.2 pu/min
         Pramp = Pref if t <= Tstep else m*t + Pref
         Pramp = Pstep if Pramp <= Pstep else Pramp
-        
+
+    Pramp = Pramp if Pramp >= 0 else 0  # Ensure Pramp is not negative
+            
     return Pramp
 
 
