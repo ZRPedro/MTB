@@ -176,12 +176,12 @@ def idealPramp(Pref, Tstep, Pstep, t):
         Pramp in [pu] -- the new value of P after the ramping
     '''
     if Pstep > Pref:
-        m =  0.0033   # pu/s - equivalent to 0.2 pu/min
-        Pramp = Pref if t <= Tstep else m*t + Pref
+        m =  0.00333333  # pu/s - equivalent to 0.2 pu/min
+        Pramp = Pref if t <= Tstep else m*(t-Tstep) + Pref
         Pramp = Pstep if Pramp >= Pstep else Pramp # Ensure Pramp does not exceed the new reference value (Pstep)
     else:
-        m = -0.0033
-        Pramp = Pref if t <= Tstep else m*t + Pref
+        m = -0.00333333  # pu/s - equivalent to -0.2 pu/min
+        Pramp = Pref if t <= Tstep else m*(t-Tstep) + Pref
         Pramp = Pstep if Pramp <= Pstep else Pramp # Ensure Pramp does not go below the new reference value (Pstep)
         
     return Pramp
