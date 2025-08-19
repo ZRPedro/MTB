@@ -232,10 +232,10 @@ def idealLFSM(Pref, f, DK=1, FSM=False, s_fsm=10, db=0):
     else:
         Pnew = Pref
         
-    if Pnew > 1.0:
-        Pnew = 1.0
-    elif Pnew < 0.0:
-        Pnew = 0.0
+    if Pnew >= 1.0:
+        Pnew = 1.0  # Limit Active Power to 1.0 pu
+    elif Pnew <= 0.0:
+        Pnew = 0.0  # Limit Active Power to 0.0 pu
 
     return Pnew
 
