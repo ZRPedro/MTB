@@ -167,9 +167,9 @@ def idealPramp(Pref, Tstep, Pstep, t):
     based on RfG (EU) 2016/631, 15.6 (e) NC 2025 (Version 4)
 
     Parameters:
-        Pref in [pu] -- for Power Park Modules, Pref is the actual Active Power output 
+        Pref in [pu] -- for Power Park Modules, Pref is Active Power reference *before ramping* 
         Tstep in [s] -- time step for the ramping
-        Pstep in [pu] -- the new value of P after the ramping   
+        Pstep in [pu] -- the new reference value of the Active Power *after ramping*   
         t in [s] -- time at which the new value of P is calculated
 
     Returns:
@@ -178,11 +178,11 @@ def idealPramp(Pref, Tstep, Pstep, t):
     if Pstep > Pref:
         m =  0.0033   # pu/s - equivalent to 0.2 pu/min
         Pramp = Pref if t <= Tstep else m*t + Pref
-        Pramp = Pstep if Pramp >= Pstep else Pramp
+        Pramp = Pstep if Pramp >= Pstep else Pramp # Ensure Pramp does not exceed the new reference value (Pstep)
     else:
         m = -0.0033
         Pramp = Pref if t <= Tstep else m*t + Pref
-        Pramp = Pstep if Pramp <= Pstep else Pramp
+        Pramp = Pstep if Pramp <= Pstep else Pramp # Ensure Pramp does not go below the new reference value (Pstep)
         
     return Pramp
 
