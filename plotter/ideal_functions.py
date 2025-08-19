@@ -184,8 +184,9 @@ def idealPramp(Pref, Tstep, Pstep, t):
         Pramp = Pref if t <= Tstep else m*t + Pref
         Pramp = Pstep if Pramp <= Pstep else Pramp
 
-    Pramp = Pramp if Pramp >= 0 else 0  # Ensure Pramp is not negative
-            
+    Pramp = Pramp if Pramp >= 0 else 0      # Ensure Pramp is not negative
+    Pramp = Pramp if Pramp <= 1.0 else 1.0  # Ensure Pramp does not exceed 1.0 pu
+
     return Pramp
 
 
