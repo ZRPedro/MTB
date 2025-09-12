@@ -63,11 +63,11 @@ def genIdealResults(result, resultData, settingDict, caseDf, pscadInitTime):
             fn = 50                                                             # Nominal frequency [Hz]
             Td = 0.2                                                            # Delay time [s]
 
-            idealData['f_hz_Td'] = delay(idealData['pll_f_hz'], Td, Ts)    # Delayed the 'pll_f_hz' signal                       
-            idealData.loc[idealData['time'] < tThresh, 'f_hz_Td'] = fn     # Set values for t < tThresh to fn to eliminate the initialisation transients
-            idealData['f_hz_Td_Lpf'] = lpf(idealData['f_hz_Td'], fc, 1/Ts) # Pass the delayed signal through an LPF
+            idealData['f_hz_Td'] = delay(idealData['pll_f_hz'], Td, Ts)         # Delayed the 'pll_f_hz' signal                       
+            idealData.loc[idealData['time'] < tThresh, 'f_hz_Td'] = fn          # Set values for t < tThresh to fn to eliminate the initialisation transients
+            idealData['f_hz_Td_Lpf'] = lpf(idealData['f_hz_Td'], fc, 1/Ts)      # Pass the delayed signal through an LPF
 
-            if not 'pstep' in caseDf['Case']['Name'].squeeze(): # idealLFSM does not support active power ramping
+            if 'step' in caseDf['Case']['Name'].squeeze() and not 'pstep' in caseDf['Case']['Name'].squeeze(): # Run idealLFSM only for 'step', but not for 'pstep'
                 idealData['P_pu_LFSM_FFR'] = pd.Series([idealLFSM(Pref=P0, f=f, DK=DK, FSM=FSM, s_fsm=s_fsm, db=db) for f in idealData['f_hz_Td_Lpf']]) # TODO: Change P0 to mtb_s_pref_pu
                 idealFigs.append('Ppoc')
                 idealSignals.append('P_pu_LFSM_FFR')                                   
@@ -76,54 +76,63 @@ def genIdealResults(result, resultData, settingDict, caseDf, pscadInitTime):
             idealData['P_pu_LFSM_Ramp'] = idealLFSMRamp(P0=idealData['mtb_s_pref_pu'], Ts=Ts, f=idealData['pll_f_hz'], fTdLpf=idealData['f_hz_Td_Lpf'], P=idealData['P_pu_LFSM_Ramp'], DK=DK, FSM=FSM, s_fsm=s_fsm, db=db)  # TODO: Change P0 to mtb_s_pref_pu
             idealFigs.append('Ppoc')
             idealSignals.append('P_pu_LFSM_Ramp')                                            
-                        
+
+            if not 'step' in caseDf['Case']['Name'].squeeze() or 'pstep' in caseDf['Case']['Name'].squeeze(): # Run idealLFSM only for 'step', but not for 'pstep'
+                Td_2s = 2
+                idealData['P_pu_LFSM_Ramp_2s'] = delay(idealData['P_pu_LFSM_Ramp'], Td_2s, Ts)
+                idealData.loc[idealData['time'] < tThresh, 'P_pu_LFSM_Ramp_2s'] = P0      # Set values for t < tThresh
+                idealFigs.append('Ppoc')
+                idealSignals.append('P_pu_LFSM_Ramp_2s')                                            
+        
+        Qdefault = settingDict['Default Q mode']                
         # Q control cases
-        if caseDf['Initial Settings']['Qmode'].squeeze() == 'Q':            
+        if caseDf['Initial Settings']['Qmode'].squeeze() == 'Q' or caseDf['Initial Settings']['Qmode'].squeeze() == 'Default' and Qdefault == 'Q':            
             Qref0 = caseDf['Initial Settings']['Qref0'].squeeze()               # Initial reactive power setpoint, when Qmode == 'Q'
             
-            idealData['Q_pu_PoC'] = lpf(idealData['mtb_s_qref'], fc, 1/Ts)      # Ideal response == Qref passed through a LPF      
-            idealData.loc[idealData['time'] < tThresh, 'Q_pu_PoC_Lpf'] = Qref0  # Set values for t < tThresh
+            idealData['Q_pu_Qctrl'] = lpf(idealData['mtb_s_qref'], fc, 1/Ts)      # Ideal response == Qref passed through a LPF      
+            idealData.loc[idealData['time'] < tThresh, 'Q_pu_Qctrl'] = Qref0      # Set values for t < tThresh
             idealFigs.append('Qpoc')
-            idealSignals.append('Q_pu_PoC')  
+            idealSignals.append('Q_pu_Qctrl')  
 
         # Q(U) control cases
-        if caseDf['Initial Settings']['Qmode'].squeeze() == 'Q(U)':
+        if caseDf['Initial Settings']['Qmode'].squeeze() == 'Q(U)' or caseDf['Initial Settings']['Qmode'].squeeze() == 'Default' and  Qdefault == 'Q(U)':
             DK = 1 if settingDict['Area']=='DK1' else 2                         # DK area, either 1 or 2
             DSO = True if settingDict['Un']<110 else False                      # DSO, either Energinet (TSO))
             s_V_droop = settingDict['V droop']                                  # Vdroop value
-            #Uref0 = caseDf['Initial Settings']['Qref0'].squeeze()               # Note: If Qmode == 'Q(U)', then Qref0 = Uref0
+            #Uref0 = caseDf['Initial Settings']['Qref0'].squeeze()              # Note: If Qmode == 'Q(U)', then Qref0 = Uref0
             Qref0 = 0.0
 
-            idealData['Q_pu_QU'] = Qref0      # Create new signal to populate
+            idealData['Q_pu_QU_Inst'] = Qref0      # Create new signal to populate
             for i, row in idealData.iterrows():
                 if row['time'] < tThresh:
                     continue
                 QpuQU = idealQU(Uref=row['mtb_s_qref'], Upos=row['fft_pos_Vmag_pu'], s=s_V_droop, Qref=Qref0, DK=DK , DSO=DSO) # Note: If Qmode == 'Q(U)', then 'mtb_s_qref' = Uref
-                idealData.loc[i, 'Q_pu_QU'] = QpuQU 
+                idealData.loc[i, 'Q_pu_QU_Inst'] = QpuQU 
+                
+            # Change LPF setting for Q(U)
+            trise_QU = 0.75                                                     # Rise time [s]
+            fc_QU = 0.35/trise_QU                                               # Cut-off frequency [Hz]
 
+            idealData['Q_pu_QU'] = lpf(idealData['Q_pu_QU_Inst'], fc_QU, 1/Ts)            
             idealFigs.append('Qpoc')
-            idealSignals.append('Q_pu_QU') 
-            
-            idealData['Q_pu_QU_Lpf'] = lpf(idealData['Q_pu_QU'], fc, 1/Ts)            
-            idealFigs.append('Qpoc')
-            idealSignals.append('Q_pu_QU_Lpf')  
+            idealSignals.append('Q_pu_QU')  
             
         #PF control mode
-        if caseDf['Initial Settings']['Qmode'].squeeze() == 'PF':
+        if caseDf['Initial Settings']['Qmode'].squeeze() == 'PF' or caseDf['Initial Settings']['Qmode'].squeeze() == 'Default' and Qdefault == 'PF':
             P0 = caseDf['Initial Settings']['P0'].squeeze()                     # Initial active power setpoint, P0
             PFref0 = caseDf['Initial Settings']['Qref0'].squeeze()              # Initial PF setpoint, Qref0, when Qmode == 'PF'
             
             if caseDf['Event 1']['type'].squeeze() == 'Pref':   # Pref changes -> slow ramping of Ppoc, thus use Ppoc and not Pref
-                idealData['Q_pu_Qpf'] = idealQpf(Ppoc=idealData['P_pu_PoC'], PFref=PFref0)
+                idealData['Q_pu_Qpf_Inst'] = idealQpf(Ppoc=idealData['P_pu_PoC'], PFref=PFref0)
             elif caseDf['Event 1']['type'].squeeze() == 'Qref': # PFref changes & Pref constant
-                idealData['Q_pu_Qpf'] = idealQpf(Ppoc=idealData['mtb_s_pref_pu'], PFref=idealData['mtb_s_qref']) # Note that .mtb_s_qref = PF if Qmode == 'PF'
+                idealData['Q_pu_Qpf_Inst'] = idealQpf(Ppoc=idealData['mtb_s_pref_pu'], PFref=idealData['mtb_s_qref']) # Note that .mtb_s_qref = PF if Qmode == 'PF'
             else: # Use Initial settings
-                idealData['Q_pu_Qpf'] = idealQpf(Ppoc=P0, PFref=PFref0)
+                idealData['Q_pu_Qpf_Inst'] = idealQpf(Ppoc=P0, PFref=PFref0)
                 
-            idealData['Q_pu_Qpf_Lpf'] = lpf(idealData['Q_pu_Qpf'], fc, 1/Ts)            
-            idealData.loc[idealData['time'] < tThresh, 'Q_pu_Qpf_Lpf'] = P0*np.tan(np.arccos(PFref0))      # Set values for t < tThresh
+            idealData['Q_pu_Qpf'] = lpf(idealData['Q_pu_Qpf_Inst'], fc, 1/Ts)            
+            idealData.loc[idealData['time'] < tThresh, 'Q_pu_Qpf'] = P0*np.tan(np.arccos(PFref0))      # Set values for t < tThresh
             idealFigs.append('Qpoc')
-            idealSignals.append('Q_pu_Qpf_Lpf')  
+            idealSignals.append('Q_pu_Qpf')  
                         
         # Fast Fault Current contribution cases
         if 'FRT' in caseDf['Case']['Name'].squeeze() or 'Fault' in caseDf['Case']['Name'].squeeze() or 'support' in caseDf['Case']['Name'].squeeze():
@@ -140,8 +149,14 @@ def genIdealResults(result, resultData, settingDict, caseDf, pscadInitTime):
                 if row['time'] < tThresh:
                     continue
                 if row['fft_pos_Vmag_pu'] >= vposFrtLimit:
-                    Iq0 =  row['fft_pos_Iq_pu']
-                    #Iq0 = 0 # TODO: Fix that the Iq0 value is used before FRT is detected
+                    # This assumes the ideal Iq = Qpoc/Upos
+                    if caseDf['Initial Settings']['Qmode'].squeeze() == 'Q' or Qdefault == 'Q':            
+                        Iq0 =  row['Q_pu_PoC']/row['fft_pos_Vmag_pu']
+                    if caseDf['Initial Settings']['Qmode'].squeeze() == 'Q(U)' or Qdefault == 'Q(U)':
+                        Iq0 =  row['Q_pu_QU']/row['fft_pos_Vmag_pu']
+                    if caseDf['Initial Settings']['Qmode'].squeeze() == 'PF' or Qdefault == 'PF':
+                        Iq0 =  row['Q_pu_Qpf']/row['fft_pos_Vmag_pu']
+                        
                 IqFFC = idealFFC(Upos=row['fft_pos_Vmag_pu'], Iq0 = Iq0, DK=DK, DSO=DSO)
                     
                 idealData.loc[i, 'Iq_pu_FFC'] = IqFFC                                     
@@ -250,15 +265,25 @@ def idealLFSMRamp(P0, Ts, f, fTdLpf, P, DK, FSM, s_fsm, db):
         P in [pu] -- the new value of P after ensuring the ramping rate is not too high
     '''
     
-    fThresh = 0.04      # Frequency threshold
+    fLower = 0.020      # Lower hysteresis frequency threshold
+    fUpper = 0.040      # Upper hysteresis frequency threshold
     PThresh = 0.0001    # Active power threshold
     m = 0.00333333      # pu/s - equivalent to 0.2 pu/min ramping rate
     fn = 50.0           # Nominal frequency in Hz
     
+    # Hysteresis band LOWER and UPPER band switches assuming we start at fn
+    LOWER = True        
+    UPPER = False
     Pref = P0.iloc[0]           
     for k in range(1, len(P)):
-        # If the active power is ramping to fast with the frequency close to the nominal frequency
-        if np.abs(f.iloc[k] - fn) < fThresh:    # Ramping active
+        # Activate active power ramping if the frequency is close to the nominal frequency
+        if np.abs(f.iloc[k] - fn) > fUpper:
+            UPPER = True
+            LOWER = False
+        elif np.abs(f.iloc[k] - fn) < fLower:
+            LOWER = True
+            UPPER = False
+        if LOWER:    # Ramping active
             if np.abs(P0.iloc[k] - P.iloc[k-1]) > PThresh:
                 if P0.iloc[k] - P.iloc[k-1] > 0:  # If P needs to increasing
                     P.iloc[k] = m*Ts + P.iloc[k-1]
@@ -271,9 +296,12 @@ def idealLFSMRamp(P0, Ts, f, fTdLpf, P, DK, FSM, s_fsm, db):
             else:   # Maintain current value of P
                 P.iloc[k] = P.iloc[k-1]
             Pref =  P.iloc[k]
-        else:   # LFSM active
+        elif UPPER:   # LFSM active
             P.iloc[k] = idealLFSM(Pref=Pref, f=fTdLpf.iloc[k-1], DK=DK, FSM=FSM, s_fsm=s_fsm, db=db)
-    
+        else: # Trapped inbetween hystersis band
+            print('How the hell did we end up trapped in the hysteresis this happen!!')
+            sys.exit(1)
+
     return P
 
 
