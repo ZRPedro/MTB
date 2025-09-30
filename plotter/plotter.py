@@ -728,7 +728,7 @@ def create_html(plots: List[go.Figure], goCursorList: List[go.Figure], path: str
     source_list += '</div>'
 
     html_content = create_html_plots(config.htmlColumns, plots, rank, rankName)
-    html_content_cursors = genCursorHTML(config.htmlCursorColumns, goCursorList, rank, rankName) if len(goCursorList) > 0 else ''
+    html_content_cursors = genCursorHTML(config.htmlCursorColumns, goCursorList, rank, rankName) if config.genCursorHTML and len(goCursorList) > 0 else ''
     
     # Create Dropdown Content for the Navbar
     idx = 0
