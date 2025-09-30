@@ -201,10 +201,13 @@ def cursorStart(cursorSignalsDf, time_interval):
             t = t[mask]
             y = y[mask]
         
-        t0 = t.iloc[0]      # Cursor start t value
-        y0 = y.iloc[0]      # Cursor start y value
-
-        cursorMetricText = f"Start: y({t0:.3f}) = {y0:.3f}"
+        if len(t) > 0:
+            t0 = t.iloc[0]      # Cursor start t value
+            y0 = y.iloc[0]      # Cursor start y value
+    
+            cursorMetricText = f"Start: y({t0:.3f}) = {y0:.3f}"
+        else:
+            cursorMetricText = "Inst: error"
     else:
         cursorMetricText = "Inst: error"
     
@@ -224,10 +227,13 @@ def cursorEnd(cursorSignalsDf, time_interval):
             t = t[mask]
             y = y[mask]
         
-        t1 = y.iloc[-1]     # Cursor end t value
-        y1 = y.iloc[-1]     # Cursor end y value
-
-        cursorMetricText = f"End: y({t1:.3f}) = {y1:.3f}"
+        if len(t) > 0:
+            t1 = y.iloc[-1]     # Cursor end t value
+            y1 = y.iloc[-1]     # Cursor end y value
+    
+            cursorMetricText = f"End: y({t1:.3f}) = {y1:.3f}"
+        else:
+            cursorMetricText = "Inst: error"
     else:
         cursorMetricText = "Inst: error"
     
@@ -247,11 +253,14 @@ def cursorDelta(cursorSignalsDf, time_interval):
             t = t[mask]
             y = y[mask]
         
-        y0 = y.iloc[0]      # Cursor start y value
-        y1 = y.iloc[-1]     # Cursor end y value
-        dy = y1 - y0        # Difference in y values
-
-        cursorMetricText = f"Delta: \u0394y = {dy:.3f}"
+        if len(t) > 0:
+            y0 = y.iloc[0]      # Cursor start y value
+            y1 = y.iloc[-1]     # Cursor end y value
+            dy = y1 - y0        # Difference in y values
+    
+            cursorMetricText = f"Delta: \u0394y = {dy:.3f}"
+        else:
+            cursorMetricText = "Inst: error"
     else:
         cursorMetricText = "Inst: error"
     
@@ -270,15 +279,18 @@ def cursorMin(cursorSignalsDf, time_interval):
             mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
             t = t[mask]
             y = y[mask]
-            
-        # Find the min of y
-        y_min = y.min()
-    
-        # Find the corresponding x-values
-        t_min = t[y.idxmin()]  # x-value where y is minimum
-    
-        # Construct the text
-        cursorMetricText = f"Min: {y_min:.3f} at t = {t_min:.3f} s"
+        
+        if len(t) > 0:
+            # Find the min of y
+            y_min = y.min()
+        
+            # Find the corresponding x-values
+            t_min = t[y.idxmin()]  # x-value where y is minimum
+        
+            # Construct the text
+            cursorMetricText = f"Min: {y_min:.3f} at t = {t_min:.3f} s"
+        else:
+            cursorMetricText = "Min: error"
     else:
         cursorMetricText = "Min: error"
     
@@ -298,14 +310,17 @@ def cursorMax(cursorSignalsDf, time_interval):
             t = t[mask]
             y = y[mask]
             
-        # Find the max of y
-        y_max = y.max()
-    
-        # Find the corresponding x-values
-        t_max = t[y.idxmax()]  # x-value where y is maximum
-    
-        # Construct the text
-        cursorMetricText = f"Max: {y_max:.3f} at t = {t_max:.3f} s"
+        if len(t) > 0:
+            # Find the max of y
+            y_max = y.max()
+        
+            # Find the corresponding x-values
+            t_max = t[y.idxmax()]  # x-value where y is maximum
+        
+            # Construct the text
+            cursorMetricText = f"Max: {y_max:.3f} at t = {t_max:.3f} s"
+        else:
+            cursorMetricText = "Max: error"
     else:
         cursorMetricText = "Max: error"
     
@@ -325,11 +340,14 @@ def cursorMean(cursorSignalsDf, time_interval):
             t = t[mask]
             y = y[mask]
     
-        # Find the mean of y
-        y_mean = y.mean()
-    
-        # Construct the text
-        cursorMetricText = f"Mean: {y_mean:.3f}"
+        if len(t) > 0:
+            # Find the mean of y
+            y_mean = y.mean()
+        
+            # Construct the text
+            cursorMetricText = f"Mean: {y_mean:.3f}"
+        else:
+            cursorMetricText = "Mean: error"
     else:
         cursorMetricText = "Mean: error"
 
@@ -349,12 +367,15 @@ def cursorGradMin(cursorSignalsDf, time_interval):
             t = t[mask]
             y = y[mask]
     
-        # Find the min gradien of y
-        y_grad = np.gradient(y,t)
-        y_grad_min = y_grad.min()*60
-        
-        # Construct the text
-        cursorMetricText = f"Grad (min): {y_grad_min:.3f} pu/min"
+        if len(t) > 0:
+            # Find the min gradien of y
+            y_grad = np.gradient(y,t)
+            y_grad_min = y_grad.min()*60
+            
+            # Construct the text
+            cursorMetricText = f"Grad (min): {y_grad_min:.3f} pu/min"
+        else:
+            cursorMetricText = "Grad (min): error"
     else:
         cursorMetricText = "Grad (min): error"
 
@@ -374,12 +395,15 @@ def cursorGradMean(cursorSignalsDf, time_interval):
             t = t[mask]
             y = y[mask]
             
-        # Find the mean gradien of y
-        y_grad = np.gradient(y,t)
-        y_grad_mean = y_grad.mean()*60
-        
-        # Construct the text
-        cursorMetricText = f"Grad (mean): {y_grad_mean:.3f} pu/min"
+        if len(t) > 0:
+            # Find the mean gradien of y
+            y_grad = np.gradient(y,t)
+            y_grad_mean = y_grad.mean()*60
+            
+            # Construct the text
+            cursorMetricText = f"Grad (mean): {y_grad_mean:.3f} pu/min"
+        else:
+            cursorMetricText = "Grad (mean): error"
     else:
         cursorMetricText = "Grad (mean): error"
 
@@ -399,12 +423,15 @@ def cursorGradMax(cursorSignalsDf, time_interval):
             t = t[mask]
             y = y[mask]
     
-        # Find the min gradien of y
-        y_grad = np.gradient(y,t)
-        y_grad_max = y_grad.max()*60
-        
-        # Construct the text
-        cursorMetricText = f"Grad (max): {y_grad_max:.3f} pu/min"
+        if len(t) > 0:
+            # Find the min gradien of y
+            y_grad = np.gradient(y,t)
+            y_grad_max = y_grad.max()*60
+            
+            # Construct the text
+            cursorMetricText = f"Grad (max): {y_grad_max:.3f} pu/min"
+        else:
+            cursorMetricText = "Grad (max): error"
     else:
         cursorMetricText = "Grad (max): error"
 
@@ -424,22 +451,25 @@ def cursorResponseDelay(cursorSignalsDf, time_interval):
             t = t[mask]
             y = y[mask]
      
-        # Find the risetime of y
-        y0 = y.iloc[0]      # Cursor start y value
-        y1 = y.iloc[-1]     # Cursor end y value
-        dy = y1 - y0        # Difference in y values
+        if len(t) > 0:
+            # Find the risetime of y
+            y0 = y.iloc[0]      # Cursor start y value
+            y1 = y.iloc[-1]     # Cursor end y value
+            dy = y1 - y0        # Difference in y values
+            
+            if dy > 0:          # Response delay time for a rising signal
+                mask = (y <= (y0 + 0.1*dy)) # The 10% rise value mask
+            else:               # Response delay time for a falling time
+                mask = (y >= (y0 + 0.1*dy)) # The 10% fall value mask
+            
+            t = t[mask]         # Get the rise/fall response delay time range values
+            
+            t_response = t.max() - t.min()      # Get the rise/fall time      
         
-        if dy > 0:          # Response delay time for a rising signal
-            mask = (y <= (y0 + 0.1*dy)) # The 10% rise value mask
-        else:               # Response delay time for a falling time
-            mask = (y >= (y0 + 0.1*dy)) # The 10% fall value mask
-        
-        t = t[mask]         # Get the rise/fall response delay time range values
-        
-        t_response = t.max() - t.min()      # Get the rise/fall time      
-    
-        # Construct the text
-        cursorMetricText = f"Response delay: {t_response:.3f} s"
+            # Construct the text
+            cursorMetricText = f"Response delay: {t_response:.3f} s"
+        else:
+            cursorMetricText = "Response delay: error"
     else:
         cursorMetricText = "Response delay: error"
 
@@ -459,23 +489,26 @@ def cursorRiseFallTime(cursorSignalsDf, time_interval):
             t = t[mask]
             y = y[mask]
      
-        # Find the risetime of y
-        y0 = y.iloc[0]      # Cursor start y value
-        y1 = y.iloc[-1]     # Cursor end y value
-        dy = y1 - y0        # Difference in y values
+        if len(t) > 0:
+            # Find the risetime of y
+            y0 = y.iloc[0]      # Cursor start y value
+            y1 = y.iloc[-1]     # Cursor end y value
+            dy = y1 - y0        # Difference in y values
+            
+            if dy > 0:                                              # Rise time
+                mask = (y >= (y0 + 0.1*dy)) & (y <= (y0 + 0.9*dy))  # The 10% to 90% rise value mask
+            else:                                                   # Fall time
+                mask = (y <= (y0 + 0.1*dy)) & (y >= (y0 + 0.9*dy))  # The 10% to 90% fall value mask
+            
+            t = t[mask]         # Get the rise/fall time range values
+            
+            tRiseFall = t.max() - t.min()      # Get the rise/fall time      
         
-        if dy > 0:                                              # Rise time
-            mask = (y >= (y0 + 0.1*dy)) & (y <= (y0 + 0.9*dy))  # The 10% to 90% rise value mask
-        else:                                                   # Fall time
-            mask = (y <= (y0 + 0.1*dy)) & (y >= (y0 + 0.9*dy))  # The 10% to 90% fall value mask
-        
-        t = t[mask]         # Get the rise/fall time range values
-        
-        tRiseFall = t.max() - t.min()      # Get the rise/fall time      
-    
-        # Construct the text
-        labelRiseOrFall = 'Rise time' if dy > 0 else 'Fall time'
-        cursorMetricText = f"{labelRiseOrFall}: {tRiseFall:.3f} s"
+            # Construct the text
+            labelRiseOrFall = 'Rise time' if dy > 0 else 'Fall time'
+            cursorMetricText = f"{labelRiseOrFall}: {tRiseFall:.3f} s"
+        else:
+            cursorMetricText = "Rise/Fall time: error"
     else:
         cursorMetricText = "Rise/Fall time: error"
 
@@ -495,18 +528,21 @@ def cursorSettlingTime(cursorSignalsDf, time_interval, tol=2):
             t = t[mask]
             y = y[mask]
      
-        # Find the settling time of y
-        t0 = t.iloc[0]          # Time t0
-        y0 = y.iloc[0]          # Cursor start y value
-        y1 = y.iloc[-1]         # Cursor end y value
-        dy = np.abs(y1 - y0)    # Difference in y values
+        if len(t) > 0:
+            # Find the settling time of y
+            t0 = t.iloc[0]          # Time t0
+            y0 = y.iloc[0]          # Cursor start y value
+            y1 = y.iloc[-1]         # Cursor end y value
+            dy = np.abs(y1 - y0)    # Difference in y values
+            
+            mask = np.abs(y - y1) >= dy*tol/100     # Tollerance setting time mask
+                    
+            tSettling = t[mask].max() - t0          # Get the settling time      
         
-        mask = np.abs(y - y1) >= dy*tol/100     # Tollerance setting time mask
-                
-        tSettling = t[mask].max() - t0          # Get the settling time      
-    
-        # Construct the text
-        cursorMetricText = f"Settling time: {tSettling:.3f} s"
+            # Construct the text
+            cursorMetricText = f"Settling time: {tSettling:.3f} s"
+        else:
+            cursorMetricText = "Settling time: error"
     else:
         cursorMetricText = "Settling time: error"
 
@@ -527,28 +563,31 @@ def cursorPeakOvershoot(cursorSignalsDf, time_interval):
             t = t[mask]
             y = y[mask]
             
-        # Find the step size within the time interval
-        y0 = y.iloc[0]          # Cursor start y value
-        y1 = y.iloc[-1]         # Cursor end y value
-        dy = np.abs(y1 - y0)    # Difference in y values
-
-        # Find the overshoot ratio of y
-        yOSRatio = 0.0                      # Default value if no overshoot
-        if y1 > y0:                         # Positve step
-            if y.max() > y1:                # Check if there is a positive overshoot
-                yOSRatio = (y.max()-y1)/dy
-        else:                               # Negative step
-            if y.min() < y1:                # Check if there is a negative overshoot
-                yOSRatio = np.abs(y.min()-y1)/dy
-
-        # Find the corresponding second order damping ratio estimate
-        if yOSRatio > 0.0:                  # Check if there is an overshoot
-            A = np.log(yOSRatio)/np.pi
-            zeta = np.sqrt(A**2/(1+A**2))
+        if len(t) > 0:
+            # Find the step size within the time interval
+            y0 = y.iloc[0]          # Cursor start y value
+            y1 = y.iloc[-1]         # Cursor end y value
+            dy = np.abs(y1 - y0)    # Difference in y values
+    
+            # Find the overshoot ratio of y
+            yOSRatio = 0.0                      # Default value if no overshoot
+            if y1 > y0:                         # Positve step
+                if y.max() > y1:                # Check if there is a positive overshoot
+                    yOSRatio = (y.max()-y1)/dy
+            else:                               # Negative step
+                if y.min() < y1:                # Check if there is a negative overshoot
+                    yOSRatio = np.abs(y.min()-y1)/dy
+    
+            # Find the corresponding second order damping ratio estimate
+            if yOSRatio > 0.0:                  # Check if there is an overshoot
+                A = np.log(yOSRatio)/np.pi
+                zeta = np.sqrt(A**2/(1+A**2))
+            else:
+                zeta = 1.0                      # Else set zeta to 1.0
+            # Construct the text
+            cursorMetricText = f"Overshoot: {yOSRatio*100:.2f} % (\u03B6 \u2248 {zeta:.3f})"
         else:
-            zeta = 1.0                      # Else set zeta to 1.0
-        # Construct the text
-        cursorMetricText = f"Overshoot: {yOSRatio*100:.2f} % (\u03B6 \u2248 {zeta:.3f})"
+            cursorMetricText = "Overshoot: error"
     else:
         cursorMetricText = "Overshoot: error"
     
@@ -584,30 +623,33 @@ def cursorFSMSlope(cursorSignalsDf, time_interval, settingsDict):
             p = p[mask]
             f = f[mask]
         
-        fn = 50                                 # Nominal frequency [Hz]
-        db = float(settingsDict['FSM deadband']) # FSM deadband in [Hz]
-                
-        if np.abs(fn-f.iloc[0]) < 0.01:
-            fnew = f.iloc[-1]   # Assume new f at the end of the cursor interval
-            Pnew = p.iloc[-1]
-            Pref = p.iloc[0]
-        else:
-            fnew = f.iloc[0]
-            Pnew = p.iloc[0]
-            Pref = p.iloc[-1]
-            
-        df = fnew - fn
-
-        if Pnew == Pref:
-            fsmSlope = np.inf
-        else:            
-            if df < 0:
-                fsmSlope = -100*(fnew-fn+db)/(fn*(Pnew-Pref))
+        if len(t) > 0:
+            fn = 50                                 # Nominal frequency [Hz]
+            db = float(settingsDict['FSM deadband']) # FSM deadband in [Hz]
+                    
+            if np.abs(fn-f.iloc[0]) < 0.01:
+                fnew = f.iloc[-1]   # Assume new f at the end of the cursor interval
+                Pnew = p.iloc[-1]
+                Pref = p.iloc[0]
             else:
-                fsmSlope = -100*(fnew-fn-db)/(fn*(Pnew-Pref))
-        
-        # Construct the text
-        cursorMetricText = f"FSM slope: {fsmSlope:.2f}%"
+                fnew = f.iloc[0]
+                Pnew = p.iloc[0]
+                Pref = p.iloc[-1]
+                
+            df = fnew - fn
+    
+            if Pnew == Pref:
+                fsmSlope = np.inf
+            else:            
+                if df < 0:
+                    fsmSlope = -100*(fnew-fn+db)/(fn*(Pnew-Pref))
+                else:
+                    fsmSlope = -100*(fnew-fn-db)/(fn*(Pnew-Pref))
+            
+            # Construct the text
+            cursorMetricText = f"FSM slope: {fsmSlope:.2f}%"
+        else:
+            cursorMetricText = "FSM slope: error"
     else:
         cursorMetricText = "FSM slope: error"
 
@@ -639,33 +681,36 @@ def cursoLFSMSlope(cursorSignalsDf, time_interval, settingsDict):
             p = p[mask]
             f = f[mask]
         
-        fn = 50                                     # Nominal frequency [Hz]
-        DK = 1 if settingsDict['Area']=='DK1' else 2 # DK area, either 1 or 2
-                
-        if np.abs(fn-f.iloc[0]) > 0.01:
-            fnew = f.iloc[0]
-            Pnew = p.iloc[0]
-            Pref = p.iloc[-1]
+        if len(t) > 0:
+            fn = 50                                     # Nominal frequency [Hz]
+            DK = 1 if settingsDict['Area']=='DK1' else 2 # DK area, either 1 or 2
+                    
+            if np.abs(fn-f.iloc[0]) > 0.01:
+                fnew = f.iloc[0]
+                Pnew = p.iloc[0]
+                Pref = p.iloc[-1]
+            else:
+                fnew = f.iloc[-1]   # new f at the end of the cursor interval
+                Pnew = p.iloc[-1]
+                Pref = p.iloc[0]
+                            
+            if DK == 1:
+                f1 = 50.2 if fnew > fn else 49.8
+            elif DK == 2:
+                f1 = 50.5 if fnew > fn else 49.5
+            else:
+                print('"DK" can either be "1" or "2"!')
+                cursorMetricText = "LFSM slope: error"
+            
+            if Pnew == Pref:
+                lfsmSlope = np.inf
+            else:
+                lfsmSlope = -100*(fnew-f1)/(fn*(Pnew-Pref))
+                  
+            # Construct the text
+            cursorMetricText = f"LFSM slope: {lfsmSlope:.2f}%"
         else:
-            fnew = f.iloc[-1]   # new f at the end of the cursor interval
-            Pnew = p.iloc[-1]
-            Pref = p.iloc[0]
-                        
-        if DK == 1:
-            f1 = 50.2 if fnew > fn else 49.8
-        elif DK == 2:
-            f1 = 50.5 if fnew > fn else 49.5
-        else:
-            print('"DK" can either be "1" or "2"!')
             cursorMetricText = "LFSM slope: error"
-        
-        if Pnew == Pref:
-            lfsmSlope = np.inf
-        else:
-            lfsmSlope = -100*(fnew-f1)/(fn*(Pnew-Pref))
-              
-        # Construct the text
-        cursorMetricText = f"LFSM slope: {lfsmSlope:.2f}%"
     else:
         cursorMetricText = "LFSM slope: error"
 
@@ -698,16 +743,19 @@ def cursorQUSlope(cursorSignalsDf, time_interval, caseDf):
             q = q[mask]
             u = u[mask]
 
-        Uref = caseDf['Initial Settings']['U0'].squeeze() # pu
-        Qnom = 0.33 # pu
-        
-        dq = q.iloc[-1] - q.iloc[0]
-        du = u.iloc[-1] - u.iloc[0]
-        
-        dquSlope = -100*du/Uref*Qnom/dq
-        
-        # Construct the text
-        cursorMetricText = f"Q(U) slope: {dquSlope:.2f}%"
+        if len(t) > 0:
+            Uref = caseDf['Initial Settings']['U0'].squeeze() # pu
+            Qnom = 0.33 # pu
+            
+            dq = q.iloc[-1] - q.iloc[0]
+            du = u.iloc[-1] - u.iloc[0]
+            
+            dquSlope = -100*du/Uref*Qnom/dq
+            
+            # Construct the text
+            cursorMetricText = f"Q(U) slope: {dquSlope:.2f}%"
+        else:
+            cursorMetricText = "Q(U) slope: error"
     else:
         cursorMetricText = "Q(U) slope: error"
 

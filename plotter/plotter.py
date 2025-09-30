@@ -148,7 +148,7 @@ def colorMap(results: Dict[int, List[Result]]) -> Dict[str, List[str]]:
             cMap[p] = colors[i:i + 3]
             i += 3
             
-    cMap['ideal'] = ["#02525e", "#00847c"]
+    cMap['ideal'] = ["#0a515d", "#057d7c", "#008b8b", "#03d7b6"]
     
     return cMap
 
@@ -208,12 +208,19 @@ def addResults(plots: List[go.Figure],
         if genIdeal:        
             # Add ideal result plots
             if figure.title in ideal['figs']:
-                i = ideal['figs'].index(figure.title) # Get the index value for the figure.title in the ideal results
-                x_value = ideal['data']['time']
-                y_value = ideal['data'][ideal['signals'][i]]
-                x_value, y_value = downSample(x_value, y_value, downsampling_method, figure.gradient_threshold)
-                add_scatterplot_for_result(colPos, 'dash', colors, 'ideal:'+ideal['signals'][i], SUBPLOT, plotlyFigure, 'ideal', rowPos,
-                                        0, x_value, y_value)
+                indices = []
+                for i, fig in enumerate(ideal['figs']):
+                    if figure.title in fig:
+                        indices.append(i)
+                      
+                traces = 0 
+                for i in indices:                
+                    x_value = ideal['data']['time']
+                    y_value = ideal['data'][ideal['signals'][i]]
+                    x_value, y_value = downSample(x_value, y_value, downsampling_method, figure.gradient_threshold)
+                    add_scatterplot_for_result(colPos, 'dash', colors, 'ideal:'+ideal['signals'][i], SUBPLOT, plotlyFigure, 'ideal', rowPos,
+                                            traces, x_value, y_value)
+                    traces += 1
             
         traces = 0
         for sig in range(1, 4):
@@ -721,7 +728,7 @@ def create_html(plots: List[go.Figure], goCursorList: List[go.Figure], path: str
     source_list += '</div>'
 
     html_content = create_html_plots(config.htmlColumns, plots, rank, rankName)
-    html_content_cursors = genCursorHTML(config.htmlCursorColumns, goCursorList, rank, rankName) if len(goCursorList) > 0 else ''
+    html_content_cursors = genCursorHTML(config.htmlCursorColumns, goCursorList, rank, rankName) if config.genCursorHTML and len(goCursorList) > 0 else ''
     
     # Create Dropdown Content for the Navbar
     idx = 0

@@ -7,3 +7,4 @@ tsdownsample==0.1.3
 psutil
 mhi.psout
 pypdf
+scipy
