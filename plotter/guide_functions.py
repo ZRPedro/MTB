@@ -41,12 +41,13 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
         # Active Power Ramping cases
         if 'P_step' in caseDf['Case']['Name'].squeeze():
             P0 = caseDf['Initial Settings']['P0'].squeeze()                     # Initial active power setpoint, P0
+            Pn = settingDict['Pn']                                              # Nominal power [MW]
             assert caseDf['Event 1']['type'].squeeze() == 'Pref'
             Tstep = caseDf['Event 1']['time'].squeeze()
             Pstep = caseDf['Event 1']['X1'].squeeze()
             assert caseDf['Event 1']['X2'].squeeze() == 0.0
             
-            guideData['P_pu_PoC_Ramp'] = pd.Series([guidePramp(Pref=P0, Tstep=Tstep, Pstep=Pstep, t=t) for t in guideData.time])
+            guideData['P_pu_PoC_Ramp'] = pd.Series([guidePramp(Pref=P0, Pn=Pn, Tstep=Tstep, Pstep=Pstep, t=t) for t in guideData.time])
             
             guideFigs.append('Ppoc')
             guideSignals.append('P_pu_PoC_Ramp')
@@ -215,7 +216,7 @@ def delay(x, Td, Ts):
     return lfilter(b, a, x)
 
 
-def guidePramp(Pref, Tstep, Pstep, t):
+def guidePramp(Pref, Pn, Tstep, Pstep, t):
     '''
     This function calculates the guide or maximum rates of change of 
     active power output (Pramp) in both an up and down direction of for 
@@ -224,6 +225,7 @@ def guidePramp(Pref, Tstep, Pstep, t):
 
     Parameters:
         Pref in [pu] -- for Power Park Modules, Pref is Active Power reference *before ramping* 
+        Pn in [MW] -- nominal power rating of the Power Park
         Tstep in [s] -- time step for the ramping
         Pstep in [pu] -- the new reference value of the Active Power *after ramping*   
         t in [s] -- time at which the new value of P is calculated
@@ -231,12 +233,13 @@ def guidePramp(Pref, Tstep, Pstep, t):
     Returns:
         Pramp in [pu] -- the new value of P after the ramping
     '''
+    m = min(0.2, 60/Pn)  # Limit the ramping to the minimum of either 0.2 pu/min or 60 MW/min
     if Pstep > Pref:
-        m =  0.00333333  # pu/s - equivalent to 0.2 pu/min
+        m =  m/60  # convert to pu/s
         Pramp = Pref if t <= Tstep else m*(t-Tstep) + Pref
         Pramp = Pstep if Pramp >= Pstep else Pramp # Ensure Pramp does not exceed the new reference value (Pstep)
     else:
-        m = -0.00333333  # pu/s - equivalent to -0.2 pu/min
+        m = -m/60  # convert to pu/s
         Pramp = Pref if t <= Tstep else m*(t-Tstep) + Pref
         Pramp = Pstep if Pramp <= Pstep else Pramp # Ensure Pramp does not go below the new reference value (Pstep)
         
