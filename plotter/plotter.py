@@ -23,7 +23,7 @@ from read_and_write_functions import loadEMT
 from process_results import getColNames, getUniqueEmtSignals
 from process_psout import getSignals
 from cursor_functions import setupCursorDataFrame, addCursorMetrics
-from ideal_functions import genIdealResults
+from guide_functions import genGuideResults
 from pypdf import PdfWriter
 
 try:
@@ -148,7 +148,7 @@ def colorMap(results: Dict[int, List[Result]]) -> Dict[str, List[str]]:
             cMap[p] = colors[i:i + 3]
             i += 3
             
-    cMap['ideal'] = ["#0a515d", "#057d7c", "#008b8b", "#03d7b6"]
+    cMap['guide'] = ["#0a515d", "#057d7c", "#008b8b", "#03d7b6"]
     
     return cMap
 
@@ -186,7 +186,7 @@ def addResults(plots: List[go.Figure],
     pfFlatTIme = settingsDict['PF flat time']
     pscadInitTime = settingsDict['PSCAD Initialization time']
     
-    if genIdeal: ideal = genIdealResults(result, resultData, settingsDict,  caseDf, pscadInitTime)
+    if genGuide: guide = genGuideResults(result, resultData, settingsDict,  caseDf, pscadInitTime)
     
     rowPos = 1
     colPos = 1
@@ -207,19 +207,19 @@ def addResults(plots: List[go.Figure],
         timeoffset = pfFlatTIme if result.typ == ResultType.RMS else pscadInitTime
 
         if genIdeal:        
-            # Add ideal result plots
-            if figure.title in ideal['figs']:
+            # Add guide result plots
+            if figure.title in guide['figs']:
                 indices = []
-                for i, fig in enumerate(ideal['figs']):
+                for i, fig in enumerate(guide['figs']):
                     if figure.title in fig:
                         indices.append(i)
                       
                 traces = 0 
                 for i in indices:                
-                    x_value = ideal['data']['time']
-                    y_value = ideal['data'][ideal['signals'][i]]
+                    x_value = guide['data']['time']
+                    y_value = guide['data'][guide['signals'][i]]
                     x_value, y_value = downSample(x_value, y_value, downsampling_method, figure.gradient_threshold)
-                    add_scatterplot_for_result(colPos, 'dash', colors, 'ideal:'+ideal['signals'][i], SUBPLOT, plotlyFigure, 'ideal', rowPos,
+                    add_scatterplot_for_result(colPos, 'dash', colors, 'guide:'+guide['signals'][i], SUBPLOT, plotlyFigure, 'guide', rowPos,
                                             traces, x_value, y_value)
                     traces += 1
             

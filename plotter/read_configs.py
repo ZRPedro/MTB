@@ -18,9 +18,8 @@ class ReadConfig:
         self.resultsDir = parsedConf['resultsDir']
         self.genHTML = parsedConf.getboolean('genHTML')
         self.genImage = parsedConf.getboolean('genImage')
-        self.genIdeal = parsedConf.getboolean('genIdeal')
+        self.genGuide = parsedConf.getboolean('genGuide')
         self.genCursorPDF = parsedConf.getboolean('genCursorPDF')
-        self.genCursorHTML = parsedConf.getboolean('genCursorHTML')
         self.htmlColumns = parsedConf.getint('htmlColumns')
         assert self.htmlColumns > 0 or not self.genHTML
         self.imageColumns = parsedConf.getint('imageColumns')
