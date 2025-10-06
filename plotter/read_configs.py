@@ -20,13 +20,12 @@ class ReadConfig:
         self.genImage = parsedConf.getboolean('genImage')
         self.genIdeal = parsedConf.getboolean('genIdeal')
         self.genCursorPDF = parsedConf.getboolean('genCursorPDF')
-        self.genCursorHTML = parsedConf.getboolean('genCursorHTML')
         self.htmlColumns = parsedConf.getint('htmlColumns')
         assert self.htmlColumns > 0 or not self.genHTML
         self.imageColumns = parsedConf.getint('imageColumns')
         assert self.imageColumns > 0 or not self.genImage
         self.htmlCursorColumns = parsedConf.getint('htmlCursorColumns')
-        assert self.htmlCursorColumns > 0 or not self.genCursorHTML
+        assert self.htmlCursorColumns > 0 or not self.genHTML
         self.imageFormat = parsedConf['imageFormat']
         self.threads = parsedConf.getint('threads')
         assert self.threads > 0
@@ -87,7 +86,7 @@ def readFigureSetup(filePath: str) -> Dict[int, List[Figure]]:
 
 def readCursorSetup(filePath: str) -> List[Cursor]:
     '''
-    Read cursor setup file.
+    Read figure setup file.
     '''
     setup: List[Dict[str, str | List]] = list()
     with open(filePath, newline='') as setupFile:
@@ -102,7 +101,7 @@ def readCursorSetup(filePath: str) -> List[Cursor]:
     rankList: List[Cursor] = list()
     for rankStr in setup:
         rankList.append(
-            Cursor(int(rankStr['rank']),  # type: ignore
+            Cursor(str(rankStr['rank']),  # type: ignore
                    str(rankStr['title']),
                    rankStr['cursor_options'],  # type: ignore
                    rankStr['emt_signals'],
