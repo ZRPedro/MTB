@@ -920,8 +920,11 @@ def main() -> None:
     print('Finished plotter main thread/n')
     end_time = time.time()
     elapsed_time = end_time - start_time
+    hh = elapsed_time//(60*60)
+    mm = (elapsed_time%(60*60))//60
+    ss = ((elapsed_time%(60*60))%60)
 
-    print(f"Script executed in {elapsed_time//(60*60)}:{(elapsed_time%(60*60))//60}:{((elapsed_time%(60*60))%60)*60} ")
+    print(f"Script executed in {hh:02n}:{mm:02n}:{ss:02n} ")
 
 if __name__ == "__main__":
     main()
