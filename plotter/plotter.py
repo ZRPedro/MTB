@@ -174,6 +174,7 @@ def addResults(plots: List[go.Figure],
         colors (Dict[str, List[str]]): Dictionary mapping project names to color lists.
         nColumns (int): Number of columns for subplot arrangement.
         settingsDict: Dictionary of project settings.
+        rankNameDict: Dictionary with Case Rank & Case Name
         caseDf: DataFrame containing MTB case settings for the current rank.
 
     Returns:
@@ -499,6 +500,7 @@ def drawPlot(rank: int,
              colorMap: Dict[str, List[str]],
              cursorDict: List[Cursor],
              settingsDict: Dict[str, str],
+             rankNameDict: Dict[int, str],
              config: ReadConfig):
     '''
     Draws plots for html and static image export.    
@@ -512,7 +514,7 @@ def drawPlot(rank: int,
     rankList = list(resultDict.keys())
     rankList.sort()
     figureList = figureDict[rank]
-    ranksCursor = [i for i in cursorDict if i.id == rank]
+    ranksCursor = [i for i in cursorDict if i.id == rankNameDict[rank]]
 
     if resultList == [] or figureList == []:
         return
@@ -549,7 +551,7 @@ def drawPlot(rank: int,
     goCursorList = genCursorPlotlyTables(ranksCursor, dfCursorsList) if len(ranksCursor) > 0 else []  
      
     if config.genHTML:
-        create_html(htmlPlots, goCursorList, figurePath, rankName if rankName is not None else "", rank, config, rankList)
+        create_html(htmlPlots, goCursorList, figurePath, rankName if rankName is not None else "", rank, config, rankList, rankNameDict)
         print(f'Exported plot for Rank {rank} to {figurePath}.html')
 
     if config.genImage:
@@ -718,7 +720,7 @@ td {
         
         
 def create_html(plots: List[go.Figure], goCursorList: List[go.Figure], path: str, rankName: str, rank: int,
-                config: ReadConfig, rankList) -> None:
+                config: ReadConfig, rankList, rankNameDict) -> None:
                 
     source_list = '<div style="text-align: left; margin-top: 75px;">'
     source_list += '<h2><div id="Source">Source data:</div></h2>'
@@ -728,13 +730,13 @@ def create_html(plots: List[go.Figure], goCursorList: List[go.Figure], path: str
     source_list += '</div>'
 
     html_content = create_html_plots(config.htmlColumns, plots, rank, rankName)
-    html_content_cursors = genCursorHTML(config.htmlCursorColumns, goCursorList, rank, rankName) if config.genCursorHTML and len(goCursorList) > 0 else ''
+    html_content_cursors = genCursorHTML(config.htmlCursorColumns, goCursorList, rank, rankName) if len(goCursorList) > 0 else ''
     
     # Create Dropdown Content for the Navbar
     idx = 0
     dropdown_content = ''
     while idx < len(rankList):
-        dropdown_content += f'<a href="{rankList[idx]}.html">Rank {rankList[idx]}</a>\n'
+        dropdown_content += f'<a href="{rankList[idx]}.html">Rank {rankList[idx]}: {rankNameDict[rankList[idx]]}</a>\n'
         idx += 5
     
     # Determine the Previous and Next Rank html page for the Navbar
@@ -856,6 +858,7 @@ def create_html_plots(columns, plots, rank, rankName):
 
 
 def main() -> None:
+    start_time = time.time()
     config = ReadConfig()
 
     print('Starting plotter main thread')
@@ -875,7 +878,8 @@ def main() -> None:
     caseGroup = settingsDict['Casegroup']
     casesDf = pd.read_excel(config.testcaseSheet, sheet_name=f'{caseGroup} cases', header=[0, 1])
     casesDf = casesDf.iloc[:, :60]     #Limit the DataFrame to the first 60 columns
-
+    rankNameDict = dict(zip(casesDf['Case']['Rank'],casesDf['Case']['Name']))
+    
     colorSchemeMap = colorMap(resultDict)
     
     if not exists(config.resultsDir):
@@ -890,9 +894,9 @@ def main() -> None:
     for rank in resultDict.keys():
         if config.threads > 1:
             threads.append(Thread(target=drawPlot,
-                                  args=(rank, resultDict, figureDict, casesDf, colorSchemeMap, cursorDict, settingsDict, config)))
+                                  args=(rank, resultDict, figureDict, casesDf, colorSchemeMap, cursorDict, settingsDict, rankNameDict, config)))
         else:
-                        drawPlot(rank, resultDict, figureDict, casesDf, colorSchemeMap, cursorDict, settingsDict, config)
+                        drawPlot(rank, resultDict, figureDict, casesDf, colorSchemeMap, cursorDict, settingsDict, rankNameDict, config)
 
     NoT = len(threads)
     if NoT > 0:
@@ -913,8 +917,11 @@ def main() -> None:
 
             time.sleep(0.5)
 
-    print('Finished plotter main thread')
+    print('Finished plotter main thread/n')
+    end_time = time.time()
+    elapsed_time = end_time - start_time
 
+    print(f"Script executed in {elapsed_time//(60*60)}:{(elapsed_time%(60*60))//60}:{((elapsed_time%(60*60))%60)*60} ")
 
 if __name__ == "__main__":
     main()
