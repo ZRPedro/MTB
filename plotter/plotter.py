@@ -161,7 +161,7 @@ def addResults(plots: List[go.Figure],
                nColumns: int,
                settingsDict, # project settings
                caseDf, # case MTB setting
-               genIdeal: bool
+               genGuide: bool
                ) -> None:
     '''
     Adds simulation results for a specific case/rank to a set of Plotly figures or a single subplot.
@@ -206,7 +206,7 @@ def addResults(plots: List[go.Figure],
         timeColName = 'time' if result.typ in (ResultType.EMT_INF, ResultType.EMT_PSOUT, ResultType.EMT_CSV, ResultType.EMT_ZIP) else resultData.columns[0]
         timeoffset = pfFlatTIme if result.typ == ResultType.RMS else pscadInitTime
 
-        if genIdeal:        
+        if genGuide:        
             # Add guide result plots
             if figure.title in guide['figs']:
                 indices = []
@@ -541,9 +541,9 @@ def drawPlot(rank: int,
             continue
 
         if config.genHTML:
-            addResults(htmlPlots, result, resultData, figureList, colorMap, config.htmlColumns, settingsDict, caseDf, config.genIdeal)
+            addResults(htmlPlots, result, resultData, figureList, colorMap, config.htmlColumns, settingsDict, caseDf, config.genGuide)
         if config.genImage:
-            addResults(imagePlots, result, resultData, figureList, colorMap,config.imageColumns, settingsDict, caseDf, config.genIdeal)
+            addResults(imagePlots, result, resultData, figureList, colorMap,config.imageColumns, settingsDict, caseDf, config.genGuide)
         if len(ranksCursor) > 0:
             addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDict,  caseDf)
     
@@ -917,7 +917,7 @@ def main() -> None:
 
             time.sleep(0.5)
 
-    print('Finished plotter main thread/n')
+    print('Finished plotter main thread\n')
     end_time = time.time()
     elapsed_time = end_time - start_time
     hh = elapsed_time//(60*60)
