@@ -55,6 +55,7 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
         # LFSM, FSM & RoCoF cases    
         if  'FSM' in caseDf['Case']['Name'].squeeze():
             P0 = caseDf['Initial Settings']['P0'].squeeze()                     # Initial active power setpoint, P0
+            Pn = settingDict['Pn']                                              # Nominal power [MW]
             DK = 1 if settingDict['Area']=='DK1' else 2                         # DK area, either 1 or 2
             DSO = True if settingDict['Un']<110 else False                      # DSO, either Energinet (TSO))
             s_fsm = settingDict['FSM droop']                                    # FSM droop in [%]
@@ -73,7 +74,7 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
                 guideSignals.append('P_pu_LFSM_FFR')                                   
             
             guideData['P_pu_LFSM_Ramp'] = P0 # Create the active power LFSM-Ramp signal to 'populate' below
-            guideData['P_pu_LFSM_Ramp'] = guideLFSMRamp(P0=guideData['mtb_s_pref_pu'], Ts=Ts, f=guideData['pll_f_hz'], fTdLpf=guideData['f_hz_Td_Lpf'], P=guideData['P_pu_LFSM_Ramp'], DK=DK, FSM=FSM, s_fsm=s_fsm, db=db)
+            guideData['P_pu_LFSM_Ramp'] = guideLFSMRamp(P0=guideData['mtb_s_pref_pu'], Pn=Pn, Ts=Ts, f=guideData['pll_f_hz'], fTdLpf=guideData['f_hz_Td_Lpf'], P=guideData['P_pu_LFSM_Ramp'], DK=DK, FSM=FSM, s_fsm=s_fsm, db=db)
             guideFigs.append('Ppoc')
             guideSignals.append('P_pu_LFSM_Ramp')                                            
 
@@ -246,7 +247,7 @@ def guidePramp(Pref, Pn, Tstep, Pstep, t):
     return Pramp
 
 
-def guideLFSMRamp(P0, Ts, f, fTdLpf, P, DK, FSM, s_fsm, db):
+def guideLFSMRamp(P0, Pn, Ts, f, fTdLpf, P, DK, FSM, s_fsm, db):
     '''
     This function ensures that the active power output (P) does not
     change too fast when the frequency (f) is close to the nominal frequency (fn)
@@ -254,6 +255,7 @@ def guideLFSMRamp(P0, Ts, f, fTdLpf, P, DK, FSM, s_fsm, db):
     
     Parameters:
         P0 in [pu] -- the Active Power reference setpoint 
+        Pn in [MW] -- nominal power rating of the Power Park
         Ts in [s] -- sampling time   
         f in [Hz] -- the actual frequency
         fTdLpf in [Hz] -- the delayed and low-pass filtered frequency
@@ -267,11 +269,12 @@ def guideLFSMRamp(P0, Ts, f, fTdLpf, P, DK, FSM, s_fsm, db):
         P in [pu] -- the new value of P after ensuring the ramping rate is not too high
     '''
     
-    fLower = 0.020      # Lower hysteresis frequency threshold
-    fUpper = 0.040      # Upper hysteresis frequency threshold
-    PThresh = 0.0001    # Active power threshold
-    m = 0.00333333      # pu/s - equivalent to 0.2 pu/min ramping rate
-    fn = 50.0           # Nominal frequency in Hz
+    fLower = 0.020        # Lower hysteresis frequency threshold
+    fUpper = 0.040        # Upper hysteresis frequency threshold
+    PThresh = 0.0001      # Active power threshold
+    m = min(0.2, 60/Pn)   # Limit the ramping to the minimum of either 0.2 pu/min or 60 MW/min
+    m = m/60              # Convert pu/min to pu/s
+    fn = 50.0             # Nominal frequency in Hz
     
     # Hysteresis band LOWER and UPPER band switches assuming we start at fn
     LOWER = True        
