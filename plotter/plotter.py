@@ -548,7 +548,7 @@ def drawPlot(rank: int,
             addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDict,  caseDf)
     
     
-    goCursorList = genCursorPlotlyTables(ranksCursor, dfCursorsList) if len(ranksCursor) > 0 else []  
+    goCursorList = genCursorPlotlyTables(ranksCursor, dfCursorsList) if (len(ranksCursor) > 0 and (config.genCursorHTML or config.genCursorPDF)) else []  
      
     if config.genHTML:
         create_html(htmlPlots, goCursorList, figurePath, rankName if rankName is not None else "", rank, config, rankList, rankNameDict)
@@ -730,7 +730,7 @@ def create_html(plots: List[go.Figure], goCursorList: List[go.Figure], path: str
     source_list += '</div>'
 
     html_content = create_html_plots(config.htmlColumns, plots, rank, rankName)
-    html_content_cursors = genCursorHTML(config.htmlCursorColumns, goCursorList, rank, rankName) if len(goCursorList) > 0 else ''
+    html_content_cursors = genCursorHTML(config.htmlCursorColumns, goCursorList, rank, rankName) if len(goCursorList) > 0 and config.genCursorHTML else ''
     
     # Create Dropdown Content for the Navbar
     idx = 0
