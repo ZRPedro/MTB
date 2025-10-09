@@ -283,7 +283,7 @@ def guideLFSMRamp(P0, Pn, Ts, f, fTdLpf, P, DK, FSM, s_fsm, db):
     # Convert Pandas Series to Numpy Array for added speed in doing difference equations below
     P0_array = np.asarray(P0)
     P_array = np.asarray(P)
-    f_array = np.asarry(f)
+    f_array = np.asarray(f)
     fTdLpf_array = np.asarray(fTdLpf)
     
     Pref = P0_array[0]           
@@ -416,7 +416,7 @@ def guideFSM(Pref, f, DK=1, s=10, db=0):
     return Pnew
 
 
-def guideQU(Uref, Upos, s, Qref=0, DK=1 , DSO=False):
+def guideQU(Uref, Upos, s, Qref=0.0, DK=1 , DSO=False):
     '''
     This function calculates the value of the reactive power required, Qpoc_QU, 
     for voltage control mode based on RfG (EU) 2016/631, 21.3 (d) NC 2025
