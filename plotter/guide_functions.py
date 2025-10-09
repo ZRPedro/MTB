@@ -64,9 +64,9 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
             fn = 50                                                             # Nominal frequency [Hz]
             Td = 0.2                                                            # Delay time [s]
 
-            guideData['f_hz_Td'] = delay(guideData['pll_f_hz'], Td, Ts)         # Delayed the 'pll_f_hz' signal                       
+            guideData['f_hz_Td'] = guideDelay(guideData['pll_f_hz'], Td, Ts)    # Delayed the 'pll_f_hz' signal                       
             guideData.loc[guideData['time'] < tThresh, 'f_hz_Td'] = fn          # Set values for t < tThresh to fn to eliminate the initialisation transients
-            guideData['f_hz_Td_Lpf'] = lpf(guideData['f_hz_Td'], fc, 1/Ts)      # Pass the delayed signal through an LPF
+            guideData['f_hz_Td_Lpf'] = guideLPF(guideData['f_hz_Td'], fc, 1/Ts) # Pass the delayed signal through an LPF
 
             if 'step' in caseDf['Case']['Name'].squeeze() and not 'pstep' in caseDf['Case']['Name'].squeeze(): # Run guideLFSM only for 'step', but not for 'pstep'
                 guideData['P_pu_LFSM_FFR'] = pd.Series([guideLFSM(Pref=P0, f=f, DK=DK, FSM=FSM, s_fsm=s_fsm, db=db) for f in guideData['f_hz_Td_Lpf']]) # TODO: Change P0 to mtb_s_pref_pu
@@ -80,7 +80,7 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
 
             if not 'step' in caseDf['Case']['Name'].squeeze() or 'pstep' in caseDf['Case']['Name'].squeeze(): # Run guideLFSM only for 'step', but not for 'pstep'
                 Td_2s = 2
-                guideData['P_pu_LFSM_Ramp_2s'] = delay(guideData['P_pu_LFSM_Ramp'], Td_2s, Ts)
+                guideData['P_pu_LFSM_Ramp_2s'] = guideDelay(guideData['P_pu_LFSM_Ramp'], Td_2s, Ts)
                 guideData.loc[guideData['time'] < tThresh, 'P_pu_LFSM_Ramp_2s'] = P0      # Set values for t < tThresh
                 guideFigs.append('Ppoc')
                 guideSignals.append('P_pu_LFSM_Ramp_2s')                                            
@@ -88,9 +88,9 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
         Qdefault = settingDict['Default Q mode']                
         # Q control cases
         if caseDf['Initial Settings']['Qmode'].squeeze() == 'Q' or caseDf['Initial Settings']['Qmode'].squeeze() == 'Default' and Qdefault == 'Q':            
-            Qref0 = caseDf['Initial Settings']['Qref0'].squeeze()               # Initial reactive power setpoint, when Qmode == 'Q'
+            Qref0 = caseDf['Initial Settings']['Qref0'].squeeze()                  # Initial reactive power setpoint, when Qmode == 'Q'
             
-            guideData['Q_pu_Q_Ctrl'] = lpf(guideData['mtb_s_qref'], fc, 1/Ts)      # Guide response == Qref passed through a LPF      
+            guideData['Q_pu_Q_Ctrl'] = guideLPF(guideData['mtb_s_qref'], fc, 1/Ts) # Guide response == Qref passed through a LPF      
             guideData.loc[guideData['time'] < tThresh, 'Q_pu_Q_Ctrl'] = Qref0      # Set values for t < tThresh
             guideFigs.append('Qpoc')
             guideSignals.append('Q_pu_Q_Ctrl')  
@@ -114,7 +114,7 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
             trise_QU = 0.75                                                     # Rise time [s]
             fc_QU = 0.35/trise_QU                                               # Cut-off frequency [Hz]
 
-            guideData['Q_pu_QU_Ctrl'] = lpf(guideData['Q_pu_QU_Inst'], fc_QU, 1/Ts)            
+            guideData['Q_pu_QU_Ctrl'] = guideLPF(guideData['Q_pu_QU_Inst'], fc_QU, 1/Ts)            
             guideFigs.append('Qpoc')
             guideSignals.append('Q_pu_QU_Ctrl')  
             
@@ -130,7 +130,7 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
             else: # Use Initial settings
                 guideData['Q_pu_Qpf_Inst'] = guideQpf(Ppoc=P0, PFref=PFref0)
                 
-            guideData['Q_pu_Qpf_Ctrl'] = lpf(guideData['Q_pu_Qpf_Inst'], fc, 1/Ts)            
+            guideData['Q_pu_Qpf_Ctrl'] = guideLPF(guideData['Q_pu_Qpf_Inst'], fc, 1/Ts)            
             guideData.loc[guideData['time'] < tThresh, 'Q_pu_Qpf_Ctrl'] = P0*np.tan(np.arccos(PFref0))      # Set values for t < tThresh
             guideFigs.append('Qpoc')
             guideSignals.append('Q_pu_Qpf_Ctrl')  
@@ -173,7 +173,7 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
     return returnDict
 
 
-def lpf(x, fc, fs):
+def guideLPF(x, fc, fs):
     '''
     Simple first order low pass filter with cut off frequency fc and sampling frequency fs
 
@@ -193,7 +193,7 @@ def lpf(x, fc, fs):
     return y
 
 
-def delay(x, Td, Ts):
+def guideDelay(x, Td, Ts):
     '''
     Simple signal delay of Td seconds with sampling time Ts
 
@@ -283,15 +283,16 @@ def guideLFSMRamp(P0, Pn, Ts, f, fTdLpf, P, DK, FSM, s_fsm, db):
     # Convert Pandas Series to Numpy Array for added speed in doing difference equations below
     P0_array = np.asarray(P0)
     P_array = np.asarray(P)
+    f_array = np.asarry(f)
     fTdLpf_array = np.asarray(fTdLpf)
     
     Pref = P0_array[0]           
     for k in range(1, len(P)):
         # Activate active power ramping if the frequency is close to the nominal frequency
-        if np.abs(f.iloc[k] - fn) > fUpper:
+        if np.abs(f_array[k] - fn) > fUpper:
             UPPER = True
             LOWER = False
-        elif np.abs(f.iloc[k] - fn) < fLower:
+        elif np.abs(f_array[k] - fn) < fLower:
             LOWER = True
             UPPER = False
         if LOWER:    # Ramping active
@@ -469,8 +470,10 @@ def guideQpf(Ppoc, PFref):
     Returns:
         Qpoc in [pu] -- the new value of Q at the point of connection
     '''
+    Qnom = 0.33     # TODO: Qnom should be the actual Qnom of the plant
+
     theta = np.arccos(PFref)
-    Qpoc = np.clip(Ppoc*np.tan(theta), -0.33, 0.33)  # Ensure Qpoc is within [-0.33, 0.33] range
+    Qpoc = np.clip(Ppoc*np.tan(theta), -Qnom, Qnom)  # Ensure Qpoc is within [-0.33, 0.33] range
                     
     return Qpoc
     
