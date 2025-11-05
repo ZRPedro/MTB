@@ -303,11 +303,12 @@ def addCustomSubscribers(thisScript : pf.ComPython, channels : List[si.Channel])
   qref1_conf = convertToConfStr('Qref_q', 'mtb_s_qref_q_pu')
   qref2_conf = convertToConfStr('Qref_qu', 'mtb_s_qref_qu_pu')
   qref3_conf = convertToConfStr('Qref_pf', 'mtb_s_qref_pf')
+  qudroop_conf = convertToConfStr('QUdroop', 'mtb_s_qudroop')
   custom1_conf = convertToConfStr('Custom1', 'mtb_s_1')
   custom2_conf = convertToConfStr('Custom2', 'mtb_s_2')
   custom3_conf = convertToConfStr('Custom3', 'mtb_s_3')
 
-  configs = custConfStr.split(';') + [pref_conf, qref1_conf, qref2_conf, qref3_conf, custom1_conf, custom2_conf, custom3_conf]
+  configs = custConfStr.split(';') + [pref_conf, qref1_conf, qref2_conf, qref3_conf, qudroop_conf, custom1_conf, custom2_conf, custom3_conf]
 
   confFilterStr = r"^([^:*?=\",~|\n\r]+):((?:\w:)?\w+(?::\d+)?)=(\w+):(S|s|S0|s0|R|r|T|t|C|c)~(.*)"
   confFilter = re.compile(confFilterStr)
