@@ -17,6 +17,7 @@ incNetRepres = {
   'balanced'   : 'sym', #Balanced, positive sequence
   'unbalanced' : 'rst',  #Unbalanced, 3-phase (ABC)
   }
+
   
 def CompileDynamicModelTypes(modelType, forceRebuild, outputLevel):
   '''
@@ -35,32 +36,8 @@ def CompileDynamicModelTypes(modelType, forceRebuild, outputLevel):
     app.PrintError('Error!\n')
   else:
     app.PrintError('Something went wrong...\n')
-  
-def CheckForZeroDerivatives(errseq):
-  '''
-  Check for zero derivatives
-  '''
-  app.PrintInfo('Check for state variable derivatives less than the tolerance for the initial conditions:')
-  app.EchoOn()
-  inc = app.GetFromStudyCase('ComInc')
-  inc.iopt_sim = 'rms'   #Simulation method
-  inc.iopt_net = 'sym'   #Network representation: Balanced = 'sym', Unbalanced = 'rst'
-  inc.iopt_show = 1      #Verify initial conditions
-  inc.iopt_adapt = 1     #Automatic step size adaption
-  inc.dtgrd = 0.001      #Electromechanical stepsize
-  if inc.iopt_adapt:
-    inc.dtgrd_max = 0.01 #Maximum stepsize
-  inc.errseq = errseq    #Tolerance value for the initial conditions
-  
-  incResult = inc.ZeroDerivative()
-  
-  if incResult == 0:
-    app.PrintWarn('At least one state variable has a derivative larger than the tolerance, or the required command options have not been set!\n')
-  elif incResult == 1:
-    app.PrintInfo('All state variable derivatives are less than the tolerance.\n')
-  else:
-    app.PrintError('Something went wrong!\n')
-  
+
+    
 def LoadFlow(iopt_net = 0, ):
   '''
   Perform a Load Flow
@@ -82,7 +59,8 @@ def LoadFlow(iopt_net = 0, ):
   else:  
     app.PrintError('Non convergence of loadflow analysis.\n')
 
-def InitConditions(iopt_net = 'sym', iopt_adapt = 1, dtgrd = 0.001, dtgrd_max = 0.01, errseq = 0.01):
+
+def InitConditions(iopt_net = 'sym', iopt_adapt = True, dtgrd = 0.001, dtgrd_max = 0.01, errseq = 0.01):
   '''
   Calculated Initial Conditions
   '''
@@ -94,7 +72,7 @@ def InitConditions(iopt_net = 'sym', iopt_adapt = 1, dtgrd = 0.001, dtgrd_max = 
     app.PrintError('Unknown value for "iopt_net"!')
     exit(1)
         
-  app.EchoOff() #To limit the output displayed
+  app.EchoOn() #To limit the output displayed
   inc = app.GetFromStudyCase('ComInc')
   #Fixed
   inc.iopt_sim = 'rms' #Simulation method
@@ -113,7 +91,17 @@ def InitConditions(iopt_net = 'sym', iopt_adapt = 1, dtgrd = 0.001, dtgrd_max = 
   else:  
     app.PrintError("Initial conditions could not be calculated.\n")
 
-def StartSimulation():
+  app.PrintInfo('Check for state variable derivatives less than the tolerance for the initial conditions:')
+  incResult = inc.ZeroDerivative() 
+  if incResult == 0:
+    app.PrintWarn('At least one state variable has a derivative larger than the "MaximumError" tolerance!\n')
+  elif incResult == 1:
+    app.PrintInfo('All state variable derivatives are less than the tolerance.\n')
+  else:
+    app.PrintError('Something went wrong!\n')
+
+ 
+def StartRMSSimulation():
   '''
   Performing an RMS Simulation
   '''
@@ -133,72 +121,46 @@ app = powerfactory.GetApplication()
 app.ClearOutputWindow()
   
 script = app.GetCurrentScript()
-excelOutputPath = script.GetAttribute('ExcelOutputPath')
 
-#######################################################
-#Compile automatically all relevant dynamic model types
-#######################################################
+initCondTolerance = script.GetAttribute('MaximumError') #Tolerance value for the initial conditions
+
+app.PrintInfo('#############################################################')
+app.PrintInfo('Compile all relevant dynamic model types (if ForceRebuild==1)')
+app.PrintInfo('#############################################################\n')
+
 modelType = script.GetAttribute('ModelTypes')
 forceRebuild = script.GetAttribute('ForceRebuild')
 outputLevel = script.GetAttribute('DisplayCompilerMessages')
-
 CompileDynamicModelTypes(modelType, forceRebuild, outputLevel)
 
-########################################################################################
-#Check for state variable derivatives less than the tolerance for the initial conditions  
-########################################################################################
-initCondTolerance = script.GetAttribute('MaximumError') #Tolerance value for the initial conditions
-
-CheckForZeroDerivatives(initCondTolerance)
-
-############################################
-#Calculate a balanced loadflow, and flat run
-############################################
-app.PrintInfo('Check for a balanced loadflow, and flat run:\n')
+app.PrintInfo('#################################################')
+app.PrintInfo('Check for balanced loadflow and variable timestep')
+app.PrintInfo('#################################################\n')
 
 LoadFlow(ldfCalcMethod['balanced'])
+InitConditions(incNetRepres['balanced'], iopt_adapt=True, errseq=initCondTolerance)
+StartRMSSimulation()
 
-#Calculate initial conditions
-InitConditions(incNetRepres['balanced'])
-
-#Start RMS Simulation
-StartSimulation()
-
-###############################################
-#Calculate an unbalanced loadflow, and flat run
-###############################################
-app.PrintInfo('Check for an unbalanced loadflow, and flat run:\n')
+app.PrintInfo('####################################################')
+app.PrintInfo('Check for unbalanced loadflow and variable timestep:')
+app.PrintInfo('####################################################\n')
 
 LoadFlow(ldfCalcMethod['unbalanced'])
+InitConditions(incNetRepres['unbalanced'], iopt_adapt=True, errseq=initCondTolerance)
+StartRMSSimulation()    
 
-#Calculate initial conditions
-InitConditions(incNetRepres['unbalanced'])
-
-#Start RMS Simulation
-StartSimulation()    
-
-#############################
-#Check for fixed timestep run
-#############################
-app.PrintInfo('Check for fixed timestep flat run:\n')
+app.PrintInfo('##################################################')
+app.PrintInfo('Check for balanced loadflow with a fixed timestep:')
+app.PrintInfo('##################################################\n')
 
 LoadFlow(ldfCalcMethod['balanced'])
+InitConditions(incNetRepres['balanced'], iopt_adapt=False, dtgrd=0.001, errseq=initCondTolerance)
+StartRMSSimulation()       
 
-#Calculate initial conditions
-InitConditions(incNetRepres['balanced'], False, 0.001)
+app.PrintInfo('####################################################')
+app.PrintInfo('Check for unbalanced loadflow with a fixed timestep:')
+app.PrintInfo('####################################################\n')
 
-#Start RMS Simulation
-StartSimulation()       
-
-################################
-#Check for variable timestep run
-################################
-app.PrintInfo('Check for variable timestep flat run:\n')
-
-LoadFlow(ldfCalcMethod['balanced'])
-
-#Calculate initial conditions
-InitConditions(incNetRepres['balanced'], True, 0.001, 0.01)
-
-#Start RMS Simulation
-StartSimulation()       
+LoadFlow(ldfCalcMethod['unbalanced'])
+InitConditions(incNetRepres['unbalanced'], iopt_adapt=False, dtgrd=0.001, errseq=initCondTolerance)
+StartRMSSimulation()       
