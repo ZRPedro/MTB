@@ -190,13 +190,13 @@ def addInterfaceFile(project : mhi.pscad.Project):
     print('Adding interface.f to project')
     project.create_resource(r'.\interface.f')
 
-def pscadOOMRecovery(emtCases):
+def writeCaseRankTaskIdCSV(emtCases):
     data = []
     for idx, case in enumerate(emtCases, start=1):
         data.append({'Case Rank': case.rank, 'Task ID': idx, 'Case Name': case.Name})
     
     df = pd.DataFrame(data)
-    df.to_csv('pscadOOMRecovery.csv', index=False)
+    df.to_csv('caseRankTaskID.csv', index=False)
     
 def main():
     print()
@@ -234,8 +234,8 @@ def main():
     else:
         raise ValueError('Invalid rank selected for par_manualrank in MTB block.')
 
-    pscadOOMRecovery(emtCases) # Save "Case Rank", "TaskID", "Case Name" in a .csv file for PSCAD OOM Recovery
-    
+    writeCaseRankTaskIdCSV(emtCases) # Save "Case Rank", "TaskID", "Case Name" in a .csv file for PSCAD OOM Recovery
+
     print()
     si.renderFortran('interface.f', channels)
     
