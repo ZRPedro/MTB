@@ -38,28 +38,29 @@ def getSignals(psoutFilePath, signalnames):
     '''
     Get all signals from the .psout file whose names appear in the signalnames list
     '''    
-    columns = signalnames.copy()
-    idx_add = 0
+    columnsnames = signalnames.copy()                           # Column names to be used for the returned DataFrame
+    idx_add = 0                                                 # To keep track of the columnnames size as signals are converter to signal arrays
     with mhi.psout.File(psoutFilePath) as psoutFile:
-        t, _ = _getSignal(psoutFile, signalnames[0])                # Get time values to get the length of all the signals in the .psout file
-        t = np.array(t)                                             # Convert to a numpy array
-        t = t.reshape(1,-1)                                         # Reshape the t from (N,) to (1,N)
-        signals = np.array(t)                                       # Use as first row for the signals array
+        t, _ = _getSignal(psoutFile, signalnames[0])            # Get time values to get the length of all the signals in the .psout file
+        t = np.array(t)                                         # Convert to a numpy array
+        t = t.reshape(1,-1)                                     # Reshape the t from (N,) to (1,N)
+        signals = np.array(t)                                   # Use as first row for the signals array
         for signalname in signalnames:
             _, signal = _getSignal(psoutFile, signalname)       # Try to get each signal in the signalnames list
             signal = np.array(signal)                           # Convert to numpy array
 
-            # Test for signal array and convert signalname to an array of signalnames
+            # Test for signal array and convert signal name to a set of signal names for each signal in the array
             signal_rows = signal.shape[0]
             if  signal_rows > 1:
                 idx = signalnames.index(signalname)
-                columns.remove(signalname)
-                for i in range(signal_rows):
-                    columns.insert(idx_add+idx+i,f'{signalname}_{i+1}')
-                idx_add = idx_add + signal_rows-1
+                columnsnames.remove(signalname)                 # Remove the signal name
+                for i in range(signal_rows):                    # And replace it with signal array names
+                    columnsnames.insert(idx_add+idx+i,f'{signalname}_{i+1}')
+                    
+                idx_add = idx_add + signal_rows-1               # Add the offset due to the signal array, to the column name index
                                 
-            signals = np.append(signals, signal, axis=0)           # Append to the signals array containing the time
+            signals = np.append(signals, signal, axis=0)        # Append to the signals array containing the time
             
-    columns = ['time']+columns                              # Add the lable to be used for the time column
+    columnsnames = ['time']+columnsnames                        # Add the lable to be used for the time column
     
-    return pd.DataFrame(np.transpose(signals), columns=columns)
+    return pd.DataFrame(np.transpose(signals), columnsnames=columnsnames)
