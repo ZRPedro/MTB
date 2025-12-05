@@ -462,11 +462,12 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
         
         # Standard plant references and outputs default setup
         if case.Pavail0.lower() == "default":
-            mtb_s_pavail_pu[case.rank] = plantSettings.Default_Pavail        
+            Pavail0 = plantSettings.Default_Pavail        
         else:
-            mtb_s_pavail_pu[case.rank] = float(case.Pavail0)
+            Pavail0 = float(case.Pavail0)
 
-        mtb_s_pref_pu[case.rank] = min(case.P0, mtb_s_pavail_pu[case.rank])
+        mtb_s_pavail_pu[case.rank] = Pavail0
+        mtb_s_pref_pu[case.rank] = min(case.P0, Pavail0)
         
         # Set Qmode
         if case.Qmode.lower() == 'default':
@@ -596,14 +597,14 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
 
             elif eventType == 'Pref recording':
                 assert isinstance(eventX1, str), f'X1 should be the relative path to the measurement file used for Pref, and not "{eventX1}"'
-                assert isinstance(eventX2, float), f'X2 should be the scaling factor for the measurement file used for Pref, and not "{eventX2}"
+                assert isinstance(eventX2, float), f'X2 should be the scaling factor for the measurement file used for Pref, and not "{eventX2}"'
                 wf = mtb_s_pref_pu[case.rank] = si.Recorded(path=eventX1, column=1, scale=eventX2, pf=pf, pscad=pscad)
                 pscad_lonRec = max(wf.pscadLen, pscad_lonRec)
                 pf_lonRec = max(wf.pfLen, pf_lonRec)
 
             elif eventType == 'Qref recording':
                 assert isinstance(eventX1, str), f'X1 should be the relative path to the measurement file used for Qref, and not "{eventX1}"'
-                assert isinstance(eventX2, float), f'X2 should be the scaling factor for the measurement file used for Qref, and not "{eventX2}"
+                assert isinstance(eventX2, float), f'X2 should be the scaling factor for the measurement file used for Qref, and not "{eventX2}"'
                 wf = si.Recorded(path=eventX1, column=1, scale=eventX2, pf=pf, pscad=pscad)
 
                 mtb_s_qref[case.rank] = wf
@@ -637,7 +638,7 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
 
             elif eventType == 'Voltage recording':
                 assert isinstance(eventX1, str), f'X1 should be the relative path to the measurement file used for the Thévening grid voltage, and not "{eventX1}"'
-                assert isinstance(eventX2, float), f'X2 should be the scaling factor for the measurement file used for the Thévening grid voltage, and not "{eventX2}"
+                assert isinstance(eventX2, float), f'X2 should be the scaling factor for the measurement file used for the Thévening grid voltage, and not "{eventX2}"'
                 if mtb_t_vmode[case.rank].s0 != 2:
                     mtb_t_vmode[case.rank] = 1
                 wf = mtb_s_vref_pu[case.rank] = si.Recorded(path=eventX1, column=1, scale=eventX2, pf=pf, pscad=pscad)
@@ -646,7 +647,7 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
 
             elif eventType == 'Inst. Voltage recording':
                 assert isinstance(eventX1, str), f'X1 should be the relative path to the measurement file used for the instantaneous Thévening grid voltage, and not "{eventX1}"'
-                assert isinstance(eventX2, float), f'X2 should be the scaling factor for the measurement file used for the instantaneous Thévening grid voltage, and not "{eventX2}"
+                assert isinstance(eventX2, float), f'X2 should be the scaling factor for the measurement file used for the instantaneous Thévening grid voltage, and not "{eventX2}"'
                 mtb_t_vmode[case.rank] = 2
                 mtb_s_varef_pu[case.rank] = si.Recorded(path=eventX1, column=1, scale=eventX2, pf=False, pscad=pscad)
                 mtb_s_vbref_pu[case.rank] = si.Recorded(path=eventX1, column=2, scale=eventX2, pf=False, pscad=pscad)
@@ -655,14 +656,14 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
 
             elif eventType == 'Phase recording':
                 assert isinstance(eventX1, str), f'X1 should be the relative path to the measurement file used for the Thévening grid voltage phase, and not "{eventX1}"'
-                assert isinstance(eventX2, float), f'X2 should be the scaling factor for the measurement file used for the Thévening grid voltage phase, and not "{eventX2}"
+                assert isinstance(eventX2, float), f'X2 should be the scaling factor for the measurement file used for the Thévening grid voltage phase, and not "{eventX2}"'
                 wf = mtb_s_phref_deg[case.rank] = si.Recorded(path=eventX1, column=1, scale=eventX2, pf=pf, pscad=pscad)
                 pscad_lonRec = max(wf.pscadLen, pscad_lonRec)
                 pf_lonRec = max(wf.pfLen, pf_lonRec)
 
             elif eventType == 'Frequency recording':
                 assert isinstance(eventX1, str), f'X1 should be the relative path to the measurement file used for the Thévening grid voltage frequency, and not "{eventX1}"'
-                assert isinstance(eventX2, float), f'X2 should be the scaling factor for the measurement file used for the Thévening grid voltage frequency, and not "{eventX2}"
+                assert isinstance(eventX2, float), f'X2 should be the scaling factor for the measurement file used for the Thévening grid voltage frequency, and not "{eventX2}"'
                 wf = mtb_s_fref_hz[case.rank] = si.Recorded(path=eventX1, column=1, scale=eventX2, pf=pf, pscad=pscad)
                 pscad_lonRec = max(wf.pscadLen, pscad_lonRec)
                 pf_lonRec = max(wf.pfLen, pf_lonRec)
