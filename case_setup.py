@@ -465,9 +465,9 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
             Pavail0 = plantSettings.Default_Pavail        
         else:
             Pavail0 = float(case.Pavail0)
-
+        
         mtb_s_pavail_pu[case.rank] = Pavail0
-        mtb_s_pref_pu[case.rank] = min(case.P0, Pavail0)
+        mtb_s_pref_pu[case.rank] = min(case.P0, Pavail0) # Does not work when using "mtb_s_pavail_pu[case.rank]" in stead of "Pavail0"
         
         # Set Qmode
         if case.Qmode.lower() == 'default':
@@ -526,7 +526,6 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
             elif eventType == 'Pavail':
                 assert isinstance(eventX1, float), f'X1 should be the new Pavail limit in pu based on Pn, and not "{eventX1}"'
                 assert isinstance(eventX2, float), f'X2 should be the gradient in 1/s of the new Pavail limit change, and not "{eventX2}"'
-
                 mtb_s_pavail_pu[case.rank].add(eventTime, eventX1, eventX2)
 
             elif eventType == 'Qref':
