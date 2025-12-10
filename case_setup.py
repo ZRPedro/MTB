@@ -462,12 +462,11 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
         
         # Standard plant references and outputs default setup
         if case.Pavail0.lower() == "default":
-            Pavail0 = plantSettings.Default_Pavail        
+            mtb_s_pavail_pu[case.rank] = plantSettings.Default_Pavail        
         else:
-            Pavail0 = float(case.Pavail0)
+            mtb_s_pavail_pu[case.rank] = float(case.Pavail0)
         
-        mtb_s_pavail_pu[case.rank] = Pavail0
-        mtb_s_pref_pu[case.rank] = min(case.P0, Pavail0) # Does not work when using "mtb_s_pavail_pu[case.rank]" in stead of "Pavail0"
+        mtb_s_pref_pu[case.rank] = case.P0
         
         # Set Qmode
         if case.Qmode.lower() == 'default':
