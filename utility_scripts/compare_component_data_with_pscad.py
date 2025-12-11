@@ -53,7 +53,7 @@ if ELMTR3_EXISTS: trfr3_names = powerfactory_trfr3_data_df['Transformer name'].t
 with mhi.pscad.application() as pscad:
     #Get a list of cases
     #cases = pscad.cases()    
-    #project = pscad.project(cases[0].name) #Assume it is the first case
+    #project = pscad.project(cases[0].name)
     project = pscad.project(pscad_project_name)
     project.focus()
     main = project.canvas('Main')
@@ -68,6 +68,7 @@ with mhi.pscad.application() as pscad:
     for cable_component in cable_components:
         if cable_component is None: continue
         params_dict = cable_component.parameters()
+        if len(params_dict) == 1: continue
         #print(params_dict) #DEBUG
         if SET_PARAMS:
             #Set the PSCAD parameters equal to the PowerFactory parameters
@@ -164,7 +165,7 @@ with mhi.pscad.application() as pscad:
                 Bp = 1/(2*pi*f*parse_PSCAD_value(params_dict['Cp'])[0])
             else:
                 print(f"Unknown unit for positive sequence shunt capacitance: {parse_PSCAD_value(params_dict['Cp'])[1]}")
-                exit(0)
+                exit(0)                
             #If zero sequence data is entered, then extract the zero sequence parameters               
             if params_dict['Estim'] == 'ENTER':
                 if parse_PSCAD_value(params_dict['Rz2'])[1] == 'ohm/m' or parse_PSCAD_value(params_dict['Rz2'])[1] == '': #'ohm/m' default
@@ -218,9 +219,11 @@ with mhi.pscad.application() as pscad:
     for trfr2_component in trfr2_components:
         if trfr2_component is None: continue
         params_dict = trfr2_component.parameters()
+        #print(params_dict) #DEBUG
         
         #Check the transformer component model definition
         component_def = trfr2_component.defn_name[1]
+        #print(component_def) #DEBUG
         
         #Duality based 3 phase 2 winding transformer
         if component_def == 'db_xfmr_3p2w':
@@ -297,9 +300,9 @@ with mhi.pscad.application() as pscad:
                 else:
                     hour = '0'
             if parse_PSCAD_value(params_dict['NLL'])[1] == 'pu' or parse_PSCAD_value(params_dict['NLL'])[1] == '':  #'pu' default              
-                NLL = parse_PSCAD_value(params_dict['CoreEddyLoss_'])[0]
-            elif parse_PSCAD_value(params_dict['CoreEddyLoss_'])[1] == '%':
-                NLL = parse_PSCAD_value(params_dict['NLL_'])[0]/100
+                NLL = parse_PSCAD_value(params_dict['NLL'])[0]
+            elif parse_PSCAD_value(params_dict['NLL'])[1] == '%':
+                NLL = parse_PSCAD_value(params_dict['NLL'])[0]/100
             else:
                 print(f"Unknown unit for No Load Losses (NLL): {parse_PSCAD_value(params_dict['NLL'])[1]}")
                 exit(0)                                                                    

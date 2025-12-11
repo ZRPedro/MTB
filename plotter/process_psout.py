@@ -37,28 +37,30 @@ def _getSignal(psoutFile, signalname):
 def getSignals(psoutFilePath, signalnames):
     '''
     Get all signals from the .psout file whose names appear in the signalnames list
-    '''
-    signalnames_not_found = list()
+    '''    
+    columnnames = signalnames.copy()                           # Column names to be used for the returned DataFrame
+    idx_add = 0                                                 # To keep track of the columnnames size as signals are converter to signal arrays
     with mhi.psout.File(psoutFilePath) as psoutFile:
-        t, _ = _getSignal(psoutFile, signalnames[0])                # Get time values to get the length of all the signals in the .psout file
-        t = np.array(t)                                             # Convert to a numpy array
-        t = t.reshape(1,-1)                                         # Reshape the t from (N,) to (1,N)
-        signals = np.array(t)                                       # Use as first row for the signals array
+        t, _ = _getSignal(psoutFile, signalnames[0])            # Get time values to get the length of all the signals in the .psout file
+        t = np.array(t)                                         # Convert to a numpy array
+        t = t.reshape(1,-1)                                     # Reshape the t from (N,) to (1,N)
+        signals = np.array(t)                                   # Use as first row for the signals array
         for signalname in signalnames:
-            try:                                                
-                _, signal = _getSignal(psoutFile, signalname)       # Try to get each signal in the signalnames list
-                signal = np.array(signal)                           # Convert to numpy array
-                signals = np.append(signals, signal, axis=0)        # And append to the signals array
-            except Exception as e:
-                print(f"Error retrieving signal '{signalname}': {e}")
-                signalnames_not_found.append(signalname)            # Make a list of all the signal names that could not be found
-            
-    # Remove the signal names that were not found from the signalnames list
-    if len(signalnames_not_found) > 0:
-        print(f"Warning: The following signal names were not found in the PSOUT file: {', '.join(signalnames_not_found)}") 
-    for signalname_not_found in signalnames_not_found:
-        signalnames.remove(signalname_not_found)
+            _, signal = _getSignal(psoutFile, signalname)       # Try to get each signal in the signalnames list
+            signal = np.array(signal)                           # Convert to numpy array
 
-    signalnames = ['time']+signalnames                              # Add the lable to be used for the time column
+            # Test for signal array and convert signal name to a set of signal names for each signal in the array
+            signal_rows = signal.shape[0]
+            if  signal_rows > 1:
+                idx = signalnames.index(signalname)
+                columnnames.remove(signalname)                 # Remove the signal name
+                for i in range(signal_rows):                    # And replace it with signal array names
+                    columnnames.insert(idx_add+idx+i,f'{signalname}_{i+1}')
+                    
+                idx_add = idx_add + signal_rows-1               # Add the offset due to the signal array, to the column name index
+                                
+            signals = np.append(signals, signal, axis=0)        # Append to the signals array containing the time
+            
+    columnnames = ['time']+columnnames                        # Add the lable to be used for the time column
     
-    return pd.DataFrame(np.transpose(signals), columns=signalnames)
+    return pd.DataFrame(np.transpose(signals), columns=columnnames)
