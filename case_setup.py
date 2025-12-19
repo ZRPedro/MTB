@@ -62,6 +62,7 @@ class PlantSettings:
         self.XR_SCR_min = float(inputs['X/R SCR min'])
         self.XR_SCR_tuning = float(inputs['X/R SCR tuning'])
         self.XR_SCR_max = float(inputs['X/R SCR max'])
+        self.Default_MtrfrGnd = bool(inputs['Main Transformer Grounded'])
         self.R0 = float(inputs['R0'])
         self.X0 = float(inputs['X0'])
         self.Default_Q_mode = str(inputs['Default Q mode'])
@@ -89,6 +90,7 @@ class Case:
         self.QUdroop0: str = str(case['QUdroop0']) # Use 'str' because 'default' is also a valid value for the droop
         self.SCR0: float = float(case['SCR0'])
         self.XR0: float = float(case['XR0'])
+        self.MtrfrGnd0: str = str(case['MtrfrGnd0'])
         self.Simulationtime: float = float(case['Simulationtime'])
         self.Events : List[Tuple[str, float, Union[float, str], Union[float, str]]] = []
 
@@ -234,6 +236,8 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
     mtb_s_qudroop.addPFsub_S0('initializer_script.ComDpl', 'IntExpr:11') #QUdroop0
     mtb_s_qudroop.addPFsub_S0('initializer_qdsl.ElmQdsl', 'initVals:11') #QUdroop0
     mtb_s_qudroop.addPFsub_S0('station_ctrl.ElmStactrl', 'ddroop')
+
+    mtb_s_mtrfrgnd = signal('mtb_s_mtrfrgnd')
     
     mtb_t_qmode = signal('mtb_t_qmode')
     mtb_t_qmode.addPFsub_S0('initializer_script.ComDpl', 'IntExpr:9') #Qmode
@@ -487,8 +491,22 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
             mtb_s_qudroop[case.rank] = plantSettings.Default_QUdroop        
         else:
             mtb_s_qudroop[case.rank] = float(case.QUdroop0)
-
+        
+        # Set Pmode
         mtb_t_pmode[case.rank] = PMODES[case.Pmode.lower()]
+
+        #Set Main Transformer Grounding
+        if case.MtrfrGnd0.lower() == "default":
+            MTRFRGND = plantSettings.Default_MtrfrGnd        
+        elif case.MtrfrGnd.lower() == "grounded":
+            MTRFRGND = True
+        else:
+            MTRFRGND = False
+        
+        if MTRFRGND:
+            mtb_s_mtrfrgnd[case.rank] = 1.0
+        else:
+            mtb_s_mtrfrgnd[case.rank] = 0.0
 
         # Fault signals
         flt_s_type[case.rank] = 0.0
