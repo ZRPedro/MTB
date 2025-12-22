@@ -498,11 +498,11 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
         #Set Main Transformer Grounding
         if case.MtrfrGnd0.lower() == "default":
             MTRFRGND = plantSettings.Default_MtrfrGnd        
-        elif case.MtrfrGnd.lower() == "grounded":
+        elif case.MtrfrGnd0.lower() == "grounded":
             MTRFRGND = True
-        else:
+        else: # not grounded / ungrounded
             MTRFRGND = False
-        
+            
         if MTRFRGND:
             mtb_s_mtrfrgnd[case.rank] = 1.0
         else:
