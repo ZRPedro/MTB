@@ -265,6 +265,14 @@ Active power;RfG_LVFRT_profile;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 0
 Reactive power;RfG_LVFRT_profile;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 0.15, , 0.15, 1.5, 1.5
 Active current;RfG_LVFRT_profile;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 0.15, , 0.15, 1.5, 1.5
 Reactive current;RfG_LVFRT_profile;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 0.15, , 0.15, 1.5, 1.5
+Active power;RfG_LVFRT_profile_Pref_05;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 0.15, , 0.15, 1.5, 1.5
+Reactive power;RfG_LVFRT_profile_Pref_05;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 0.15, , 0.15, 1.5, 1.5
+Active current;RfG_LVFRT_profile_Pref_05;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 0.15, , 0.15, 1.5, 1.5
+Reactive current;RfG_LVFRT_profile_Pref_05;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 0.15, , 0.15, 1.5, 1.5
+Active power;RfG_LVFRT_profile_Pref_05_Pavail;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 0.15, , 0.15, 1.5, 1.5
+Reactive power;RfG_LVFRT_profile_Pref_05_Pavail;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 0.15, , 0.15, 1.5, 1.5
+Active current;RfG_LVFRT_profile_Pref_05_Pavail;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 0.15, , 0.15, 1.5, 1.5
+Reactive current;RfG_LVFRT_profile_Pref_05_Pavail;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 0.15, , 0.15, 1.5, 1.5
 Active power;RfG_OVRT_profile;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 0.1, 0.1
 Reactive power;RfG_OVRT_profile;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 0.1, 0.1
 Active current;RfG_OVRT_profile;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 0.1, 0.1
