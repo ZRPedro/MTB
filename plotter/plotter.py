@@ -882,9 +882,10 @@ def main() -> None:
     if settingsDict['Run custom cases']:
         customCasesDf = pd.read_excel(config.testcaseSheet, sheet_name='Custom cases', header=[0, 1])
         customCasesDf = customCasesDf.iloc[:, :60]     #Limit the DataFrame to the first 60 columns
+        rankNameDict = {**dict(zip(casesDf['Case']['Rank'],casesDf['Case']['Name'])), **dict(zip(customCasesDf['Case']['Rank'],customCasesDf['Case']['Name']))} # Python < 3.9 compatible
+    else:
+        rankNameDict = dict(zip(casesDf['Case']['Rank'],casesDf['Case']['Name']))
         
-    rankNameDict = {**dict(zip(casesDf['Case']['Rank'],casesDf['Case']['Name'])), **dict(zip(customCasesDf['Case']['Rank'],customCasesDf['Case']['Name']))} # Python < 3.9 compatible
-
     colorSchemeMap = colorMap(resultDict)
     
     if not exists(config.resultsDir):
