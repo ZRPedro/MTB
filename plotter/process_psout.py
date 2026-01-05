@@ -38,7 +38,7 @@ def getSignals(psoutFilePath, signalnames):
     '''
     Get all signals from the .psout file whose names appear in the signalnames list
     '''    
-    columnnames = signalnames.copy()                           # Column names to be used for the returned DataFrame
+    columnnames = signalnames.copy()                            # Column names to be used for the returned DataFrame
     idx_add = 0                                                 # To keep track of the columnnames size as signals are converter to signal arrays
     with mhi.psout.File(psoutFilePath) as psoutFile:
         t, _ = _getSignal(psoutFile, signalnames[0])            # Get time values to get the length of all the signals in the .psout file
@@ -53,7 +53,7 @@ def getSignals(psoutFilePath, signalnames):
             signal_rows = signal.shape[0]
             if  signal_rows > 1:
                 idx = signalnames.index(signalname)
-                columnnames.remove(signalname)                 # Remove the signal name
+                columnnames.remove(signalname)                  # Remove the signal name
                 for i in range(signal_rows):                    # And replace it with signal array names
                     columnnames.insert(idx_add+idx+i,f'{signalname}_{i+1}')
                     
@@ -61,6 +61,6 @@ def getSignals(psoutFilePath, signalnames):
                                 
             signals = np.append(signals, signal, axis=0)        # Append to the signals array containing the time
             
-    columnnames = ['time']+columnnames                        # Add the lable to be used for the time column
+    columnnames = ['time']+columnnames                          # Add the lable to be used for the time column
     
     return pd.DataFrame(np.transpose(signals), columns=columnnames)
