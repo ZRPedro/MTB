@@ -735,9 +735,10 @@ def create_html(plots: List[go.Figure], goCursorList: List[go.Figure], path: str
     # Create Dropdown Content for the Navbar
     idx = 0
     dropdown_content = ''
+    increment = 5 if len(rankList) < 130 else 10
     while idx < len(rankList):
         dropdown_content += f'<a href="{rankList[idx]}.html">Rank {rankList[idx]}: {rankNameDict[rankList[idx]]}</a>\n'
-        idx += 5
+        idx += increment
     
     # Determine the Previous and Next Rank html page for the Navbar
     idx = rankList.index(rank)
@@ -878,8 +879,12 @@ def main() -> None:
     caseGroup = settingsDict['Casegroup']
     casesDf = pd.read_excel(config.testcaseSheet, sheet_name=f'{caseGroup} cases', header=[0, 1])
     casesDf = casesDf.iloc[:, :60]     #Limit the DataFrame to the first 60 columns
-    rankNameDict = dict(zip(casesDf['Case']['Rank'],casesDf['Case']['Name']))
-    
+    if settingsDict['Run custom cases']:
+        customCasesDf = pd.read_excel(config.testcaseSheet, sheet_name='Custom cases', header=[0, 1])
+        customCasesDf = customCasesDf.iloc[:, :60]     #Limit the DataFrame to the first 60 columns
+        
+    rankNameDict = dict(zip(casesDf['Case']['Rank'],casesDf['Case']['Name'])) | dict(zip(customCasesDf['Case']['Rank'],customCasesDf['Case']['Name']))
+
     colorSchemeMap = colorMap(resultDict)
     
     if not exists(config.resultsDir):
