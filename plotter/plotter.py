@@ -124,8 +124,12 @@ def colorMap(results: Dict[int, List[Result]]) -> Dict[str, List[str]]:
     '''
     Select colors for the given projects. Return a dictionary with the project name as key and a list of colors as value.
     '''
-    colors = ['#e6194B', '#3cb44b', "#ffe119", '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#f032e6', '#bfef45',
-              '#fabed4', '#469990', '#dcbeff', '#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1',
+    colors = ['#e6194B', '#3cb44b', '#ffe119', 
+              '#4363d8', '#f58231', '#911eb4',
+              '#42d4f4', '#f032e6', '#bfef45',
+              '#fabed4', '#469990', '#dcbeff',
+              '#9A6324', '#fffac8', '#800000',
+              '#aaffc3', '#808000', '#ffd8b1',
               '#000075', '#a9a9a9', '#000000']
 
     projects: Set[str] = set()
@@ -136,17 +140,12 @@ def colorMap(results: Dict[int, List[Result]]) -> Dict[str, List[str]]:
 
     cMap: Dict[str, List[str]] = dict()
 
-    if len(list(projects)) > 2:
-        i = 0
-        for p in list(projects):
-            cMap[p] = [colors[i % len(colors)]] * 3
-            i += 1
-        return cMap
-    else:
-        i = 0
-        for p in list(projects):
-            cMap[p] = colors[i:i + 3]
-            i += 3
+    i = 0
+    for p in list(projects):
+        cMap[p] = colors[i:i + 3]
+        i += 3
+        if i >= 21:
+            i = 0
             
     cMap['guide'] = ["#0a515d", "#057d7c", "#008b8b", "#03d7b6"]
     
