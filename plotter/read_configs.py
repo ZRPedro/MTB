@@ -28,8 +28,8 @@ class ReadConfig:
         self.htmlCursorColumns = parsedConf.getint('htmlCursorColumns')
         assert self.htmlCursorColumns > 0 or not self.genHTML
         self.imageFormat = parsedConf['imageFormat']
-        self.threads = parsedConf.getint('threads')
-        assert self.threads > 0
+        self.processes = parsedConf.getint('processes')
+        assert self.processes > 0
         self.testcaseSheet = parsedConf['testcaseSheet']
         self.simDataDirs : List[Tuple[str, str]] = list()
         simPaths = cp.items('Simulation data paths')
@@ -82,7 +82,8 @@ def readFigureSetup(filePath: str) -> Dict[int, List[Figure]]:
                 if not exc in figDict.keys():
                     figDict[exc] = defaultSetup.copy()
                 figDict[exc].remove(fig)
-    return figDict
+    
+    return dict(figDict)
 
 
 def readCursorSetup(filePath: str) -> List[Cursor]:
