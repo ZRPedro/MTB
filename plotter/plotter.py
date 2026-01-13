@@ -9,11 +9,12 @@ import numpy as np
 import pandas as pd
 from plotly.subplots import make_subplots  # type: ignore
 import plotly.graph_objects as go  # type: ignore
+import plotly.io as pio
 from typing import List, Dict, Union, Tuple, Set
 from sampling_functions import downSample
-from threading import Thread, Lock
-import time
+import multiprocessing
 import sys
+import time
 from math import ceil
 from read_configs import ReadConfig, readFigureSetup, readCursorSetup
 from Figure import Figure
@@ -25,6 +26,9 @@ from process_psout import getSignals
 from cursor_functions import setupCursorDataFrame, addCursorMetrics
 from guide_functions import genGuideResults
 from pypdf import PdfWriter
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from tqdm import tqdm
+import warnings
 
 try:
     LOG_FILE = open('plotter.log', 'w')
@@ -32,25 +36,31 @@ except:
     print('Failed to open log file. Logging to file disabled.')
     LOG_FILE = None  # type: ignore
 
-gLock = Lock()
+# To suppress Numpy divide error messages
+np.seterr(divide='ignore', invalid='ignore')                                    
 
+# To suppress openpyxl warning messages
+warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")      
 
-def print(*args):  # type: ignore
-    '''
-    Overwrites the print function to also write to a log file.
-    '''
-    gLock.acquire()
-    outputString = ''.join(map(str, args)) + '\n'  # type: ignore
-    sys.stdout.write(outputString)
-    if LOG_FILE:
-        try:
-            LOG_FILE.write(outputString)
+# To store the original built-in print so we can still use it
+_builtin_print = print
+
+def print(*args, **kwargs):
+    # Check if we are in the main process
+    is_main = multiprocessing.current_process().name == 'MainProcess'
+    
+    if is_main:
+        outputString = ' '.join(map(str, args))
+        sys.stdout.write(outputString + '\n')
+        if 'LOG_FILE' in globals() and LOG_FILE:
+            LOG_FILE.write(outputString + '\n')
             LOG_FILE.flush()
-        except:
-            pass
-    gLock.release()
+    else:
+        # So we use the built-in print to send it to the 'hidden' pipe
+        outputString = ' '.join(map(str, args))
+        _builtin_print(outputString)
 
-
+        
 def idFile(filePath: str) -> Tuple[
     Union[ResultType, None], Union[int, None], Union[str, None], Union[str, None], Union[str, None]]:
     '''
@@ -512,8 +522,8 @@ def drawPlot(rank: int,
     resultList = resultDict.get(rank, [])
     rankList = list(resultDict.keys())
     rankList.sort()
-    figureList = figureDict[rank]
-    ranksCursor = [i for i in cursorDict if i.id == rankNameDict[rank]]
+    figureList = figureDict.get(rank, figureDict.get(next(iter(figureDict)), []))
+    ranksCursor = [i for i in cursorDict if i.id == rankNameDict.get(rank, [])]
 
     if resultList == [] or figureList == []:
         return
@@ -861,7 +871,7 @@ def main() -> None:
     start_time = time.time()
     config = ReadConfig()
 
-    print('Starting plotter main thread')
+    print('Starting plotter Main Process')
 
     # Output config
     print('Configuration:')
@@ -869,7 +879,7 @@ def main() -> None:
         print(f'\t{setting}: {config.__dict__[setting]}')
 
     print()
-
+      
     resultDict = mapResultFiles(config)
     figureDict = readFigureSetup('figureSetup.csv')
     cursorDict = readCursorSetup('cursorSetup.csv')
@@ -890,39 +900,33 @@ def main() -> None:
     if not exists(config.resultsDir):
         makedirs(config.resultsDir)
 
-    np.seterr(divide='ignore', invalid='ignore') # To ignore RunTimeWarning produced by the downsample_based_on_gradient function
-
     create_css(config.resultsDir)
+    
+    if config.genImage:
+        pio.kaleido.scope.chromium_args = ("--disable-gpu", "--no-sandbox", "--single-process")
 
-    threads: List[Thread] = list()
+    
+    tasks = [
+        (rank, resultDict, figureDict, casesDf, colorSchemeMap, cursorDict, settingsDict, rankNameDict, config)
+        for rank in resultDict.keys()
+        ]
 
-    for rank in resultDict.keys():
-        if config.threads > 1:
-            threads.append(Thread(target=drawPlot,
-                                  args=(rank, resultDict, figureDict, casesDf, colorSchemeMap, cursorDict, settingsDict, rankNameDict, config)))
-        else:
-                        drawPlot(rank, resultDict, figureDict, casesDf, colorSchemeMap, cursorDict, settingsDict, rankNameDict, config)
-
-    NoT = len(threads)
-    if NoT > 0:
-        sched = threads.copy()
-        inProg: List[Thread] = []
-
-        while len(sched) > 0:
-            for t in inProg:
-                if not t.is_alive():
-                    print(f'Thread {t.native_id} finished')
-                    inProg.remove(t)
-
-            while len(inProg) < config.threads and len(sched) > 0:
-                nextThread = sched.pop()
-                nextThread.start()
-                print(f'Started thread {nextThread.native_id}')
-                inProg.append(nextThread)
-
-            time.sleep(0.5)
-
-    print('Finished plotter main thread\n')
+    if config.processes > 1:
+        with ProcessPoolExecutor(max_workers=config.processes) as executor:
+            futures = [executor.submit(drawPlot, *task) for task in tasks]
+            
+            for future in tqdm(as_completed(futures), 
+                               total=len(futures), 
+                               desc="Plotting Ranks",
+                               ncols=None):
+                try:
+                    future.result() # This will raise the actual error if a process crashed
+                except Exception as e:
+                    tqdm.write(f"Task failed with error: {e}")
+    else:
+        for task in tasks:
+            drawPlot(*task)
+           
     end_time = time.time()
     elapsed_time = end_time - start_time
     hh = elapsed_time//(60*60)
@@ -932,7 +936,10 @@ def main() -> None:
     print(f"Script executed in {hh:02n}:{mm:02n}:{ss:02n} ")
 
 if __name__ == "__main__":
-    main()
-
-if LOG_FILE:
-    LOG_FILE.close()
+    try:
+        main()
+        
+    finally:
+        if 'LOG_FILE' in globals() and LOG_FILE:
+            LOG_FILE.close()
+            

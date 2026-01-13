@@ -19,6 +19,7 @@ def downSample(x_value, y_value, downsampling_method, gradient_threshold):
         x_value, y_value = down_sample(x_value, y_value)
     return x_value, y_value
         
+
 def downsample_based_on_gradient(time, values, gradient_threshold):
     values = pd.to_numeric(values, errors='coerce')
     gradient = calculate_gradient(time, values)
