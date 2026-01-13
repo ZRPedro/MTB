@@ -133,6 +133,7 @@ def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDic
     None.
 
     '''
+
     pfFlatTIme = settingsDict['PF flat time']
     pscadInitTime = settingsDict['PSCAD Initialization time']
     
