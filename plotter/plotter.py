@@ -522,7 +522,7 @@ def drawPlot(rank: int,
     resultList = resultDict.get(rank, [])
     rankList = list(resultDict.keys())
     rankList.sort()
-    figureList = figureDict.get(rank, figureDict.get(next(iter(figureDict)), []))
+    figureList = figureDict.get(rank, figureDict.get(-1, []))
     ranksCursor = [i for i in cursorDict if i.id == rankNameDict.get(rank, [])]
 
     if resultList == [] or figureList == []:
