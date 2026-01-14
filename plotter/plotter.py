@@ -929,11 +929,10 @@ def main() -> None:
            
     end_time = time.time()
     elapsed_time = end_time - start_time
-    hh = elapsed_time//(60*60)
-    mm = (elapsed_time%(60*60))//60
-    ss = ((elapsed_time%(60*60))%60)
+    mm, ss = divmod(elapsed_time, 60)
+    hh, mm = divmod(mm, 60)
 
-    print(f"Script executed in {hh:02n}:{mm:02n}:{ss:02n} ")
+    print(f"Script executed in {hh:02n}:{mm:02n}:{ss:06.3f} ")
 
 if __name__ == "__main__":
     try:
