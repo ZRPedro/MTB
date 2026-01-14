@@ -55,22 +55,15 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
             guideFigs.append('Ppoc')
             guideSignals.append('P_pu_PoC_Ramp')
         
-        # "Advance" multi-step Active Power Ramping cases
-        elif 'P-change' in caseDf['Case']['Name'].squeeze():
+        # "Advance" (multi-step) Active Power Ramping cases (with limited Pavailabale cases)
+        elif 'Pref-change' in caseDf['Case']['Name'].squeeze() or 'Pavail_step' in caseDf['Case']['Name'].squeeze() or 'Pavail_variation' in caseDf['Case']['Name'].squeeze():
             guideData['P_pu_PoC_Ramp'] = guideData['mtb_s_pref_pu'].clip(upper=guideData['mtb_s_pavail_pu']) # Create the active power reference signal clipped to the available power to 'populate' below
             guideData['P_pu_PoC_Ramp'] = guidePramp2(Pref=guideData['P_pu_PoC_Ramp'], Pn=Pn, Pavail=guideData['mtb_s_pavail_pu'], Ts=Ts, P=guideData['P_pu_PoC_Ramp'])
             guideFigs.append('Ppoc')
             guideSignals.append('P_pu_PoC_Ramp')                                            
 
-        # "Advance" Active Power Ramping with limited Pavailabale cases           
-        elif 'Pavail_step' in caseDf['Case']['Name'].squeeze():
-            guideData['P_pu_PoC_Ramp'] = guideData['mtb_s_pref_pu'].clip(upper=guideData['mtb_s_pavail_pu']) # Create the active power reference signal clipped to the available power to 'populate' below
-            guideData['P_pu_PoC_Ramp'] = guidePramp2(Pref=guideData['P_pu_PoC_Ramp'], Pn=Pn, Pavail=guideData['mtb_s_pavail_pu'], Ts=Ts, P=guideData['P_pu_PoC_Ramp'])
-            guideFigs.append('Ppoc')
-            guideSignals.append('P_pu_PoC_Ramp')                                            
-            
         # LFSM, FSM & RoCoF cases    
-        elif  'FSM' in caseDf['Case']['Name'].squeeze():
+        elif 'FSM' in caseDf['Case']['Name'].squeeze() or 'RoCoF' in caseDf['Case']['Name'].squeeze() or 'Freq' in caseDf['Case']['Name'].squeeze():
             s_fsm = settingDict['FSM droop']                                    # FSM droop in [%]
             db = settingDict['FSM deadband']                                    # FSM deadband in [Hz]
             FSM = caseDf['Initial Settings']['Pmode'].squeeze() == 'LFSM+FSM'   # FSM mode enabled
@@ -102,6 +95,11 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
                 guideFigs.append('Ppoc')
                 guideSignals.append('P_pu_LFSM_Ramp_2s')                                            
         
+        elif 'SystemProtect' not in caseDf['Case']['Name'].squeeze() or 'Fault' not in caseDf['Case']['Name'].squeeze() or 'LVFRT' not in caseDf['Case']['Name'].squeeze():
+            guideData['P_pu_PoC'] = guideData['mtb_s_pref_pu']
+            guideFigs.append('Ppoc')
+            guideSignals.append('P_pu_PoC')  
+            
         Qdefault = settingDict['Default Q mode']                
         # Q control cases
         if caseDf['Initial Settings']['Qmode'].squeeze() == 'Q' or caseDf['Initial Settings']['Qmode'].squeeze() == 'Default' and Qdefault == 'Q':            
@@ -283,7 +281,6 @@ def guidePramp2(Pref, Pn, Pavail, Ts, P):
     Pavail_array = np.asarray(Pavail)
     P_array = np.asarray(P)
     
-    Pref=Pref_array[0]
     for k in range(1, len(P)):
         if np.abs(Pref_array[k] - P_array[k-1]) > PThresh:
             if Pref_array[k] - P_array[k-1] > 0:  # If P needs to increasing
@@ -291,12 +288,11 @@ def guidePramp2(Pref, Pn, Pavail, Ts, P):
                 if P_array[k] > Pref_array[k]:  # Ensure P does not exceed Pref / Pavail
                     P_array[k] = Pref_array[k]
             else: # If P needs to decreasing
+                P_array[k] = -m*Ts + P_array[k-1]
+                if P_array[k] < Pref_array[k]:  # Ensure P does not go below Pref
+                    P_array[k] = Pref_array[k]
                 if P_array[k] > Pavail_array[k]:  # Ensure P is clamped to Pavail if Pavail goes down suddenly
                     P_array[k] = Pavail_array[k]
-                else:
-                    P_array[k] = -m*Ts + P_array[k-1]
-                    if P_array[k] < Pref_array[k]:  # Ensure P does not go below Pref
-                        P_array[k] = Pref_array[k]
         else: # Maintain current value of P
             P_array[k] = P_array[k-1]            
         
