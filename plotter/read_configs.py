@@ -4,7 +4,6 @@ from typing import Dict, List, Tuple
 import csv
 from Figure import Figure
 from Cursor import Cursor
-from collections import defaultdict
 from configparser import ConfigParser
 from down_sampling_method import DownSamplingMethod
 from cursor_type import CursorType
