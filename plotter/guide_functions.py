@@ -41,8 +41,10 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
         DK = 1 if settingDict['Area']=='DK1' else 2                             # DK area, either 1 or 2
         DSO = True if settingDict['Un']<110 else False                          # DSO, either Energinet (TSO))
         Pn = settingDict['Pn']                                                  # Nominal power [MW] 
-        P0 = caseDf['Initial Settings']['P0'].squeeze()                         # Initial active power setpoint, P0
         
+        P0 = guideData['mtb_s_pref_pu'][0]                                      # Initial active power setpoint, P0
+        Pavail0 = guideData['mtb_s_pavail_pu'][0]                               # Initial limited active power available value, Pavail0 
+
         # Active Power Ramping cases
         if ('P_step' in caseDf['Case']['Name'].squeeze() or 'PQ/Pn' in caseDf['Case']['Name'].squeeze()) and not 'Pavail' in caseDf['Case']['Name'].squeeze():
             assert caseDf['Event 1']['type'].squeeze() == 'Pref'
@@ -91,7 +93,7 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
             if not 'step' in caseDf['Case']['Name'].squeeze() or 'pstep' in caseDf['Case']['Name'].squeeze(): # Run guideLFSM only for 'step', but not for 'pstep'
                 Td_2s = 2
                 guideData['P_pu_LFSM_Ramp_2s'] = guideDelay(guideData['P_pu_LFSM_Ramp'], Td_2s, Ts)
-                guideData.loc[guideData['time'] < tThresh, 'P_pu_LFSM_Ramp_2s'] = P0      # Set values for t < tThresh
+                guideData.loc[guideData['time'] < tThresh, 'P_pu_LFSM_Ramp_2s'] = min(P0, Pavail0)      # Set values for t < tThresh
                 guideFigs.append('Ppoc')
                 guideSignals.append('P_pu_LFSM_Ramp_2s')                                            
         
