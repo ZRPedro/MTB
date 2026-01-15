@@ -13,7 +13,7 @@ The workflow is simple:
 4. **Execute Simulations** using the MTB Python scripts.
 5. **Visualize the Results** with the included plotter tool.
 
-For the latest release notes, please visit the [Releases page](https://github.com/Energinet-AIG/MTB/releases). Learn more about the regulations for grid connection of new facilities in Denmark: [Danish](https://energinet.dk/regler/el/nettilslutning) or [English](https://en.energinet.dk/electricity/rules-and-regulations/regulations-for-new-facilities).
+For the latest release notes, please visit the [Releases page](https://github.com/Energinet-AIG/MTB/releases). Learn more about the regulations for grid connection of new facilities in Denmark: [Danish](https://energinet.dk/regler/el/nettilslutning) or [English](https://en.energinet.dk/rules-regulations-conditions-and-methods/electricity-rules-conditions-and-methods/).
 
 ![96](https://github.com/user-attachments/assets/6ce6746c-83b6-4d3f-a433-71c7ce5409de)
 *Example comparative study between RMS (red) and EMT (blue) models.*
