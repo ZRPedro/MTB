@@ -33,17 +33,24 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
         trise = 0.5                                               # Rise time [s]
         fc = 0.35/trise                                           # Cut-off frequency [Hz]
         
-        tThresh = -1                                              # Time threshold [s]            
+        tThresh = -1                        # Time threshold [s]            
         
         guideFigs = ['']
         guideSignals = ['']
         
-        DK = 1 if settingDict['Area']=='DK1' else 2               # DK area, either 1 or 2
-        DSO = True if settingDict['Un']<110 else False            # DSO, either Energinet (TSO))
-        Pn = settingDict['Pn']                                    # Nominal power [MW] 
-        
-        P0 = guideData['mtb_s_pref_pu'][0]                        # Initial active power setpoint, P0
-        Pavail0 = guideData['mtb_s_pavail_pu'][0]                 # Initial limited active power available value, Pavail0 
+        DK = 1 if settingDict['Area']=='DK1' else 2                             # DK area, either 1 or 2
+        DSO = True if settingDict['Un']<110 else False                          # DSO, either Energinet (TSO))
+        if DK == 1 and not DSO:
+            vposFrtLimit = 0.85
+        elif DK == 2 or DSO:
+            vposFrtLimit = 0.9
+        else:
+            print(f"DK = {DK} is not a valid option!")
+            sys.exit(1)
+
+        Pn = settingDict['Pn']                                                  # Nominal power [MW]         
+        P0 = guideData['mtb_s_pref_pu'][0]                                      # Initial active power setpoint, P0
+        Pavail0 = guideData['mtb_s_pavail_pu'][0]                               # Initial limited active power available value, Pavail0 
 
         # Active Power Ramping cases
         if ('P_step' in caseDf['Case']['Name'].squeeze() or 'PQ/Pn' in caseDf['Case']['Name'].squeeze()) and not 'Pavail' in caseDf['Case']['Name'].squeeze():
@@ -76,7 +83,7 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
             guideData.loc[guideData['time'] < tThresh, 'f_hz_Td'] = fn          # Set values for t < tThresh to fn to eliminate the initialisation transients
             guideData['f_hz_Td_Lpf'] = guideLPF(guideData['f_hz_Td'], fc, 1/Ts) # Pass the delayed signal through an LPF
 
-            if 'step' in caseDf['Case']['Name'].squeeze() and not 'pstep' in caseDf['Case']['Name'].squeeze():   # Run guideLFSM only for 'step', but not for 'pstep'
+            if 'step' in caseDf['Case']['Name'].squeeze() and not 'pstep' in caseDf['Case']['Name'].squeeze(): # Run guideLFSM only for 'step', but not for 'pstep'
                 guideData['P_pu_LFSM_FFR'] = guideData['mtb_s_pref_pu'].clip(upper=guideData['mtb_s_pavail_pu']) # Create the 'dummy' active power reference signal clipped to the available power be to 'overwritten' below
                 for i, row in guideData.iterrows():
                     PpuLFSM = guideLFSM(Pref=row['mtb_s_pref_pu'], f=row['f_hz_Td_Lpf'], Pavail=row['mtb_s_pavail_pu'], DK=DK, FSM=FSM, s_fsm=s_fsm, db=db)
@@ -93,7 +100,7 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
             if not 'step' in caseDf['Case']['Name'].squeeze() or 'pstep' in caseDf['Case']['Name'].squeeze(): # Run guideLFSM only for 'step', but not for 'pstep'
                 Td_2s = 2
                 guideData['P_pu_LFSM_Ramp_2s'] = guideDelay(guideData['P_pu_LFSM_Ramp'], Td_2s, Ts)
-                guideData.loc[guideData['time'] < tThresh, 'P_pu_LFSM_Ramp_2s'] = min(P0, Pavail0)            # Set values for t < tThresh
+                guideData.loc[guideData['time'] < tThresh, 'P_pu_LFSM_Ramp_2s'] = min(P0, Pavail0)      # Set values for t < tThresh
                 guideFigs.append('Ppoc')
                 guideSignals.append('P_pu_LFSM_Ramp_2s')                                            
         
@@ -116,12 +123,24 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
         if caseDf['Initial Settings']['Qmode'].squeeze() == 'Q(U)' or caseDf['Initial Settings']['Qmode'].squeeze() == 'Default' and  Qdefault == 'Q(U)':
             Qref0 = 0.0                                                         # Note: This is the initial reactive power reference
 
+            # Change LPF setting for Upos
+            trise_Upos = 0.025                                                  # Rise time [s]
+            fc_Upos = 0.35/trise_Upos                                           # Cut-off frequency [Hz]
+
+            # Implement a LPF on the Upos to slow down the Q(U) response during an "instantaneous" LVFRT event
+            guideData['fft_pos_Vmag_pu_lpf'] = guideLPF(guideData['fft_pos_Vmag_pu'], fc_Upos, 1/Ts)
+            
             guideData['Q_pu_QU_Inst'] = Qref0      # Create new signal to populate
             for i, row in guideData.iterrows():
                 if row['time'] < tThresh:
                     continue
-                QpuQU = guideQU(Uref=row['mtb_s_qref'], Upos=row['fft_pos_Vmag_pu'], s=row['mtb_s_qudroop'], Qref=Qref0, DK=DK , DSO=DSO) # Note: If Qmode == 'Q(U)', then 'mtb_s_qref' = Uref
-                guideData.loc[i, 'Q_pu_QU_Inst'] = QpuQU 
+                if row['fft_pos_Vmag_pu_lpf'] > vposFrtLimit: # No FRT
+                    QpuQU = guideQU(Uref=row['mtb_s_qref'], Upos=row['fft_pos_Vmag_pu_lpf'], s=row['mtb_s_qudroop'], Qref=Qref0) # Note: If Qmode == 'Q(U)', then 'mtb_s_qref' = Uref
+                    guideData.loc[i, 'Q_pu_QU_Inst'] = QpuQU 
+                else:
+                    # For the first index, keep the initialized value (Qref0); otherwise, use the previous value
+                    if i > guideData.index[0]:
+                        guideData.loc[i, 'Q_pu_QU_Inst'] = guideData.loc[i-1, 'Q_pu_QU_Inst']
                 
             # Change LPF setting for Q(U)
             trise_QU = 0.75                                                     # Rise time [s]
@@ -149,13 +168,8 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
                         
         # Fast Fault Current contribution cases
         if 'FRT' in caseDf['Case']['Name'].squeeze() or 'Fault' in caseDf['Case']['Name'].squeeze() or 'support' in caseDf['Case']['Name'].squeeze():
-            if DK == 1:
-                vposFrtLimit = 0.85                                             # FRT Voltage limit for DK1
-            elif DK == 2 or DSO:
-                vposFrtLimit = 0.9                                              # FRT Voltage limit for DK2 or DSO cases
-                
             Iq0 = 0
-            guideData['Iq_pu_FFC'] = 0.0    # Create new signal to populate
+            guideData['Iq_pu_FFC_Inst'] = 0.0    # Create new signal to populate
             for i, row in guideData.iterrows():
                 if row['time'] < tThresh:
                     continue
@@ -164,14 +178,19 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
                     if caseDf['Initial Settings']['Qmode'].squeeze() == 'Q' or (caseDf['Initial Settings']['Qmode'].squeeze() == 'Default' and Qdefault == 'Q'):            
                         Iq0 =  row['Q_pu_Q_Ctrl']/row['fft_pos_Vmag_pu']
                     if caseDf['Initial Settings']['Qmode'].squeeze() == 'Q(U)' or (caseDf['Initial Settings']['Qmode'].squeeze() == 'Default' and Qdefault == 'Q(U)'):
-                        Iq0 =  row['Q_pu_QU_Ctrl']/row['fft_pos_Vmag_pu']
+                        Iq0 =  row['Q_pu_QU_Inst']/row['fft_pos_Vmag_pu']
                     if caseDf['Initial Settings']['Qmode'].squeeze() == 'PF' or (caseDf['Initial Settings']['Qmode'].squeeze() == 'Default' and Qdefault == 'PF'):
                         Iq0 =  row['Q_pu_Qpf_Ctrl']/row['fft_pos_Vmag_pu']
                         
                 IqFFC = guideFFC(Upos=row['fft_pos_Vmag_pu'], Iq0 = Iq0, DK=DK, DSO=DSO)
                     
-                guideData.loc[i, 'Iq_pu_FFC'] = IqFFC                                     
+                guideData.loc[i, 'Iq_pu_FFC_Inst'] = IqFFC                                     
             
+            # Change LPF setting for Iq
+            trise_FFC = 0.025                                                   # Rise time [s]
+            fc_FFC = 0.35/trise_FFC                                             # Cut-off frequency [Hz]
+
+            guideData['Iq_pu_FFC'] = guideLPF(guideData['Iq_pu_FFC_Inst'], fc_FFC, 1/Ts)            
             guideFigs.append('Ireactive')
             guideSignals.append('Iq_pu_FFC')  
 
@@ -475,7 +494,7 @@ def guideFSM(Pref, f, DK=1, s=10, db=0):
     return Pnew
 
 
-def guideQU(Uref, Upos, s, Qref=0.0, DK=1 , DSO=False):
+def guideQU(Uref, Upos, s, Qref=0.0):
     '''
     This function calculates the value of the reactive power required, Qpoc_QU, 
     for voltage control mode based on RfG (EU) 2016/631, 21.3 (d) NC 2025
@@ -487,33 +506,21 @@ def guideQU(Uref, Upos, s, Qref=0.0, DK=1 , DSO=False):
                         point of connection
                         TODO: Legacy suppor for Terminal (LV/MV ?)
         s in [%]     -- the voltage droop of the Q(U) control   
-        Qref in [pu] -- the Reactive Power reference (which by default is zero)
+        Qref in [pu] -- the Reactive Power reference/offset (which by default is zero)
 
     Returns:
         Qpoc_QU in [pu] -- the new value of Q at the point of connection
     '''
     Qnom = 0.33     # TODO: Qnom should be the actual Qnom of the plant
     
-    if DK == 1 and not DSO:
-        vposFrtLimit = 0.85
-    elif DK == 2 or DSO:
-        vposFrtLimit = 0.9
+    dU = Uref-Upos
+    dQ = 100*dU/Uref*Qnom/s      
+    if Qref + dQ > Qnom:
+        Qpoc_QU = -Qnom 
+    elif Qref + dQ < -Qnom:
+       Qpoc_QU = -Qnom 
     else:
-        print(f"DK = {DK} is not a valid option!")
-        sys.exit(1)
-
-    if Upos < vposFrtLimit: # No FRT
-        Qpoc_QU = Qnom     # Qpoc_QU reference is is clamped at Qnom 
-    else:
-        dU = Uref-Upos
-        # Safety Check: Prevent Division by Zero
-        dQ = 100*dU/Uref*Qnom/s      
-        if Qref + dQ > Qnom:
-            Qpoc_QU = Qnom
-        elif Qref + dQ < -Qnom:
-           Qpoc_QU = -Qnom 
-        else:
-            Qpoc_QU = Qref + dQ
+        Qpoc_QU = Qref + dQ
         
     return Qpoc_QU
 
@@ -556,9 +563,9 @@ def guideFFC(Upos, Iq0, DK, DSO):
 
     '''
     if DK == 1 and not DSO:
-        vposFrtLimit = 0.85
+        vposFrtLimit = 0.85 # NC 2025 (Version 4) for DK1
     elif DK == 2 or DSO:
-        vposFrtLimit = 0.9
+        vposFrtLimit = 0.9  # NC 2025 (Version 4) for DK2
     else:
         print(f"DK = {DK} is not a valid option!")
         sys.exit(1)
@@ -568,9 +575,9 @@ def guideFFC(Upos, Iq0, DK, DSO):
     else:
         if Upos < vposFrtLimit and Upos > 0.5:
             if DK==2 or DSO:
-                IqFFC = -1/0.4*Upos+2.25 + Iq0
+                IqFFC = -1/0.4*Upos+2.25 + Iq0     # NC 2025 (Version 4) for DK2
             else: # DK==1
-                IqFFC = -1/0.35*Upos+2.42857 + Iq0
+                IqFFC = -1/0.35*Upos+2.42857 + Iq0 # NC 2025 (Version 4) for DK1
             
         else: # Upos <= 0.5
             IqFFC = 1.0 + Iq0
