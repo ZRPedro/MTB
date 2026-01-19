@@ -57,7 +57,7 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
             assert caseDf['Event 1']['type'].squeeze() == 'Pref'
             Tstep = caseDf['Event 1']['time'].squeeze()
             Pstep = caseDf['Event 1']['X1'].squeeze()
-            #assert caseDf['Event 1']['X2'].squeeze() == 0.0
+            assert caseDf['Event 1']['X2'].squeeze() == 0.0
             
             guideData['P_pu_PoC_Ramp'] = pd.Series([guidePramp(Pref=P0, Pn=Pn, Tstep=Tstep, Pstep=Pstep, t=t) for t in guideData.time])
             
@@ -138,7 +138,9 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
                     QpuQU = guideQU(Uref=row['mtb_s_qref'], Upos=row['fft_pos_Vmag_pu_lpf'], s=row['mtb_s_qudroop'], Qref=Qref0) # Note: If Qmode == 'Q(U)', then 'mtb_s_qref' = Uref
                     guideData.loc[i, 'Q_pu_QU_Inst'] = QpuQU 
                 else:
-                    guideData.loc[i, 'Q_pu_QU_Inst'] = guideData.loc[i-1, 'Q_pu_QU_Inst'] 
+                    # For the first index, keep the initialized value (Qref0); otherwise, use the previous value
+                    if i > guideData.index[0]:
+                        guideData.loc[i, 'Q_pu_QU_Inst'] = guideData.loc[i-1, 'Q_pu_QU_Inst']
                 
             # Change LPF setting for Q(U)
             trise_QU = 0.75                                                     # Rise time [s]
@@ -512,10 +514,9 @@ def guideQU(Uref, Upos, s, Qref=0.0):
     Qnom = 0.33     # TODO: Qnom should be the actual Qnom of the plant
     
     dU = Uref-Upos
-    # Safety Check: Prevent Division by Zero
     dQ = 100*dU/Uref*Qnom/s      
     if Qref + dQ > Qnom:
-        Qpoc_QU = Qnom
+        Qpoc_QU = -Qnom 
     elif Qref + dQ < -Qnom:
        Qpoc_QU = -Qnom 
     else:
