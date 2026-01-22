@@ -143,7 +143,7 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
                         guideData.loc[i, 'Q_pu_QU_Inst'] = guideData.loc[i-1, 'Q_pu_QU_Inst']
                 
             # Change LPF setting for Q(U)
-            trise_QU = 0.75                                                     # Rise time [s]
+            trise_QU = 0.95                                                     # Rise time [s]
             fc_QU = 0.35/trise_QU                                               # Cut-off frequency [Hz]
 
             guideData['Q_pu_QU_Ctrl'] = guideLPF(guideData['Q_pu_QU_Inst'], fc_QU, 1/Ts)            
@@ -516,7 +516,7 @@ def guideQU(Uref, Upos, s, Qref=0.0):
     dU = Uref-Upos
     dQ = 100*dU/Uref*Qnom/s      
     if Qref + dQ > Qnom:
-        Qpoc_QU = -Qnom 
+        Qpoc_QU = Qnom
     elif Qref + dQ < -Qnom:
        Qpoc_QU = -Qnom 
     else:
