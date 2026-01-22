@@ -547,8 +547,7 @@ def guideQpf(Ppoc, PFref):
 
 def guideFFC(Upos, Iq0, DK, DSO):
     '''
-    This function calculates the fast fault current (FFC) contribution,
-    Id (experimental) and Iq, based on the positive sequence voltage, Upos
+    This function calculates the fast fault current (FFC) contribution, Iq, based on the positive sequence voltage, Upos
     based on RfG (EU) 2016/631, 20.2 (b) NC 2025 (Version 4) for DK1 and DK2
     
     Parameters:    
@@ -560,23 +559,20 @@ def guideFFC(Upos, Iq0, DK, DSO):
         IqFFC in [pu] -- the required positive sequence, quadrature current at the point of connection
 
     '''
-    if DK == 1 and not DSO:
+    if DK == 2 or DSO:
+        vposFrtLimit = 0.9  # NC 2025 (Version 4) for DK2 or for DSO cases
+        m = 1/0.4
+        c = 2.25
+    else: # DK1
         vposFrtLimit = 0.85 # NC 2025 (Version 4) for DK1
-    elif DK == 2 or DSO:
-        vposFrtLimit = 0.9  # NC 2025 (Version 4) for DK2
-    else:
-        print(f"DK = {DK} is not a valid option!")
-        sys.exit(1)
+        m = 1/0.35
+        c = 2.42857
        
     if Upos >= vposFrtLimit: # No FRT
         IqFFC = Iq0     # Iq is unchanged
     else:
         if Upos < vposFrtLimit and Upos > 0.5:
-            if DK==2 or DSO:
-                IqFFC = -1/0.4*Upos+2.25 + Iq0     # NC 2025 (Version 4) for DK2
-            else: # DK==1
-                IqFFC = -1/0.35*Upos+2.42857 + Iq0 # NC 2025 (Version 4) for DK1
-            
+            IqFFC = -m*Upos + c + Iq0
         else: # Upos <= 0.5
             IqFFC = 1.0 + Iq0
         
