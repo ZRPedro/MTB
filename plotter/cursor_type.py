@@ -16,7 +16,10 @@ class CursorType(Enum):
     OVERSHOOT  = 12
     FSM_DROOP  = 13
     LFSM_DROOP = 14
-    QU_DROOP   = 15
+    QU_T1      = 15
+    QU_T2      = 16
+    QU_DROOP   = 17
+    QU_SS_TOL  = 18
 
     @classmethod
     def from_string(cls, string : str):
