@@ -322,7 +322,7 @@ def genCursorPlotlyTables(ranksCursor, dfCursorsList):
     goCursorList = []
 
     EMPIRICAL_HEADER_ROW_HEIGHT_PX = 25  # Measured height for a header row (font size 10)
-    EMPIRICAL_CELL_ROW_HEIGHT_PX = 20    # Measured height for a single line of data (font size 10)
+    EMPIRICAL_CELL_ROW_HEIGHT_PX = 21    # Measured height for a single line of data (font size 10)
                                          # If text wraps, this value needs to be higher (e.g., 50-55px for two lines)
 
     FIGURE_TITLE_HEIGHT_PX = 25          # Estimated height for the `fig.update_layout` title
