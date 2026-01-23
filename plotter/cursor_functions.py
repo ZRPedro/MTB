@@ -152,46 +152,103 @@ def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDic
             for option in cursor.cursor_options:
                 for time_interval in getTimeIntervals(cursor.time_ranges):
                     if option.name == 'START':
-                        cursorMetricData.append(cursorStart(cursorSignalsDf, time_interval))
-                    elif option.name == 'END':
-                       cursorMetricData.append(cursorEnd(cursorSignalsDf, time_interval))
-                    elif option.name == 'DELTA':
-                       cursorMetricData.append(cursorDelta(cursorSignalsDf, time_interval))
-                    elif option.name == 'MIN':
-                        cursorMetricData.append(cursorMin(cursorSignalsDf, time_interval))
-                    elif option.name == 'MAX':
-                        cursorMetricData.append(cursorMax(cursorSignalsDf, time_interval))
-                    elif option.name == 'MEAN':
-                        cursorMetricData.append(cursorMean(cursorSignalsDf, time_interval))
-                    elif option.name == 'GRAD_MIN':
-                        cursorMetricData.append(cursorGradMin(cursorSignalsDf, time_interval))
-                    elif option.name == 'GRAD_MAX':
-                        cursorMetricData.append(cursorGradMax(cursorSignalsDf, time_interval))
-                    elif option.name == 'GRAD_MEAN':
-                        cursorMetricData.append(cursorGradMean(cursorSignalsDf, time_interval))
-                    elif option.name == 'RESPONSE':
-                        cursorMetricData.append(cursorResponseDelay(cursorSignalsDf, time_interval))
-                    elif option.name == 'RISE_FALL':
-                        cursorMetricData.append(cursorRiseFallTime(cursorSignalsDf, time_interval))
-                    elif option.name == 'SETTLING':
-                        cursorMetricData.append(cursorSettlingTime(cursorSignalsDf, time_interval))
-                    elif option.name == 'OVERSHOOT':
-                        cursorMetricData.append(cursorPeakOvershoot(cursorSignalsDf, time_interval))
-                    elif option.name == 'FSM_DROOP':
-                        cursorMetricData.append(cursorFSMDroop(cursorSignalsDf, time_interval, settingsDict))
-                    elif option.name == 'LFSM_DROOP':
-                        cursorMetricData.append(cursoLFSMDroop(cursorSignalsDf, time_interval, settingsDict))
-                    elif option.name == 'QU_T1':
-                        cursorMetricData.append(cursorQUt1(cursorSignalsDf, time_interval))
-                    elif option.name == 'QU_T2':
-                        cursorMetricData.append(cursorQUt2(cursorSignalsDf, time_interval))
-                    elif option.name == 'QU_DROOP':
-                        cursorMetricData.append(cursorQUDroop(cursorSignalsDf, time_interval, caseDf))
-                    elif option.name == 'QU_SS_TOL':
-                        cursorMetricData.append(cursorQUSSTol(cursorSignalsDf, time_interval, settingsDict, caseDf))
-                    else:
-                        print(f'Cursor function {option} not defined')
+                        t0, y0 = cursorStart(cursorSignalsDf, time_interval)
+                        cursorMetricText = f"Start: y({t0:.3f}) = {y0:.3f}"
                         
+                    elif option.name == 'END':
+                       t1, y1 = cursorEnd(cursorSignalsDf, time_interval)
+                       cursorMetricText = f"End: y({t1:.3f}) = {y1:.3f}"
+                       
+                    elif option.name == 'DELTA':
+                       dy = cursorDelta(cursorSignalsDf, time_interval)
+                       cursorMetricText = f"Delta: \u0394y = {dy:.3f}"
+                       
+                    elif option.name == 'MIN':
+                        y_min, t_min = cursorMin(cursorSignalsDf, time_interval)
+                        cursorMetricText = f"Min: {y_min:.3f} at t = {t_min:.3f} s"
+                        
+                    elif option.name == 'MAX':
+                        y_max, t_max = cursorMax(cursorSignalsDf, time_interval)
+                        cursorMetricText = f"Max: {y_max:.3f} at t = {t_max:.3f} s"
+                        
+                    elif option.name == 'MEAN':
+                        y_mean = cursorMean(cursorSignalsDf, time_interval)
+                        cursorMetricText = f"Mean: {y_mean:.3f}"
+                        
+                    elif option.name == 'GRAD_MIN':
+                        y_grad_min = cursorGradMin(cursorSignalsDf, time_interval)
+                        cursorMetricText = f"Grad (min): {y_grad_min:.3f} pu/min"
+                        
+                    elif option.name == 'GRAD_MAX':
+                        y_grad_mean = cursorGradMax(cursorSignalsDf, time_interval)
+                        cursorMetricText = f"Grad (mean): {y_grad_mean:.3f} pu/min"
+                        
+                    elif option.name == 'GRAD_MEAN':
+                        y_grad_max = cursorGradMean(cursorSignalsDf, time_interval)
+                        cursorMetricText = f"Grad (max): {y_grad_max:.3f} pu/min"
+                        
+                    elif option.name == 'RESPONSE':
+                        t_response = cursorResponseDelay(cursorSignalsDf, time_interval)
+                        cursorMetricText = f"Response delay: {t_response:.3f} s"
+                        
+                    elif option.name == 'RISE_FALL':
+                        dy, tRiseFall = cursorRiseFallTime(cursorSignalsDf, time_interval)
+                        if not np.isnan(dy):
+                            labelRiseOrFall = 'Rise time' if dy > 0 else 'Fall time'
+                            cursorMetricText = f'{labelRiseOrFall}: {tRiseFall:.3f} s'
+                        else:
+                            cursorMetricText = 'Rise/Fall time: metric error'
+                        
+                    elif option.name == 'SETTLING':
+                        tSettling = cursorSettlingTime(cursorSignalsDf, time_interval, tol=2)
+                        cursorMetricText = f"Settling time: {tSettling:.3f} s"
+                        
+                    elif option.name == 'OVERSHOOT':
+                        yOSRatio, zeta = cursorPeakOvershoot(cursorSignalsDf, time_interval)
+                        cursorMetricText = f"Overshoot: {yOSRatio*100:.2f} % (\u03B6 \u2248 {zeta:.3f})"
+
+                    elif option.name == 'FSM_DROOP':
+                        fsmDroop = cursorFSMDroop(cursorSignalsDf, time_interval, settingsDict)
+                        cursorMetricText = f"FSM droop value: {fsmDroop:.2f}%"
+
+                    elif option.name == 'LFSM_DROOP':
+                        lfsmDroop = cursoLFSMDroop(cursorSignalsDf, time_interval, settingsDict)
+                        cursorMetricText = f"LFSM droop value: {lfsmDroop:.2f}%"
+                        
+                    elif option.name == 'QU_T1':
+                        t_response = cursorResponseDelay(cursorSignalsDf, time_interval)
+                        dy, tRiseFall = cursorRiseFallTime(cursorSignalsDf, time_interval)
+                        if not np.isnan(t_response) and not np.isnan(tRiseFall):
+                            t1 = t_response + tRiseFall
+                            labelRiseOrFall = 'Q(U) t1 rise time' if dy > 0 else 'Q(U) t1 fall time'
+                            cursorMetricText = f"{labelRiseOrFall}: {t1:.3f} s"
+                        else:
+                            cursorMetricText = "Q(U) t1 rise/fall time: metric error"
+
+                    elif option.name == 'QU_T2':
+                        tSettling = cursorSettlingTime(cursorSignalsDf, time_interval, tol=2)
+                        cursorMetricText = f"Q(U) t2 settling time: {tSettling:.3f} s"
+                        
+                    elif option.name == 'QU_DROOP':
+                        s = cursorQUDroop(cursorSignalsDf, time_interval, caseDf)
+                        cursorMetricText = f"Q(U) droop value: {s:.2f}%"
+                        
+                    elif option.name == 'QU_SS_TOL':
+                        dqReg, dqSSTol = cursorQUSSTol(cursorSignalsDf, time_interval, settingsDict, caseDf)
+                        cursorMetricText = f'Q(U) steady-state tolerance: {dqSSTol:+.2f}% (\u0394Q required = {dqReg:+.3f} pu)'
+                        
+                    elif option.name == 'DELTA_FFC':
+                        diq, dFFC = cursorDeltaFFC(cursorSignalsDf, time_interval, settingsDict)
+                        if not np.isnan(dFFC):
+                            iqDiff = dFFC - diq 
+                            cursorMetricText = f'\u0394FFC required: {dFFC:.3f} pu (Iq diff. = {iqDiff:.3f} pu)'
+                        else:
+                            cursorMetricText = '\u0394FFC: metric error'
+                    else:
+                        cursorMetricText = f'Cursor function {option} not defined'
+                
+                    cursorMetricData.append(cursorMetricText)
+
             dfCursorsList[i][cursorSignalsDf.columns[1]] = cursorMetricData # Add column to cursor DataFrame, using the first cursor signal display name
 
 
@@ -211,13 +268,9 @@ def cursorStart(cursorSignalsDf, time_interval):
             t0 = t[0]      # Cursor start t value
             y0 = y[0]      # Cursor start y value
     
-            cursorMetricText = f"Start: y({t0:.3f}) = {y0:.3f}"
-        else:
-            cursorMetricText = "Inst: error"
-    else:
-        cursorMetricText = "Inst: error"
-    
-    return cursorMetricText
+            return (t0, y0)
+
+    return (np.nan, np.nan)
     
 
 def cursorEnd(cursorSignalsDf, time_interval):
@@ -233,16 +286,12 @@ def cursorEnd(cursorSignalsDf, time_interval):
             t, y = t[mask], y[mask]
         
         if len(t) > 0:
-            t1 = y[-1]     # Cursor end t value
+            t1 = t[-1]     # Cursor end t value
             y1 = y[-1]     # Cursor end y value
     
-            cursorMetricText = f"End: y({t1:.3f}) = {y1:.3f}"
-        else:
-            cursorMetricText = "Inst: error"
-    else:
-        cursorMetricText = "Inst: error"
+            return (t1, y1)
     
-    return cursorMetricText
+    return (np.nan, np.nan)
     
 
 def cursorDelta(cursorSignalsDf, time_interval):
@@ -262,13 +311,9 @@ def cursorDelta(cursorSignalsDf, time_interval):
             y1 = y[-1]     # Cursor end y value
             dy = y1 - y0   # Difference in y values
     
-            cursorMetricText = f"Delta: \u0394y = {dy:.3f}"
-        else:
-            cursorMetricText = "Inst: error"
-    else:
-        cursorMetricText = "Inst: error"
+            return dy
     
-    return cursorMetricText
+    return np.nan
     
 
 def cursorMin(cursorSignalsDf, time_interval):
@@ -290,14 +335,9 @@ def cursorMin(cursorSignalsDf, time_interval):
             # Find the corresponding x-values
             t_min = t[np.argmin(y)]  # t-value where y is minimum
         
-            # Construct the text
-            cursorMetricText = f"Min: {y_min:.3f} at t = {t_min:.3f} s"
-        else:
-            cursorMetricText = "Min: error"
-    else:
-        cursorMetricText = "Min: error"
+            return (y_min, t_min)
     
-    return cursorMetricText
+    return (np.nan, np.nan)
 
 
 def cursorMax(cursorSignalsDf, time_interval):
@@ -319,14 +359,9 @@ def cursorMax(cursorSignalsDf, time_interval):
             # Find the corresponding x-values
             t_max = t[np.argmax(y)]  # t-value where y is maximum
         
-            # Construct the text
-            cursorMetricText = f"Max: {y_max:.3f} at t = {t_max:.3f} s"
-        else:
-            cursorMetricText = "Max: error"
-    else:
-        cursorMetricText = "Max: error"
+            return (y_max, t_max)
     
-    return cursorMetricText
+    return (np.nan, np.nan)
 
 
 def cursorMean(cursorSignalsDf, time_interval):
@@ -345,14 +380,9 @@ def cursorMean(cursorSignalsDf, time_interval):
             # Find the mean of y
             y_mean = y.mean()
         
-            # Construct the text
-            cursorMetricText = f"Mean: {y_mean:.3f}"
-        else:
-            cursorMetricText = "Mean: error"
-    else:
-        cursorMetricText = "Mean: error"
+            return y_mean
 
-    return cursorMetricText
+    return np.nan
 
 
 def cursorGradMin(cursorSignalsDf, time_interval):
@@ -372,14 +402,9 @@ def cursorGradMin(cursorSignalsDf, time_interval):
             y_grad = np.gradient(y,t)
             y_grad_min = y_grad.min()*60
             
-            # Construct the text
-            cursorMetricText = f"Grad (min): {y_grad_min:.3f} pu/min"
-        else:
-            cursorMetricText = "Grad (min): error"
-    else:
-        cursorMetricText = "Grad (min): error"
-
-    return cursorMetricText
+            return y_grad_min
+            
+    return np.nan
 
 
 def cursorGradMean(cursorSignalsDf, time_interval):
@@ -399,14 +424,9 @@ def cursorGradMean(cursorSignalsDf, time_interval):
             y_grad = np.gradient(y,t)
             y_grad_mean = y_grad.mean()*60
             
-            # Construct the text
-            cursorMetricText = f"Grad (mean): {y_grad_mean:.3f} pu/min"
-        else:
-            cursorMetricText = "Grad (mean): error"
-    else:
-        cursorMetricText = "Grad (mean): error"
-
-    return cursorMetricText
+            return y_grad_mean
+            
+    return np.nan
 
 
 def cursorGradMax(cursorSignalsDf, time_interval):
@@ -426,14 +446,9 @@ def cursorGradMax(cursorSignalsDf, time_interval):
             y_grad = np.gradient(y,t)
             y_grad_max = y_grad.max()*60
             
-            # Construct the text
-            cursorMetricText = f"Grad (max): {y_grad_max:.3f} pu/min"
-        else:
-            cursorMetricText = "Grad (max): error"
-    else:
-        cursorMetricText = "Grad (max): error"
-
-    return cursorMetricText
+            return y_grad_max
+            
+    return np.nan
 
 
 def cursorResponseDelay(cursorSignalsDf, time_interval):
@@ -463,14 +478,9 @@ def cursorResponseDelay(cursorSignalsDf, time_interval):
             
             t_response = t.max() - t.min()      # Get the rise/fall time      
         
-            # Construct the text
-            cursorMetricText = f"Response delay: {t_response:.3f} s"
-        else:
-            cursorMetricText = "Response delay: error"
-    else:
-        cursorMetricText = "Response delay: error"
-
-    return cursorMetricText
+            return t_response
+            
+    return np.nan
 
 
 def cursorRiseFallTime(cursorSignalsDf, time_interval):
@@ -500,53 +510,9 @@ def cursorRiseFallTime(cursorSignalsDf, time_interval):
             
             tRiseFall = t.max() - t.min()      # Get the rise/fall time      
         
-            # Construct the text
-            labelRiseOrFall = 'Rise time' if dy > 0 else 'Fall time'
-            cursorMetricText = f"{labelRiseOrFall}: {tRiseFall:.3f} s"
-        else:
-            cursorMetricText = "Rise/Fall time: error"
-    else:
-        cursorMetricText = "Rise/Fall time: error"
-
-    return cursorMetricText
-
-
-def cursorQUt1(cursorSignalsDf, time_interval):
-    '''
-    Calculate the 0%-90% rise or fall time of a reactive power signal over a time interval
-    '''
-    if len(cursorSignalsDf.columns) >=2:
-        t = cursorSignalsDf.iloc[:, 0].values
-        y = cursorSignalsDf.iloc[:, 1].values
-        
-        if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
-            t, y = t[mask], y[mask]
-     
-        if len(t) > 0:
-            # Find the risetime of y
-            y0 = y[0]      # Cursor start y value
-            y1 = y[-1]     # Cursor end y value
-            dy = y1 - y0   # Difference in y values
+            return (dy, tRiseFall)
             
-            if dy > 0:                                   # Rise time
-                mask = (y >= y0) & (y <= (y0 + 0.9*dy))  # The 0% to 90% rise value mask
-            else:                                        # Fall time
-                mask = (y <= y0) & (y >= (y0 + 0.9*dy))  # The 0% to 90% fall value mask
-            
-            t = t[mask]    # Get the rise/fall time range values
-            
-            tRiseFall = t.max() - t[0]      # Get the rise/fall time      
-        
-            # Construct the text
-            labelRiseOrFall = 'Q(U) t1 rise time' if dy > 0 else 'Q(U) t1 fall time'
-            cursorMetricText = f"{labelRiseOrFall}: {tRiseFall:.3f} s"
-        else:
-            cursorMetricText = "Q(U) t1 rise/fall time: error"
-    else:
-        cursorMetricText = "Q(U) t1 rise/fall time: error"
-
-    return cursorMetricText
+    return (np.nan, np.nan)
 
 
 def cursorSettlingTime(cursorSignalsDf, time_interval, tol=2):
@@ -575,50 +541,9 @@ def cursorSettlingTime(cursorSignalsDf, time_interval, tol=2):
             else:
                 tSettling = 0.0
                 
-            # Construct the text
-            cursorMetricText = f"Settling time: {tSettling:.3f} s"
-        else:
-            cursorMetricText = "Settling time: error"
-    else:
-        cursorMetricText = "Settling time: error"
+            return tSettling
 
-    return cursorMetricText
-
-
-def cursorQUt2(cursorSignalsDf, time_interval, tol=0.5):
-    '''
-    Calculate the settling time of a reactive power signal until comes within 5% of the Qmax value over a time interval
-    '''
-    if len(cursorSignalsDf.columns) >=2:
-        t = cursorSignalsDf.iloc[:, 0].values
-        y = cursorSignalsDf.iloc[:, 1].values
-        
-        if len(time_interval) > 0:
-            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
-            t, y = t[mask], y[mask]
-     
-        if len(t) > 0:
-            # Find the settling time of y
-            t0 = t[0]             # Time t0
-            y0 = y[0]             # Cursor start y value
-            y1 = np.mean(y[-10:]) # Cursor end y value is the mean of the last 10 values
-            dy = np.abs(y1 - y0)  # Difference in y values
-            
-            outside_tol_band_mask = np.abs(y - y1) >= dy*tol/100     # Mask where the signal is OUTSIDE the tolerance band
-                    
-            if np.any(outside_tol_band_mask):
-                tSettling = t[outside_tol_band_mask].max() - t0      # Get the settling time      
-            else:
-                tSettling = 0.0
-                
-            # Construct the text
-            cursorMetricText = f"Q(U) t2 settling time: {tSettling:.3f} s"
-        else:
-            cursorMetricText = "Q(U) t2 settling time: error"
-    else:
-        cursorMetricText = "Q(U) t2 settling time: error"
-
-    return cursorMetricText
+    return np.nan
 
 
 def cursorPeakOvershoot(cursorSignalsDf, time_interval):
@@ -655,14 +580,10 @@ def cursorPeakOvershoot(cursorSignalsDf, time_interval):
                 zeta = np.sqrt(A**2/(1+A**2))
             else:
                 zeta = 1.0                      # Else set zeta to 1.0
-            # Construct the text
-            cursorMetricText = f"Overshoot: {yOSRatio*100:.2f} % (\u03B6 \u2248 {zeta:.3f})"
-        else:
-            cursorMetricText = "Overshoot: error"
-    else:
-        cursorMetricText = "Overshoot: error"
-    
-    return cursorMetricText
+                
+            return (yOSRatio, zeta)
+        
+    return (np.nan, np.nan)
 
 
 def cursorFSMDroop(cursorSignalsDf, time_interval, settingsDict):
@@ -715,14 +636,9 @@ def cursorFSMDroop(cursorSignalsDf, time_interval, settingsDict):
                 else:
                     fsmDroop = -100*(fnew-fn-db)/(fn*(Pnew-Pref))
             
-            # Construct the text
-            cursorMetricText = f"FSM droop value: {fsmDroop:.2f}%"
-        else:
-            cursorMetricText = "FSM droop value: error"
-    else:
-        cursorMetricText = "FSM droop value: error"
-
-    return cursorMetricText
+            return fsmDroop
+           
+    return np.nan
 
 
 def cursoLFSMDroop(cursorSignalsDf, time_interval, settingsDict):
@@ -749,7 +665,7 @@ def cursoLFSMDroop(cursorSignalsDf, time_interval, settingsDict):
             t, p, f = t[mask], p[mask], f[mask]
         
         if len(t) > 0:
-            fn = 50                                     # Nominal frequency [Hz]
+            fn = 50                                      # Nominal frequency [Hz]
             DK = 1 if settingsDict['Area']=='DK1' else 2 # DK area, either 1 or 2
                     
             if np.abs(fn-f[0]) > 0.01:
@@ -761,27 +677,19 @@ def cursoLFSMDroop(cursorSignalsDf, time_interval, settingsDict):
                 Pnew = p[-1]
                 Pref = p[0]
                             
-            if DK == 1:
-                f1 = 50.2 if fnew > fn else 49.8
-            elif DK == 2:
-                f1 = 50.5 if fnew > fn else 49.5
-            else:
-                print('"DK" can either be "1" or "2"!')
-                cursorMetricText = "LFSM droop value: error"
+            if DK == 1: # DK1
+                f1 = 50.2 if fnew > fn else 49.8 # NC 2025 (Version 4) for DK1
+            else: # DK2
+                f1 = 50.5 if fnew > fn else 49.5 # NC 2025 (Version 4) for DK2
             
             if Pnew == Pref:
                 lfsmDroop = np.inf
             else:
                 lfsmDroop = -100*(fnew-f1)/(fn*(Pnew-Pref))
                   
-            # Construct the text
-            cursorMetricText = f"LFSM droop value: {lfsmDroop:.2f}%"
-        else:
-            cursorMetricText = "LFSM droop value: error"
-    else:
-        cursorMetricText = "LFSM droop value: error"
+            return lfsmDroop
 
-    return cursorMetricText
+    return np.nan
 
 
 def cursorQUDroop(cursorSignalsDf, time_interval, caseDf):
@@ -791,11 +699,12 @@ def cursorQUDroop(cursorSignalsDf, time_interval, caseDf):
     The droop is expressed as a percentage of the nominal reactive power (Qnom) and the nominal voltage (Uref)
 
     The droop is calculated as:
-        dQ/dU = -100 * (dU/Uref) * (Qnom/dQ)
+        s = -100 * (du/Uref) * (Qnom/dq)
     
     where:
-        dQ = change in reactive power (Q)
-        dU = change in voltage (U)
+        s  = the Q-U droop
+        dq = change in reactive power (Q)
+        du = change in voltage (U)
         Uref = nominal voltage (U)
         Qnom = nominal reactive power (Q) = 0.33 pu (as per the standard)
     '''
@@ -815,30 +724,25 @@ def cursorQUDroop(cursorSignalsDf, time_interval, caseDf):
             dq = q[-1] - q[0]
             du = u[-1] - u[0]
             
-            dquDroop = -100*du/Uref*Qnom/dq
+            s = -100*du/Uref*Qnom/dq
             
-            # Construct the text
-            cursorMetricText = f"Q(U) droop value: {dquDroop:.2f}%"
-        else:
-            cursorMetricText = "Q(U) droop value: error"
-    else:
-        cursorMetricText = "Q(U) droop value: error"
-
-    return cursorMetricText
+            return s
+            
+    return np.nan
     
 
 def cursorQUSSTol(cursorSignalsDf, time_interval, settingsDict, caseDf):
     '''
-    Calculate the Q(U) droop of a signal over a time interval
-    The droop is calculated as the change in reactive power (Q) over the change in voltage (U)
-    The droop is expressed as a percentage of the nominal reactive power (Qnom) and the nominal voltage (Uref)
+    Calculate the required change reactive power (Q) based on the change in voltage (U) for a given Q-U droop (s), over a time interval
+    It then calculated the stead-state tollerance of the required change in Q with the actual change in Q expressed as a percentage of the nominal reactive power (Qnom)
 
     The droop is calculated as:
-        dQ/dU = -100 * (dU/Uref) * (Qnom/dQ)
+        s = -100 * (du/Uref) * (Qnom/dq)
     
     where:
-        dQ = change in reactive power (Q)
-        dU = change in voltage (U)
+        s  = the Q-U droop
+        dq = change in reactive power (Q)
+        du = change in voltage (U)
         Uref = nominal voltage (U)
         Qnom = nominal reactive power (Q) = 0.33 pu (as per the standard)
     '''
@@ -858,6 +762,7 @@ def cursorQUSSTol(cursorSignalsDf, time_interval, settingsDict, caseDf):
                 s = defaultQUdroop
             else:
                 s = QUdroop0
+                
             Uref = caseDf['Initial Settings']['U0'].squeeze() # pu
             Qnom = 0.33 # pu
             
@@ -866,13 +771,62 @@ def cursorQUSSTol(cursorSignalsDf, time_interval, settingsDict, caseDf):
             
             dqReq = -100*du/Uref*Qnom/s
             dqReq = np.clip(dqReq,-Qnom, Qnom) # Clip to +/- Qnom            
-            quSSTol = 100*(dq-dqReq)/Qnom
+            dqSSTol = 100*(dq-dqReq)/Qnom
             
-            # Construct the text
-            cursorMetricText = f"Q(U) steady-state tolerance: {quSSTol:.2f}%"
-        else:
-            cursorMetricText = "Q(U) steady-state tolerance: error"
-    else:
-        cursorMetricText = "Q(U) steady-state tolerance: error"
+            return (dqReq, dqSSTol)
 
-    return cursorMetricText
+    return (np.nan, np.nan)
+
+
+def cursorDeltaFFC(cursorSignalsDf, time_interval, settingsDict):
+    '''
+    Calculate the required the fast fault current (FFC) contribution,
+    Id (experimental) and Iq, based on the positive sequence voltage, Upos
+    based on RfG (EU) 2016/631, 20.2 (b) NC 2025 (Version 4) for DK1 and DK2
+    
+    The delta FFC contribution is calculated as:
+        dFFC = -m*upos + c
+    
+    where:    
+        upos = the positive sequence voltage magnitude at the point of connection
+        iq0 = the Iq value just before FRT is entered 
+        
+    and the slope m, and offset c, depending on the whether the plant is connected DK1, DK2 or to a DSO network
+    '''
+    if len(cursorSignalsDf.columns) >=3:
+        t = cursorSignalsDf.iloc[:, 0].values
+        i = cursorSignalsDf.iloc[:, 1].values
+        u = cursorSignalsDf.iloc[:, 2].values
+
+        if len(time_interval) > 0:
+            mask = (t >= time_interval[0]) & (t <= time_interval[1]) if len(time_interval) == 2 else (t >= time_interval[0])
+            t, i, u = t[mask], i[mask], u[mask]
+
+        if len(t) > 0:
+            DK = 1 if settingsDict['Area']=='DK1' else 2    # DK area, either 1 or 2
+            DSO = True if settingsDict['Un']<110 else False  # DSO, either Energinet (TSO))
+
+            if DK == 2 or DSO:
+                vposFrtLimit = 0.9  # NC 2025 (Version 4) for DK2 or for DSO cases
+                m = 1/0.4
+                c = 2.25
+            else: # DK1
+                vposFrtLimit = 0.85 # NC 2025 (Version 4) for DK1
+                m = 1/0.35
+                c = 2.42857
+                
+            upos = u[-1]
+            iq0  = i[0]
+            diq  = i[-1] - iq0
+                
+            if upos >= vposFrtLimit: # No FRT
+                dFFC = 0     # Iq is unchanged
+            else:
+                if upos < vposFrtLimit and upos > 0.5:
+                    dFFC = -m*upos + c
+                else: # Upos <= 0.5
+                    dFFC = 1.0
+                        
+            return (diq, dFFC)
+        
+    return (np.nan, np.nan)
