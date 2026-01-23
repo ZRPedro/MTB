@@ -5,14 +5,14 @@ from scipy.signal import bilinear, lfilter, lfiltic
 from Result import ResultType
 
 
-def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
+def genGuideResults(result, resultData, settingsDict, caseDf, pscadInitTime):
     '''
     Generates guide results for different test cases based on PSCAD simulation data and settings.
 
     Parameters:
         result: Result object containing result type information.
         resultData: pandas.DataFrame containing simulation data.
-        settingDict: dict containing test settings and parameters.
+        settingsDict: dict containing test settings and parameters.
         caseDf: pandas.DataFrame containing case configuration and events.
         pscadInitTime: float, initial time offset from PSCAD simulation.
 
@@ -38,8 +38,8 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
         guideFigs = ['']
         guideSignals = ['']
         
-        DK = 1 if settingDict['Area']=='DK1' else 2                             # DK area, either 1 or 2
-        DSO = True if settingDict['Un']<110 else False                          # DSO, either Energinet (TSO))
+        DK = 1 if settingsDict['Area']=='DK1' else 2                             # DK area, either 1 or 2
+        DSO = True if settingsDict['Un']<110 else False                          # DSO, either Energinet (TSO))
         if DK == 1 and not DSO:
             vposFrtLimit = 0.85
         elif DK == 2 or DSO:
@@ -48,7 +48,7 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
             print(f"DK = {DK} is not a valid option!")
             sys.exit(1)
 
-        Pn = settingDict['Pn']                                                  # Nominal power [MW]         
+        Pn = settingsDict['Pn']                                                  # Nominal power [MW]         
         P0 = guideData['mtb_s_pref_pu'][0]                                      # Initial active power setpoint, P0
         Pavail0 = guideData['mtb_s_pavail_pu'][0]                               # Initial limited active power available value, Pavail0 
 
@@ -73,8 +73,8 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
 
         # LFSM, FSM & RoCoF cases    
         elif 'FSM' in caseDf['Case']['Name'].squeeze() or 'RoCoF' in caseDf['Case']['Name'].squeeze() or 'Freq' in caseDf['Case']['Name'].squeeze():
-            s_fsm = settingDict['FSM droop']                                    # FSM droop in [%]
-            db = settingDict['FSM deadband']                                    # FSM deadband in [Hz]
+            s_fsm = settingsDict['FSM droop']                                    # FSM droop in [%]
+            db = settingsDict['FSM deadband']                                    # FSM deadband in [Hz]
             FSM = caseDf['Initial Settings']['Pmode'].squeeze() == 'LFSM+FSM'   # FSM mode enabled
             fn = 50                                                             # Nominal frequency [Hz]
             Td = 0.2                                                            # Delay time [s]
@@ -109,7 +109,7 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
             guideFigs.append('Ppoc')
             guideSignals.append('P_pu_PoC')  
             
-        Qdefault = settingDict['Default Q mode']                
+        Qdefault = settingsDict['Default Q mode']                
         # Q control cases
         if caseDf['Initial Settings']['Qmode'].squeeze() == 'Q' or caseDf['Initial Settings']['Qmode'].squeeze() == 'Default' and Qdefault == 'Q':            
             Qref0 = caseDf['Initial Settings']['Qref0'].squeeze()                  # Initial reactive power setpoint, when Qmode == 'Q'
@@ -143,7 +143,7 @@ def genGuideResults(result, resultData, settingDict, caseDf, pscadInitTime):
                         guideData.loc[i, 'Q_pu_QU_Inst'] = guideData.loc[i-1, 'Q_pu_QU_Inst']
                 
             # Change LPF setting for Q(U)
-            trise_QU = 0.75                                                     # Rise time [s]
+            trise_QU = 0.95                                                     # Rise time [s]
             fc_QU = 0.35/trise_QU                                               # Cut-off frequency [Hz]
 
             guideData['Q_pu_QU_Ctrl'] = guideLPF(guideData['Q_pu_QU_Inst'], fc_QU, 1/Ts)            
@@ -516,7 +516,7 @@ def guideQU(Uref, Upos, s, Qref=0.0):
     dU = Uref-Upos
     dQ = 100*dU/Uref*Qnom/s      
     if Qref + dQ > Qnom:
-        Qpoc_QU = -Qnom 
+        Qpoc_QU = Qnom
     elif Qref + dQ < -Qnom:
        Qpoc_QU = -Qnom 
     else:
@@ -547,8 +547,7 @@ def guideQpf(Ppoc, PFref):
 
 def guideFFC(Upos, Iq0, DK, DSO):
     '''
-    This function calculates the fast fault current (FFC) contribution,
-    Id (experimental) and Iq, based on the positive sequence voltage, Upos
+    This function calculates the fast fault current (FFC) contribution, Iq, based on the positive sequence voltage, Upos
     based on RfG (EU) 2016/631, 20.2 (b) NC 2025 (Version 4) for DK1 and DK2
     
     Parameters:    
@@ -557,28 +556,23 @@ def guideFFC(Upos, Iq0, DK, DSO):
         Iq0 in [pu] -- the Iq value just before FRT is entered 
         DSO in [True, False] -- if True, the function will use the DSO voltage limit of 0.9 pu, otherwise it will use the TSO voltage limit of 0.85 pu for DK1
     Returns:
-        tuple of (Id, Iq)
-        Id in [pu] -- the "remaining" positive sequence, direct current at the point of connection
         IqFFC in [pu] -- the required positive sequence, quadrature current at the point of connection
 
     '''
-    if DK == 1 and not DSO:
+    if DK == 2 or DSO:
+        vposFrtLimit = 0.9  # NC 2025 (Version 4) for DK2 or for DSO cases
+        m = 1/0.4
+        c = 2.25
+    else: # DK1
         vposFrtLimit = 0.85 # NC 2025 (Version 4) for DK1
-    elif DK == 2 or DSO:
-        vposFrtLimit = 0.9  # NC 2025 (Version 4) for DK2
-    else:
-        print(f"DK = {DK} is not a valid option!")
-        sys.exit(1)
+        m = 1/0.35
+        c = 2.42857
        
     if Upos >= vposFrtLimit: # No FRT
         IqFFC = Iq0     # Iq is unchanged
     else:
         if Upos < vposFrtLimit and Upos > 0.5:
-            if DK==2 or DSO:
-                IqFFC = -1/0.4*Upos+2.25 + Iq0     # NC 2025 (Version 4) for DK2
-            else: # DK==1
-                IqFFC = -1/0.35*Upos+2.42857 + Iq0 # NC 2025 (Version 4) for DK1
-            
+            IqFFC = -m*Upos + c + Iq0
         else: # Upos <= 0.5
             IqFFC = 1.0 + Iq0
         

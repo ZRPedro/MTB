@@ -321,12 +321,12 @@ def genCursorPlotlyTables(ranksCursor, dfCursorsList):
     '''
     goCursorList = []
 
-    EMPIRICAL_HEADER_ROW_HEIGHT_PX = 35  # Measured height for a header row (font size 10)
-    EMPIRICAL_CELL_ROW_HEIGHT_PX = 28    # Measured height for a single line of data (font size 10)
+    EMPIRICAL_HEADER_ROW_HEIGHT_PX = 25  # Measured height for a header row (font size 10)
+    EMPIRICAL_CELL_ROW_HEIGHT_PX = 21    # Measured height for a single line of data (font size 10)
                                          # If text wraps, this value needs to be higher (e.g., 50-55px for two lines)
 
-    FIGURE_TITLE_HEIGHT_PX = 40          # Estimated height for the `fig.update_layout` title
-    LAYOUT_MARGIN_TOP_PX = 50            # Top margin
+    FIGURE_TITLE_HEIGHT_PX = 25          # Estimated height for the `fig.update_layout` title
+    LAYOUT_MARGIN_TOP_PX = 20            # Top margin
     LAYOUT_MARGIN_BOTTOM_PX = 0          # Bottom margin
     LAYOUT_MARGIN_LEFT_PX = 60           # Left margin
     LAYOUT_MARGIN_RIGHT_PX = 60          # Right margin
@@ -388,13 +388,13 @@ def genCursorPlotlyTables(ranksCursor, dfCursorsList):
         fig.update_layout(
             title_text=cursor_title,
             title_x=0.5, # Center the title
-            # Apply the calculated height and a reasonable width
+            title_pad=dict(b=0, t=10), # Reduce padding below the title
             height=total_figure_height,
             margin=dict(
-                t=LAYOUT_MARGIN_TOP_PX,
-                l=LAYOUT_MARGIN_LEFT_PX,
-                r=LAYOUT_MARGIN_RIGHT_PX,
-                b=LAYOUT_MARGIN_BOTTOM_PX
+                t=FIGURE_TITLE_HEIGHT_PX,
+                b=LAYOUT_MARGIN_BOTTOM_PX,
+                l=LAYOUT_MARGIN_LEFT_PX, 
+                r=LAYOUT_MARGIN_RIGHT_PX
             )
         )
         
@@ -722,7 +722,8 @@ def create_css(resultsDir):
 td {
   height: 50px;
   vertical-align: bottom;
-}'''
+}
+'''
     
     with open(f'{css_path}', 'w') as file:
         file.write(css_content)        
