@@ -23,14 +23,14 @@ Active power;RfG_SS_flatrun_Q6;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 1
 Reactive power;RfG_SS_flatrun_Q6;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 1.0, 0.0
 Active current;RfG_SS_flatrun_Q6;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 1.0, 0.0
 Reactive current;RfG_SS_flatrun_Q6;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 1.0, 0.0
-Active power;RfG_SS_flatrun_Uctrl1;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 1.0, 0.0
-Reactive power;RfG_SS_flatrun_Uctrl1;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 1.0, 0.0
-Active current;RfG_SS_flatrun_Uctrl1;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 1.0, 0.0
-Reactive current;RfG_SS_flatrun_Uctrl1;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 1.0, 0.0
-Active power;RfG_SS_flatrun_Uctrl2;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 1.0, 0.0
-Reactive power;RfG_SS_flatrun_Uctrl2;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 1.0, 0.0
-Active current;RfG_SS_flatrun_Uctrl2;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 1.0, 0.0
-Reactive current;RfG_SS_flatrun_Uctrl2;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 1.0, 0.0
+Active power;RfG_SS_flatrun_Uctrl_min;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 1.0, 0.0
+Reactive power;RfG_SS_flatrun_Uctrl_min;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 1.0, 0.0
+Active current;RfG_SS_flatrun_Uctrl_min;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 1.0, 0.0
+Reactive current;RfG_SS_flatrun_Uctrl_min;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 1.0, 0.0
+Active power;RfG_SS_flatrun_Uctrl_max;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 1.0, 0.0
+Reactive power;RfG_SS_flatrun_Uctrl_max;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 1.0, 0.0
+Active current;RfG_SS_flatrun_Uctrl_max;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 1.0, 0.0
+Reactive current;RfG_SS_flatrun_Uctrl_max;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 1.0, 0.0
 Active power;RfG_SS_flatrun_PFctrl1;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 1.0, 0.0
 Reactive power;RfG_SS_flatrun_PFctrl1;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 1.0, 0.0
 Active current;RfG_SS_flatrun_PFctrl1;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 1.0, 0.0
@@ -63,180 +63,120 @@ Active power;RfG_P_step_down_0.5_0.0;start, end, delta, grad_min, grad_max, grad
 Active current;RfG_P_step_down_0.5_0.0;start, end, delta, grad_min, grad_max, grad_mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 150.0
 Reactive power;RfG_P_step_down_0.5_0.0;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 150.0
 Reactive current;RfG_P_step_down_0.5_0.0;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 150.0
-Active power 1;RfG_FSM_step1;response, rise_fall,  settling, fsm_droop;MTB\P_pu_PoC, MTB\pll_f_hz;meas\s:ppoc_pu, meas\s:f_hz;0.0, 15.0, 30.0, 45.0
-Active power 2;RfG_FSM_step1;start, end, delta, grad_min, grad_max, grad_mean;MTB\P_pu_PoC;meas\s:ppoc_pu;15.0, 30.0, 45.0
-Active current 1;RfG_FSM_step1;response, rise_fall,  settling, fsm_droop;MTB\fft_pos_Id_pu, MTB\pll_f_hz;meas\s:pos_Id_pu, meas\s:f_hz;0.0, 15.0, 30.0, 45.0
-Active current 2;RfG_FSM_step1;start, end, delta, grad_min, grad_max, grad_mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;15.0, 30.0, 45.0
-Active power 1;RfG_FSM_step2;response, rise_fall,  settling, fsm_droop;MTB\P_pu_PoC, MTB\pll_f_hz;meas\s:ppoc_pu, meas\s:f_hz;0.0, 15.0, 30.0, 45.0
-Active power 2;RfG_FSM_step2;start, end, delta, grad_min, grad_max, grad_mean;MTB\P_pu_PoC;meas\s:ppoc_pu;15.0, 30.0, 45.0
-Active current 1;RfG_FSM_step2;response, rise_fall,  settling, fsm_droop;MTB\fft_pos_Id_pu, MTB\pll_f_hz;meas\s:pos_Id_pu, meas\s:f_hz;0.0, 15.0, 30.0, 45.0
-Active current 2;RfG_FSM_step2;start, end, delta, grad_min, grad_max, grad_mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;15.0, 30.0, 45.0
+Active power 1;RfG_FSM_step1;start, end, delta;MTB\P_pu_PoC;meas\s:ppoc_pu;15.0, 30.0, 45.0
+Active power 2;RfG_FSM_step1;grad_min, grad_max, grad_mean;MTB\P_pu_PoC;meas\s:ppoc_pu;15.0, 30.0, 45.0
+Active power 3;RfG_FSM_step1;response, rise_fall,  settling, fsm_droop;MTB\P_pu_PoC, MTB\pll_f_hz;meas\s:ppoc_pu, meas\s:f_hz;0.0, 15.0, 30.0, 45.0
+Active power 1;RfG_FSM_step2;start, end, delta;MTB\P_pu_PoC;meas\s:ppoc_pu;15.0, 30.0, 45.0
+Active power 2;RfG_FSM_step2;grad_min, grad_max, grad_mean;MTB\P_pu_PoC;meas\s:ppoc_pu;15.0, 30.0, 45.0
+Active power 3;RfG_FSM_step2;response, rise_fall,  settling, fsm_droop;MTB\P_pu_PoC, MTB\pll_f_hz;meas\s:ppoc_pu, meas\s:f_hz;0.0, 15.0, 30.0, 45.0
 Active power 1;RfG_LFSM-OU_step1;response, rise_fall,  settling, lfsm_droop;MTB\P_pu_PoC, MTB\pll_f_hz;meas\s:ppoc_pu, meas\s:f_hz;0.0, 20.0, 40.0, 60.0, 60.0, 80.0
 Active power 2;RfG_LFSM-OU_step1;start, end, delta, grad_min, grad_max, grad_mean;MTB\P_pu_PoC;meas\s:ppoc_pu;20.0, 40.0, 80.0
-Active current 1;RfG_LFSM-OU_step1;response, rise_fall,  settling, lfsm_droop;MTB\fft_pos_Id_pu, MTB\pll_f_hz;meas\s:pos_Id_pu, meas\s:f_hz;0.0, 20.0, 40.0, 60.0, 60.0, 80.0
-Active current 2;RfG_LFSM-OU_step1;start, end, delta, grad_min, grad_max, grad_mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;20.0, 40.0, 80.0
-Active power;RfG_LFSM-O_ramp;min, max, response;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 5.0, 5.0, 14.0
+Active power;RfG_LFSM-O_ramp;min, max, , lfsm_droop;MTB\P_pu_PoC, MTB\pll_f_hz;meas\s:ppoc_pu, meas\s:f_hz;0.0, 5.0, 5.0, 14.0
 Reactive power;RfG_LFSM-O_ramp;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 5.0, 5.0, 14.0
-Active current;RfG_LFSM-O_ramp;min, max, response;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 5.0, 5.0, 14.0
-Reactive current;RfG_LFSM-O_ramp;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 5.0, 5.0, 14.0
-Active power;RfG_LFSM-U_ramp;min, max, response;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 5.0, 5.0, 14.0
+Active power;RfG_LFSM-U_ramp;min, max, , lfsm_droop;MTB\P_pu_PoC, MTB\pll_f_hz;meas\s:ppoc_pu, meas\s:f_hz;0.0, 5.0, 5.0, 14.0
 Reactive power;RfG_LFSM-U_ramp;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 5.0, 5.0, 14.0
-Active current;RfG_LFSM-U_ramp;min, max, response;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 5.0, 5.0, 14.0
-Reactive current;RfG_LFSM-U_ramp;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 5.0, 5.0, 14.0
 Active power;RfG_FSM_LFSM-O_ramp;min, max, response;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 10.0, 9.0, 19.0
 Reactive power;RfG_FSM_LFSM-O_ramp;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 10.0, 9.0, 19.0
-Active current;RfG_FSM_LFSM-O_ramp;min, response, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 10.0, 9.0, 19.0
-Reactive current;RfG_FSM_LFSM-O_ramp;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 10.0, 9.0, 19.0
 Active power;RfG_FSM_LFSM-U_ramp;min, max, response;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 10.0, 9.0, 19.0
 Reactive power;RfG_FSM_LFSM-U_ramp;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 10.0, 9.0, 19.0
-Active current;RfG_FSM_LFSM-U_ramp;min, max, response;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 10.0, 9.0, 19.0
-Reactive current;RfG_FSM_LFSM-U_ramp;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 10.0, 9.0, 19.0
 Active power;RfG_FSM_LFSM-O_step;min, max, response;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 5.0, 5.0, 10.0, 10.0, 15.0, 15.0, 25.0, 25.0, 35.0, 35.0
 Reactive power;RfG_FSM_LFSM-O_step;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 5.0, 5.0, 10.0, 10.0, 15.0, 15.0, 25.0, 25.0, 35.0, 35.0
-Active current;RfG_FSM_LFSM-O_step;min, max, response;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 5.0, 5.0, 10.0, 10.0, 15.0, 15.0, 25.0, 25.0, 35.0, 35.0
-Reactive current;RfG_FSM_LFSM-O_step;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 5.0, 5.0, 10.0, 10.0, 15.0, 15.0, 25.0, 25.0, 35.0, 35.0
 Active power;RfG_FSM_LFSM-U_step;min, max, response;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 5.0, 5.0, 10.0, 10.0, 15.0, 15.0, 25.0, 25.0, 35.0, 35.0
 Reactive power;RfG_FSM_LFSM-U_step;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 5.0, 5.0, 10.0, 10.0, 15.0, 15.0, 25.0, 25.0, 35.0, 35.0
-Active current;RfG_FSM_LFSM-U_step;min, max, response;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 5.0, 5.0, 10.0, 10.0, 15.0, 15.0, 25.0, 25.0, 35.0, 35.0
-Reactive current;RfG_FSM_LFSM-U_step;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 5.0, 5.0, 10.0, 10.0, 15.0, 15.0, 25.0, 25.0, 35.0, 35.0
 Active power;RfG_LFSM-O_Pavail;min, max, response;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 1.0, 1.0, 10.0, 10.0, 30.0, 30.0
 Reactive power;RfG_LFSM-O_Pavail;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 1.0, 1.0, 10.0, 10.0, 30.0, 30.0
-Active current;RfG_LFSM-O_Pavail;min, max, response;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 1.0, 1.0, 10.0, 10.0, 30.0, 30.0
-Reactive current;RfG_LFSM-O_Pavail;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 1.0, 1.0, 10.0, 10.0, 30.0, 30.0
 Active power;RfG_LFSM-U_Pavail;min, max, response;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 1.0, 1.0, 5.0, 5.0, 20.0,  20.0
 Reactive power;RfG_LFSM-U_Pavail;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 1.0, 1.0, 5.0, 5.0, 20.0,  20.0
-Active current;RfG_LFSM-U_Pavail;min, max, response;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 1.0, 1.0, 5.0, 5.0, 20.0,  20.0
-Reactive current;RfG_LFSM-U_Pavail;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 1.0, 1.0, 5.0, 5.0, 20.0,  20.0
 Active power;RfG_U-Q/Pn_Neutral;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
 Reactive power;RfG_U-Q/Pn_Neutral;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
-Active current;RfG_U-Q/Pn_Neutral;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
-Reactive current;RfG_U-Q/Pn_Neutral;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
 Active power;RfG_U-Q/Pn_Neutral_stab;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
 Reactive power;RfG_U-Q/Pn_Neutral_stab;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
-Active current;RfG_U-Q/Pn_Neutral_stab;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
-Reactive current;RfG_U-Q/Pn_Neutral_stab;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
 Active power;RfG_U-Q/Pn_underEX;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
 Reactive power;RfG_U-Q/Pn_underEX;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
-Active current;RfG_U-Q/Pn_underEX;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
-Reactive current;RfG_U-Q/Pn_underEX;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
 Active power;RfG_U-Q/Pn_overEX;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
 Reactive power;RfG_U-Q/Pn_overEX;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
-Active current;RfG_U-Q/Pn_overEX;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
-Reactive current;RfG_U-Q/Pn_overEX;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 20.0, 20.0, 40.0, 40.0, 80.0, 80.0
-Active power;RfG_PQ/Pn_Neutral1;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
+Active power;RfG_PQ/Pn_Neutral1;grad_min, grad_max, grad_mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 150.0
 Reactive power;RfG_PQ/Pn_Neutral1;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
-Active current;RfG_PQ/Pn_Neutral1;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_PQ/Pn_Neutral1;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
-Active power;RfG_PQ/Pn_Neutral2;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
+Active power;RfG_PQ/Pn_Neutral2;grad_min, grad_max, grad_mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 150.0
 Reactive power;RfG_PQ/Pn_Neutral2;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
-Active current;RfG_PQ/Pn_Neutral2;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_PQ/Pn_Neutral2;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
-Active power;RfG_PQ/Pn_underEX1;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
+Active power;RfG_PQ/Pn_underEX1;grad_min, grad_max, grad_mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 150.0
 Reactive power;RfG_PQ/Pn_underEX1;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
-Active current;RfG_PQ/Pn_underEX1;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_PQ/Pn_underEX1;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
-Active power;RfG_PQ/Pn_underEX2;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
+Active power;RfG_PQ/Pn_underEX2;grad_min, grad_max, grad_mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 150.0
 Reactive power;RfG_PQ/Pn_underEX2;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
-Active current;RfG_PQ/Pn_underEX2;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_PQ/Pn_underEX2;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
-Active power;RfG_PQ/Pn_overEX1;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
+Active power;RfG_PQ/Pn_overEX1;grad_min, grad_max, grad_mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 150.0
 Reactive power;RfG_PQ/Pn_overEX1;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
-Active current;RfG_PQ/Pn_overEX1;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_PQ/Pn_overEX1;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
-Active power;RfG_PQ/Pn_overEX2;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
+Active power;RfG_PQ/Pn_overEX2;grad_min, grad_max, grad_mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 150.0
 Reactive power;RfG_PQ/Pn_overEX2;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
-Active current;RfG_PQ/Pn_overEX2;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_PQ/Pn_overEX2;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
-Active power;RfG_Ucontrol_Scmin;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Reactive power;RfG_Ucontrol_Scmin;response,  rise_fall, qu_droop;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Active current;RfG_Ucontrol_Scmin;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Reactive current;RfG_Ucontrol_Scmin;response,  rise_fall, qu_droop;MTB\fft_pos_Iq_pu, MTB\meas_Vag_pu;meas\s:pos_Iq_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Reactive power;RfG_Ucontrol_Scmin;overshoot, settling;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Reactive current;RfG_Ucontrol_Scmin;overshoot, settling;MTB\fft_pos_Iq_pu, MTB\meas_Vag_pu;meas\s:pos_Iq_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Active power;RfG_Ucontrol_Sctune;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Reactive power;RfG_Ucontrol_Sctune;response,  rise_fall, qu_droop;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Active current;RfG_Ucontrol_Sctune;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Reactive current;RfG_Ucontrol_Sctune;response,  rise_fall, qu_droop;MTB\fft_pos_Iq_pu, MTB\meas_Vag_pu;meas\s:pos_Iq_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Reactive power;RfG_Ucontrol_Sctune;overshoot, settling;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Reactive current;RfG_Ucontrol_Sctune;overshoot, settling;MTB\fft_pos_Iq_pu, MTB\meas_Vag_pu;meas\s:pos_Iq_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Active power;RfG_Ucontrol_Scmax;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Reactive power;RfG_Ucontrol_Scmax;response,  rise_fall, qu_droop;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Active current;RfG_Ucontrol_Scmax;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Reactive current;RfG_Ucontrol_Scmax;response,  rise_fall, qu_droop;MTB\fft_pos_Iq_pu, MTB\meas_Vag_pu;meas\s:pos_Iq_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Reactive power;RfG_Ucontrol_Scmax;overshoot, settling;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Reactive current;RfG_Ucontrol_Scmax;overshoot, settling;MTB\fft_pos_Iq_pu, MTB\meas_Vag_pu;meas\s:pos_Iq_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
-Active power;RfG_Ucontrol_FRTsensitivity;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;2.0, 8.0, 8.0, 20.0, 20.0, 26.0, 26.0, 40.0, 40.0, 46.0, 46.0, 51.0, 51.0, 65.0, 65.0, 71.0, 71.0, 73.0, 73.0
-Reactive power;RfG_Ucontrol_FRTsensitivity;response,  rise_fall, qu_droop;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;2.0, 8.0, 8.0, 20.0, 20.0, 26.0, 26.0, 40.0, 40.0, 46.0, 46.0, 51.0, 51.0, 65.0, 65.0, 71.0, 71.0, 73.0, 73.0
-Active current;RfG_Ucontrol_FRTsensitivity;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;2.0, 8.0, 8.0, 20.0, 20.0, 26.0, 26.0, 40.0, 40.0, 46.0, 46.0, 51.0, 51.0, 65.0, 65.0, 71.0, 71.0, 73.0, 73.0
-Reactive current;RfG_Ucontrol_FRTsensitivity;response,  rise_fall, qu_droop;MTB\fft_pos_Iq_pu, MTB\meas_Vag_pu;meas\s:pos_Iq_pu, meas\s:Vag_pu;2.0, 8.0, 8.0, 20.0, 20.0, 26.0, 26.0, 40.0, 40.0, 46.0, 46.0, 51.0, 51.0, 65.0, 65.0, 71.0, 71.0, 73.0, 73.0
-Active power;RfG_Ucontrol_FRTsensitivity-ramp;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;2.0, 4.4, 4.4, 9.4, 9.4, 10.6, 10.6
-Reactive power;RfG_Ucontrol_FRTsensitivity-ramp;response,  rise_fall, qu_droop;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;2.0, 4.4, 4.4, 9.4, 9.4, 10.6, 10.6
-Active current;RfG_Ucontrol_FRTsensitivity-ramp;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;2.0, 4.4, 4.4, 9.4, 9.4, 10.6, 10.6
-Reactive current;RfG_Ucontrol_FRTsensitivity-ramp;response,  rise_fall, qu_droop;MTB\fft_pos_Iq_pu, MTB\meas_Vag_pu;meas\s:pos_Iq_pu, meas\s:Vag_pu;2.0, 4.4, 4.4, 9.4, 9.4, 10.6, 10.6
+Active power;RfG_Ucontrol_Scmin;mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
+Reactive power 1;RfG_Ucontrol_Scmin;overshoot;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
+Reactive power 2;RfG_Ucontrol_Scmin;qu_t1,  qu_t2;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
+Reactive power 3;RfG_Ucontrol_Scmin;qu_droop, qu_ss_tol;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
+Active power;RfG_Ucontrol_Sctune;mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
+Reactive power 1;RfG_Ucontrol_Sctune;overshoot;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
+Reactive power 2;RfG_Ucontrol_Sctune;qu_t1,  qu_t2;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
+Reactive power 3;RfG_Ucontrol_Sctune;qu_droop, qu_ss_tol;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
+Active power;RfG_Ucontrol_Scmax;mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
+Reactive power 1;RfG_Ucontrol_Scmax;overshoot;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
+Reactive power 2;RfG_Ucontrol_Scmax;qu_t1,  qu_t2;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
+Reactive power 3;RfG_Ucontrol_Scmax;qu_droop, qu_ss_tol;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0, 7.0, 7.0, 14.0, 14.0, 21.0, 21.0, 28.0, 28.0, 35.0, 35.0, 42.0, 42.0, 49.0, 49.0, 56.0, 56.0, 63.0, 63.0, 70.0, 70.0, 77.0, 77.0
+Active power;RfG_Ucontrol_FRTsensitivity;mean;MTB\P_pu_PoC;meas\s:ppoc_pu;2.0, 8.0, 8.0, 20.0, 20.0, 26.0, 26.0, 40.0, 40.0, 46.0, 46.0, 51.0, 51.0, 65.0, 65.0, 71.0, 71.0, 73.0, 73.0
+Reactive power 1;RfG_Ucontrol_FRTsensitivity;overshoot;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;2.0, 8.0, 8.0, 20.0, 20.0, 26.0, 26.0, 40.0, 40.0, 46.0, 46.0, 51.0, 51.0, 65.0, 65.0, 71.0, 71.0, 73.0, 73.0
+Reactive power 2;RfG_Ucontrol_FRTsensitivity;qu_t1,  qu_t2;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;2.0, 8.0, 8.0, 20.0, 20.0, 26.0, 26.0, 40.0, 40.0, 46.0, 51.0, 65.0, 65.0, 71.0, 73.0
+Reactive power 3;RfG_Ucontrol_FRTsensitivity;qu_droop, qu_ss_tol;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;2.0, 8.0, 8.0, 20.0, 20.0, 26.0, 26.0, 40.0, 40.0, 46.0, 51.0, 65.0, 65.0, 71.0, 73.0
+Reactive current;RfG_Ucontrol_FRTsensitivity;start, end, delta, delta_ffc;MTB\fft_pos_Iq_pu, MTB\meas_Vag_pu;meas\s:pos_Iq_pu, meas\s:Vag_pu;46.0, 51.0, 71.0, 73.0
+Active power;RfG_Ucontrol_FRTsensitivity-ramp;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;6.0, 11.0
+Reactive power 1;RfG_Ucontrol_FRTsensitivity-ramp;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;6.0, 11.0
+Reactive power 2;RfG_Ucontrol_FRTsensitivity-ramp;qu_droop, qu_ss_tol;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;2.0, 6.0, 11.0, 13.0
+Reactive current;RfG_Ucontrol_FRTsensitivity-ramp;start, end, delta, delta_ffc;MTB\fft_pos_Iq_pu, MTB\meas_Vag_pu;meas\s:pos_Iq_pu, meas\s:Vag_pu;2.0, 6.0, 11.0, 13.0
 Active power;RfG_Uarea_Qreq_1(up);min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
 Reactive power;RfG_Uarea_Qreq_1(up);min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
 Active current;RfG_Uarea_Qreq_1(up);min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_Uarea_Qreq_1(up);min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
+Secondary voltage;RfG_Uarea_Qreq_1(up);min, max, mean;MTB\fft_pos_Vmag_pu;meas\s:pos_Vmag_pu;0.0
 Active power;RfG_Uarea_Qreq_2(up);min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
 Reactive power;RfG_Uarea_Qreq_2(up);min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
 Active current;RfG_Uarea_Qreq_2(up);min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_Uarea_Qreq_2(up);min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
+Secondary voltage;RfG_Uarea_Qreq_2(up);min, max, mean;MTB\fft_pos_Vmag_pu;meas\s:pos_Vmag_pu;0.0
 Active power;RfG_Uarea_Qreq_1(down);min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
 Reactive power;RfG_Uarea_Qreq_1(down);min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
 Active current;RfG_Uarea_Qreq_1(down);min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_Uarea_Qreq_1(down);min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
+Secondary voltage;RfG_Uarea_Qreq_1(down);min, max, mean;MTB\fft_pos_Vmag_pu;meas\s:pos_Vmag_pu;0.0
 Active power;RfG_Uarea_Qreq_2(down);min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
 Reactive power;RfG_Uarea_Qreq_2(down);min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
 Active current;RfG_Uarea_Qreq_2(down);min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_Uarea_Qreq_2(down);min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
+Secondary voltage;RfG_Uarea_Qreq_2(down);min, max, mean;MTB\fft_pos_Vmag_pu;meas\s:pos_Vmag_pu;0.0
 Active power;RfG_Uarea_Qreq_3(down);min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
 Reactive power;RfG_Uarea_Qreq_3(down);min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
 Active current;RfG_Uarea_Qreq_3(down);min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_Uarea_Qreq_3(down);min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
+Secondary voltage;RfG_Uarea_Qreq_3(down);min, max, mean;MTB\fft_pos_Vmag_pu;meas\s:pos_Vmag_pu;0.0
 Active power;RfG_Uarea_Q(U)req_1(up);min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
-Reactive power;RfG_Uarea_Q(U)req_1(up);response,  rise_fall, qu_droop;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0
-Active current;RfG_Uarea_Q(U)req_1(up);min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_Uarea_Q(U)req_1(up);response,  rise_fall, qu_droop;MTB\fft_pos_Iq_pu, MTB\meas_Vag_pu;meas\s:pos_Iq_pu, meas\s:Vag_pu;0.0
+Reactive power 1;RfG_Uarea_Q(U)req_1(up);min, max, mean;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0
+Reactive power 2;RfG_Uarea_Q(U)req_1(up);qu_t1, qu_t2, qu_droop;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0
+Secondary voltage;RfG_Uarea_Q(U)req_1(up);min, max, mean;MTB\fft_pos_Vmag_pu;meas\s:pos_Vmag_pu;0.0
 Active power;RfG_Uarea_Q(U)req_2(up);min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
-Reactive power;RfG_Uarea_Q(U)req_2(up);response,  rise_fall, qu_droop;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0
+Reactive power ;RfG_Uarea_Q(U)req_2(up);min, max, mean;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0
 Active current;RfG_Uarea_Q(U)req_2(up);min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_Uarea_Q(U)req_2(up);response,  rise_fall, qu_droop;MTB\fft_pos_Iq_pu, MTB\meas_Vag_pu;meas\s:pos_Iq_pu, meas\s:Vag_pu;0.0
+Secondary voltage;RfG_Uarea_Q(U)req_2(up);min, max, mean;MTB\fft_pos_Vmag_pu;meas\s:pos_Vmag_pu;0.0
 Active power;RfG_Uarea_Q(U)req_1(down);min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
-Reactive power;RfG_Uarea_Q(U)req_1(down);response,  rise_fall, qu_droop;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0
-Active current;RfG_Uarea_Q(U)req_1(down);min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_Uarea_Q(U)req_1(down);response,  rise_fall, qu_droop;MTB\fft_pos_Iq_pu, MTB\meas_Vag_pu;meas\s:pos_Iq_pu, meas\s:Vag_pu;0.0
+Reactive power 1;RfG_Uarea_Q(U)req_1(down);min, max, mean;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0
+Reactive power 2;RfG_Uarea_Q(U)req_1(down);qu_t1, qu_t2, qu_droop;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0
+Secondary voltage;RfG_Uarea_Q(U)req_1(down);min, max, mean;MTB\fft_pos_Vmag_pu;meas\s:pos_Vmag_pu;0.0
 Active power;RfG_Uarea_Q(U)req_2(down);min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
-Reactive power;RfG_Uarea_Q(U)req_2(down);response,  rise_fall, qu_droop;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0
+Reactive power;RfG_Uarea_Q(U)req_2(down);min, max, mean;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0
 Active current;RfG_Uarea_Q(U)req_2(down);min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_Uarea_Q(U)req_2(down);min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
+Secondary voltage;RfG_Uarea_Q(U)req_2(down);min, max, mean;MTB\fft_pos_Vmag_pu;meas\s:pos_Vmag_pu;0.0
 Active power;RfG_Uarea_Q(U)req_3(down);min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
-Reactive power;RfG_Uarea_Q(U)req_3(down);response,  rise_fall, qu_droop;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0
+Reactive power;RfG_Uarea_Q(U)req_3(down);min, max, mean;MTB\Q_pu_PoC, MTB\meas_Vag_pu;meas\s:qpoc_pu, meas\s:Vag_pu;0.0
 Active current;RfG_Uarea_Q(U)req_3(down);min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_Uarea_Q(U)req_3(down);response,  rise_fall, qu_droop;MTB\fft_pos_Iq_pu, MTB\meas_Vag_pu;meas\s:pos_Iq_pu, meas\s:Vag_pu;0.0
+Secondary voltage;RfG_Uarea_Q(U)req_3(down);min, max, mean;MTB\fft_pos_Vmag_pu;meas\s:pos_Vmag_pu;0.0
 Active power;RfG_Q_control_up;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
-Reactive power;RfG_Q_control_up;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
-Active current;RfG_Q_control_up;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
-Reactive current;RfG_Q_control_up;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
+Reactive power 1;RfG_Q_control_up;response, rise_fall, settling;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
+Reactive power 2;RfG_Q_control_up;overshoot;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
 Active power;RfG_Q_control_down;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
-Reactive power;RfG_Q_control_down;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
-Active current;RfG_Q_control_down;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
-Reactive current;RfG_Q_control_down;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
-Active power;RfG_Qpf_Pfref-change;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
-Reactive power;RfG_Qpf_Pfref-change;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
-Active current;RfG_Qpf_Pfref-change;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
-Reactive current;RfG_Qpf_Pfref-change;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
-Active power;RfG_Qpf_P-change;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 35.0, 35.0, 70.0, 70.0, 100.0, 100.0
-Reactive power;RfG_Qpf_P-change;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 35.0, 35.0, 70.0, 70.0, 100.0, 100.0
-Active current;RfG_Qpf_P-change;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 35.0, 35.0, 70.0, 70.0, 100.0, 100.0
-Reactive current;RfG_Qpf_P-change;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 35.0, 35.0, 70.0, 70.0, 100.0, 100.0
-Active power;RfG_SystemGuard;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;-1.0, 0.0, 0.0, 1.0, 1.0, 15.0, 15.0, 30.0, 30.0
-Reactive power;RfG_SystemGuard;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;-1.0, 0.0, 0.0, 1.0, 1.0, 15.0, 15.0, 30.0, 30.0
-Active current;RfG_SystemGuard;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;-1.0, 0.0, 0.0, 1.0, 1.0, 15.0, 15.0, 30.0, 30.0
-Reactive current;RfG_SystemGuard;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;-1.0, 0.0, 0.0, 1.0, 1.0, 15.0, 15.0, 30.0, 30.0
-Active power;RfG_SystemGuard+fault;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;-1.0, 0.0, 0.0, 1.0, 1.0, 0.65, 0.65, 30.0, 30.0
-Reactive power;RfG_SystemGuard+fault;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;-1.0, 0.0, 0.0, 1.0, 1.0, 0.65, 0.65, 30.0, 30.0
-Active current;RfG_SystemGuard+fault;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;-1.0, 0.0, 0.0, 1.0, 1.0, 0.65, 0.65, 30.0, 30.0
-Reactive current;RfG_SystemGuard+fault;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;-1.0, 0.0, 0.0, 1.0, 1.0, 0.65, 0.65, 30.0, 30.0
+Reactive power 1;RfG_Q_control_down;response, rise_fall, settling;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
+Reactive power 2;RfG_Q_control_down;overshoot;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
+Active power;RfG_Qpf_PFref-change;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
+Reactive power;RfG_Qpf_PFref-change;response, rise_fall, settling;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 30.0, 30.0, 60.0, 60.0, 90.0, 90.0
+Active power;RfG_Qpf_Pref-change;grad_min, grad_max, grad_mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 30.0, 35.0, 65.0, 70.0, 100.0, 100.0, 130.0
 Active power;RfG_MaxPhaseJump1;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0, 2.5, 2.5, 5.0, 5.0, 7.5, 7.5
 Reactive power;RfG_MaxPhaseJump1;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 2.5, 2.5, 5.0, 5.0, 7.5, 7.5
 Active current;RfG_MaxPhaseJump1;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 2.5, 2.5, 5.0, 5.0, 7.5, 7.5
@@ -289,6 +229,10 @@ Active power;RfG_Fault_3_40;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
 Reactive power;RfG_Fault_3_40;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
 Active current;RfG_Fault_3_40;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
 Reactive current;RfG_Fault_3_40;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
+Active power;RfG_Fault_3_60;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
+Reactive power;RfG_Fault_3_60;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
+Active current;RfG_Fault_3_60;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
+Reactive current;RfG_Fault_3_60;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
 Active power;RfG_Fault_3_80;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
 Reactive power;RfG_Fault_3_80;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
 Active current;RfG_Fault_3_80;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
@@ -309,6 +253,10 @@ Active power;RfG_Fault_2_40;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
 Reactive power;RfG_Fault_2_40;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
 Active current;RfG_Fault_2_40;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
 Reactive current;RfG_Fault_2_40;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
+Active power;RfG_Fault_2_60;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
+Reactive power;RfG_Fault_2_60;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
+Active current;RfG_Fault_2_60;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
+Reactive current;RfG_Fault_2_60;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
 Active power;RfG_Fault_2_80;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
 Reactive power;RfG_Fault_2_80;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
 Active current;RfG_Fault_2_80;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
@@ -329,6 +277,10 @@ Active power;RfG_Fault_1_40;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
 Reactive power;RfG_Fault_1_40;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
 Active current;RfG_Fault_1_40;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
 Reactive current;RfG_Fault_1_40;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
+Active power;RfG_Fault_1_60;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
+Reactive power;RfG_Fault_1_60;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
+Active current;RfG_Fault_1_60;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
+Reactive current;RfG_Fault_1_60;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
 Active power;RfG_Fault_1_80;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
 Reactive power;RfG_Fault_1_80;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
 Active current;RfG_Fault_1_80;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
@@ -585,14 +537,14 @@ Active power;RfG_proc_VoltageRise_insta_max;min, max, mean;MTB\P_pu_PoC;meas\s:p
 Reactive power;RfG_proc_VoltageRise_insta_max;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0, 0.1, 0.1, 1.0, 1.0, 1.1, 1.1, 2.0, 2.0, 2.1, 2.1, 3.0, 3.0, 3.1, 3.1, 4.0, 4.0, 4.1, 4.1, 5.0, 5.0, 5.1, 5.1
 Active current;RfG_proc_VoltageRise_insta_max;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0, 0.1, 0.1, 1.0, 1.0, 1.1, 1.1, 2.0, 2.0, 2.1, 2.1, 3.0, 3.0, 3.1, 3.1, 4.0, 4.0, 4.1, 4.1, 5.0, 5.0, 5.1, 5.1
 Reactive current;RfG_proc_VoltageRise_insta_max;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0, 0.1, 0.1, 1.0, 1.0, 1.1, 1.1, 2.0, 2.0, 2.1, 2.1, 3.0, 3.0, 3.1, 3.1, 4.0, 4.0, 4.1, 4.1, 5.0, 5.0, 5.1, 5.1
-Active power;RfG_proc_Fault_3_0.8pu;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
-Reactive power;RfG_proc_Fault_3_0.8pu;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
-Active current;RfG_proc_Fault_3_0.8pu;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_proc_Fault_3_0.8pu;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
-Active power;RfG_proc_Fault_3_0.6pu;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
-Reactive power;RfG_proc_Fault_3_0.6pu;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
-Active current;RfG_proc_Fault_3_0.6pu;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
-Reactive current;RfG_proc_Fault_3_0.6pu;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
+Active power;RfG_proc_Fault_3_0.80pu;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
+Reactive power;RfG_proc_Fault_3_0.80pu;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
+Active current;RfG_proc_Fault_3_0.80pu;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
+Reactive current;RfG_proc_Fault_3_0.80pu;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
+Active power;RfG_proc_Fault_3_0.60pu;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
+Reactive power;RfG_proc_Fault_3_0.60pu;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
+Active current;RfG_proc_Fault_3_0.60pu;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
+Reactive current;RfG_proc_Fault_3_0.60pu;min, max, mean;MTB\fft_pos_Iq_pu;meas\s:pos_Iq_pu;0.0
 Active power;RfG_proc_Fault_3_0.40pu;min, max, mean;MTB\P_pu_PoC;meas\s:ppoc_pu;0.0
 Reactive power;RfG_proc_Fault_3_0.40pu;min, max, mean;MTB\Q_pu_PoC;meas\s:qpoc_pu;0.0
 Active current;RfG_proc_Fault_3_0.40pu;min, max, mean;MTB\fft_pos_Id_pu;meas\s:pos_Id_pu;0.0
