@@ -180,12 +180,12 @@ def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDic
                         cursorMetricText = f"Grad (min): {y_grad_min:.3f} pu/min"
                         
                     elif option.name == 'GRAD_MAX':
-                        y_grad_mean = cursorGradMax(cursorSignalsDf, time_interval)
-                        cursorMetricText = f"Grad (mean): {y_grad_mean:.3f} pu/min"
+                        y_grad_max = cursorGradMax(cursorSignalsDf, time_interval)
+                        cursorMetricText = f"Grad (max): {y_grad_max:.3f} pu/min"
                         
                     elif option.name == 'GRAD_MEAN':
-                        y_grad_max = cursorGradMean(cursorSignalsDf, time_interval)
-                        cursorMetricText = f"Grad (max): {y_grad_max:.3f} pu/min"
+                        y_grad_mean = cursorGradMean(cursorSignalsDf, time_interval)
+                        cursorMetricText = f"Grad (mean): {y_grad_mean:.3f} pu/min"
                         
                     elif option.name == 'RESPONSE':
                         t_response = cursorResponseDelay(cursorSignalsDf, time_interval)
@@ -529,10 +529,10 @@ def cursorSettlingTime(cursorSignalsDf, time_interval, tol=2):
      
         if len(t) > 0:
             # Find the settling time of y
-            t0 = t[0]             # Time t0
-            y0 = y[0]             # Cursor start y value
-            y1 = np.mean(y[-10:]) # Cursor end y value is the mean of the last 10 values
-            dy = np.abs(y1 - y0)  # Difference in y values
+            t0 = t[0]                          # Time t0
+            y0 = y[0]                          # Cursor start y value
+            y1 = np.mean(y[-min(10, len(y)):]) # Cursor end y value is the mean of up to the last 10 values
+            dy = np.abs(y1 - y0)               # Difference in y values
             
             outside_tol_band_mask = np.abs(y - y1) >= dy*tol/100     # Mask where the signal is OUTSIDE the tolerance band
                     
@@ -756,7 +756,7 @@ def cursorQUSSTol(cursorSignalsDf, time_interval, settingsDict, caseDf):
             t, q, u = t[mask], q[mask], u[mask]
 
         if len(t) > 0:
-            defaultQUdroop = float(settingsDict['Default Q(U) droop']) # FSM deadband in [Hz]
+            defaultQUdroop = float(settingsDict['Default Q(U) droop']) # Q(U) droop in [%]
             QUdroop0 = caseDf['Initial Settings']['QUdroop0'].squeeze() # pu
             if QUdroop0 == 'Default':
                 s = defaultQUdroop
