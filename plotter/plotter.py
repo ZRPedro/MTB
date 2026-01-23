@@ -391,8 +391,8 @@ def genCursorPlotlyTables(ranksCursor, dfCursorsList):
             title_pad=dict(b=0, t=10), # Reduce padding below the title
             height=total_figure_height,
             margin=dict(
-                t=FIGURE_TITLE_HEIGHT_PX, # Minimal top margin
-                b=LAYOUT_MARGIN_BOTTOM_PX,  # Force zero bottom margin
+                t=FIGURE_TITLE_HEIGHT_PX,
+                b=LAYOUT_MARGIN_BOTTOM_PX,
                 l=LAYOUT_MARGIN_LEFT_PX, 
                 r=LAYOUT_MARGIN_RIGHT_PX
             )
