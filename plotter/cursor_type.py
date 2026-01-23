@@ -20,6 +20,7 @@ class CursorType(Enum):
     QU_T2      = 16
     QU_DROOP   = 17
     QU_SS_TOL  = 18
+    DELTA_FFC  = 19
 
     @classmethod
     def from_string(cls, string : str):
