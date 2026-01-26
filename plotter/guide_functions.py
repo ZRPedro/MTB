@@ -72,7 +72,7 @@ def genGuideResults(result, resultData, settingsDict, caseDf, pscadInitTime):
             guideSignals.append('P_pu_PoC_Ramp')                                            
 
         # LFSM, FSM & RoCoF cases    
-        elif 'FSM' in caseDf['Case']['Name'].squeeze() or 'RoCoF' in caseDf['Case']['Name'].squeeze() or 'Freq' in caseDf['Case']['Name'].squeeze():
+        elif 'FSM' in caseDf['Case']['Name'].squeeze() or 'RoCoF' in caseDf['Case']['Name'].squeeze() or 'Freq' in caseDf['Case']['Name'].squeeze() or 'freqStep' in caseDf['Case']['Name'].squeeze():
             s_fsm = settingsDict['FSM droop']                                    # FSM droop in [%]
             db = settingsDict['FSM deadband']                                    # FSM deadband in [Hz]
             FSM = caseDf['Initial Settings']['Pmode'].squeeze() == 'LFSM+FSM'   # FSM mode enabled
