@@ -4,7 +4,6 @@ from typing import Dict, List, Tuple
 import csv
 from Figure import Figure
 from Cursor import Cursor
-from collections import defaultdict
 from configparser import ConfigParser
 from down_sampling_method import DownSamplingMethod
 from cursor_type import CursorType
@@ -28,8 +27,8 @@ class ReadConfig:
         self.htmlCursorColumns = parsedConf.getint('htmlCursorColumns')
         assert self.htmlCursorColumns > 0 or not self.genHTML
         self.imageFormat = parsedConf['imageFormat']
-        self.threads = parsedConf.getint('threads')
-        assert self.threads > 0
+        self.processes = parsedConf.getint('processes')
+        assert self.processes > 0
         self.testcaseSheet = parsedConf['testcaseSheet']
         self.simDataDirs : List[Tuple[str, str]] = list()
         simPaths = cp.items('Simulation data paths')
@@ -68,21 +67,39 @@ def readFigureSetup(filePath: str) -> Dict[int, List[Figure]]:
                    figureStr['include_in_case'],  # type: ignore
                    figureStr['exclude_in_case']))  # type: ignore
 
-    defaultSetup = [fig for fig in figureList if fig.include_in_case == []]
-    figDict: Dict[int, List[Figure]] = defaultdict(lambda: defaultSetup)
-
+    # 1. Identify "Global" figures (those with no specific include list)
+    global_figures = [fig for fig in figureList if not fig.include_in_case]
+    
+    # 2. Get a list of all unique ranks mentioned in the CSV
+    all_ranks = set()
     for fig in figureList:
-        if fig.include_in_case != []:
-            for inc in fig.include_in_case:
-                if not inc in figDict.keys():
-                    figDict[inc] = defaultSetup.copy()
-                figDict[inc].append(fig)
-        else:
-            for exc in fig.exclude_in_case:
-                if not exc in figDict.keys():
-                    figDict[exc] = defaultSetup.copy()
-                figDict[exc].remove(fig)
-    return figDict
+        all_ranks.update(fig.include_in_case)
+        all_ranks.update(fig.exclude_in_case)
+    
+    # 3. Build the dictionary
+    final_dict: Dict[int, List[Figure]] = {}
+    
+    # We loop through every rank we found
+    for r in all_ranks:
+        # Start with a FRESH copy of the global figures
+        current_rank_figs = global_figures.copy()
+        
+        # Add figures specifically included for this rank
+        for fig in figureList:
+            if r in fig.include_in_case:
+                current_rank_figs.append(fig)
+        
+        # Remove figures specifically excluded for this rank
+        for fig in figureList:
+            if r in fig.exclude_in_case and fig in current_rank_figs:
+                current_rank_figs.remove(fig)
+        
+        final_dict[r] = current_rank_figs
+
+    # 4. Add a "Default" key for ranks NOT mentioned in the CSV
+    final_dict[-1] = global_figures 
+    
+    return final_dict
 
 
 def readCursorSetup(filePath: str) -> List[Cursor]:
