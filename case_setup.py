@@ -83,14 +83,14 @@ class Case:
         self.Name: str = str(case['Name'])
         self.U0: float = float(case['U0'])
         self.P0: float = float(case['P0'])
-        self.Pavail0: str = str(case['Pavail0']) # Use 'str' because 'default' is also a valid value for the droop
+        self.Pavail0: str = str(case['Pavail0']) if 'Pavail0' in case else '1.0' # Use 'str' because 'default' is also a valid value for the droop
         self.Pmode: str = str(case['Pmode'])
         self.Qmode: str = str(case['Qmode'])
         self.Qref0: float = float(case['Qref0'])
         self.QUdroop0: str = str(case['QUdroop0']) # Use 'str' because 'default' is also a valid value for the droop
         self.SCR0: float = float(case['SCR0'])
         self.XR0: float = float(case['XR0'])
-        self.MtrfrGnd0: str = str(case['MtrfrGnd0'])
+        self.MtrfrGnd0: str = str(case['MtrfrGnd0']) if 'MtrfrGnd0' in case else 'False'
         self.Simulationtime: float = float(case['Simulationtime'])
         self.Events : List[Tuple[str, float, Union[float, str], Union[float, str]]] = []
 
