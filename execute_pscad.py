@@ -22,7 +22,7 @@ def print(*args): #type: ignore
         LOG_FILE.flush()
 
 if __name__ == '__main__':
-    print(sys.version)
+    print('Python ', sys.version)
     #Ensure right working directory
     executePath = os.path.abspath(__file__)
     executeFolder = os.path.dirname(executePath)
@@ -37,27 +37,30 @@ if __name__ == '__main__':
     
 from configparser import ConfigParser
 
-class readConfig:
-  def __init__(self) -> None:
-    self.cp = ConfigParser(allow_no_value=True)
-    self.cp.read('config.ini')
-    self.parsedConf = self.cp['config']
-    self.sheetPath = str(self.parsedConf['Casesheet path'])
-    self.pythonPath = str(self.parsedConf['Python path'])
-    self.volley = int(self.parsedConf['Volley'])
-    self.exportPath = str(self.parsedConf['Export folder'])
+config = ConfigParser()
 
-config = readConfig()
-sys.path.append(config.pythonPath)
+config.read('config.ini')
+sheetPath = config.get('General', 'Casesheet path', fallback='testcases.xlsx')
+exportPath = config.get('General', 'Export folder', fallback='export')
+pythonPath = config.get('Python', 'Python path')
+fortranVersion = config.get('PSCAD', 'Fortran version')
+volley = config.getint('PSCAD', 'Volley', fallback=16)
+workspacePath = config.get('PSCAD', 'Workspace')
+
+sys.path.append(pythonPath)
 
 from datetime import datetime
 import shutil
 import psutil #type: ignore
 from typing import List, Optional
 import pandas as pd
+import warnings
 import sim_interface as si
 import case_setup as cs
 from pscad_update_ums import updateUMs
+
+# To suppress openpyxl warning messages
+warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")      
 
 try:
     import mhi.pscad
@@ -70,12 +73,72 @@ def connectPSCAD() -> mhi.pscad.PSCAD:
     ports = [con.laddr.port for con in psutil.net_connections() if con.status == psutil.CONN_LISTEN and con.pid == pid] #type: ignore
 
     if len(ports) == 0: #type: ignore
-        exit('No PSCAD listening ports found')
+        print('No PSCAD listening ports found!\n')
+        return None
     elif len(ports) > 1: #type: ignore
         print('WARNING: Multiple PSCAD listening ports found. Using the first one.')
-    
-    return mhi.pscad.connect(port = ports[0]) #type: ignore
+        
+    try:
+        pscad = mhi.pscad.connect(port = ports[0]) #type: ignore
+    except (AttributeError, Exception) as e:
+        print(f"Connection failed: {e}. Proceeding to launch new instance.\n")
+        return None
+   
+    # Set Fortran version
+    pscad.settings({'fortran_version': fortranVersion})
 
+    return pscad    
+    
+def startPSCAD():
+   
+    # Launch PSCAD
+    print('Starting PSCAD v5.0.2\n')
+    pscad = mhi.pscad.launch(version='5.0.2',
+                             silence=True,
+                             splash=False,
+                             minimize=True,
+                             load_user_profile=False)
+    
+    if pscad:
+        ## PSCAD Licence management
+        # Release certificate if already exists
+        pscad.release_certificate()
+        
+        # Lets try to get a license, query server for list of available licenses.
+        # Grab the first license found and use the certificate to license PSCAD
+        if(pscad.logged_in() == True):
+            certs = pscad.get_available_certificates()
+            if len(certs) > 0:
+                # finding a license with open instances
+                for cert in list(certs.values()):
+                    if cert.available() > 0:
+                        print('Acquiring Certificate Now! : %s', str(cert))
+                        pscad.get_certificate(cert)
+                        print('PSCAD should have a license now\n')
+                        break
+                if pscad.licensed() == False:
+                    print("All PSCAD Licenses are in use right now!")
+            else:
+                print("No certificate licenses available on server")
+                print("Starting PSCAD in unlicensed mode")
+        else:
+            print("You must log in (top right on PSCAD) and then restart script")
+        
+        ## Set some PSCAD settings - can only be done with a valid license
+        pscad_options = {'fortran_version': fortranVersion,
+                         'start_page_startup':False,
+                         'cl_use_advanced': True }
+        
+        pscad.settings(pscad_options)
+        
+        # Open PSCAD workspace
+        pscad.load(workspacePath)
+        
+        return pscad
+    else:
+        print("PSCAD could not be started")
+        return    
+    
 def outToCsv(srcPath : str, dstPath : str):
     """
     Converts PSCAD .out file into .csv file
@@ -201,9 +264,17 @@ def writeCaseRankTaskIdCSV(emtCases):
 def main():
     print()
     print('execute_pscad.py started at:', datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '\n')
+    
     pscad = connectPSCAD()
+    
+    # If the script is not executed from within PSCAD, run PSCAD as an external client
+    if pscad is None: 
+        runningAsEternalClient = True
+        pscad = startPSCAD()
+    else:
+        runningAsEternalClient = False
 
-    plantSettings, channels, _, _, emtCases = cs.setup(config.sheetPath, pscad = True, pfEncapsulation = None)
+    plantSettings, channels, _, _, emtCases = cs.setup(sheetPath, pscad = True, pfEncapsulation = None)
 
     #Print plant settings from casesheet
     print('Plant settings:')
@@ -259,16 +330,23 @@ def main():
     pmr = pscad.create_simulation_set('MTB')
     pmr.add_tasks(MTB.project_name)
     project_pmr = pmr.task(MTB.project_name)
-    project_pmr.parameters(ammunition = len(emtCases) if MTB.parameters()['par_mode'] == 'VOLLEY' else 1 , volley = config.volley, affinity_type = '2') #type: ignore
+    project_pmr.parameters(ammunition = len(emtCases) if MTB.parameters()['par_mode'] == 'VOLLEY' else 1 , volley = volley, affinity_type = '2') #type: ignore
 
     pscad.run_simulation_sets('MTB') #type: ignore ??? By sideeffect changes current working directory ???
     os.chdir(executeFolder)
 
-    psoutFolder = cleanUpPsoutFiles(buildFolder, config.exportPath, plantSettings.Projectname)
+    psoutFolder = cleanUpPsoutFiles(buildFolder, exportPath, plantSettings.Projectname)
     print()
     taskIdToRank(psoutFolder, plantSettings.Projectname, emtCases, singleRank)
 
     print('execute_pscad.py finished at: ', datetime.now().strftime('%m-%d %H:%M:%S'))
+    
+    if runningAsEternalClient:
+        print('Releasing All Certificate...')
+        pscad.release_all_certificates()
+        print('Quiting PSCAD...')
+        pscad.quit()
+        print('Done.')
 
 if __name__ == '__main__':
     main()
