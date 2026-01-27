@@ -83,14 +83,14 @@ class Case:
         self.Name: str = str(case['Name'])
         self.U0: float = float(case['U0'])
         self.P0: float = float(case['P0'])
-        self.Pavail0: str = str(case['Pavail0']) # Use 'str' because 'default' is also a valid value for the droop
+        self.Pavail0: str = str(case['Pavail0']) if 'Pavail0' in case else '1.0' # Use 'str' because 'default' is also a valid value for the droop
         self.Pmode: str = str(case['Pmode'])
         self.Qmode: str = str(case['Qmode'])
         self.Qref0: float = float(case['Qref0'])
         self.QUdroop0: str = str(case['QUdroop0']) # Use 'str' because 'default' is also a valid value for the droop
         self.SCR0: float = float(case['SCR0'])
         self.XR0: float = float(case['XR0'])
-        self.MtrfrGnd0: str = str(case['MtrfrGnd0'])
+        self.MtrfrGnd0: str = str(case['MtrfrGnd0']) if 'MtrfrGnd0' in case else 'False'
         self.Simulationtime: float = float(case['Simulationtime'])
         self.Events : List[Tuple[str, float, Union[float, str], Union[float, str]]] = []
 
@@ -711,9 +711,9 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
             mtb_t_simtimePf_s[case.rank] = pf_lonRec
             mtb_t_simtimePscad_s[case.rank] = pscad_lonRec
             
-            if pf_lonRec == 0 and case.RMS:
+            if pf_lonRec == 0 and pscad_lonRec == 0 and case.RMS:
                 warn(f'Rank: {case.rank}. Powerfactory simulationtime set to 0.0s.')
-            if pscad_lonRec == 0 and case.EMT:
+            if pscad_lonRec == 0 and pf_lonRec == 0 and case.EMT:
                 warn(f'Rank: {case.rank}. PSCAD simulationtime set to 0.0s.')
         else:
             mtb_t_simtimePscad_s[case.rank] = case.Simulationtime + plantSettings.PSCAD_init_time
