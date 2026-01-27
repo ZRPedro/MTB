@@ -373,9 +373,9 @@ class Recorded(Waveform):
             f.close()
             
             if len(glob('*.pswx')) == 0:
-                if len(glob('..\*.pswx')) > 0:
-                    mtbBasePaht = basename(getcwd())
-                    recFilePath = join(mtbBasePaht, recFilePath)
+                if len(glob('..\\*.pswx')) > 0:
+                    mtbBasePath = basename(getcwd())
+                    recFilePath = join(mtbBasePath, recFilePath)
                 else:
                     raise RuntimeError('Could not find a PSCAD Workspace file ("*.pswx") in the current or parent folder.')
 
@@ -384,13 +384,13 @@ class Recorded(Waveform):
 
     @property
     def pfLen(self):
-        if self.__pfPath__ == None:
+        if self.__pfPath__ == None and self.__pscadPath__ == None:
             warn(f'Recorded waveform (source: {self.__path__}) pfLen call with pfPath set to None. Returning 0.0.')
         return self.__pfLen__
 
     @property
     def pscadLen(self):
-        if self.__pscadPath__ == None:
+        if self.__pscadPath__ == None and self.__pfPath__ == None:
              warn(f'Recorded waveform (source: {self.__path__}) pscadLen call with pscadPath set to None. Returning 0.0.')
         return self.__pscadLen__
 

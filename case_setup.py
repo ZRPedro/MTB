@@ -711,9 +711,9 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
             mtb_t_simtimePf_s[case.rank] = pf_lonRec
             mtb_t_simtimePscad_s[case.rank] = pscad_lonRec
             
-            if pf_lonRec == 0 and case.RMS:
+            if pf_lonRec == 0 and pscad_lonRec == 0 and case.RMS:
                 warn(f'Rank: {case.rank}. Powerfactory simulationtime set to 0.0s.')
-            if pscad_lonRec == 0 and case.EMT:
+            if pscad_lonRec == 0 and pf_lonRec == 0 and case.EMT:
                 warn(f'Rank: {case.rank}. PSCAD simulationtime set to 0.0s.')
         else:
             mtb_t_simtimePscad_s[case.rank] = case.Simulationtime + plantSettings.PSCAD_init_time
