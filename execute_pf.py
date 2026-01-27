@@ -11,21 +11,17 @@ os.chdir(executeFolder)
 
 from configparser import ConfigParser
 
-class readConfig:
-  def __init__(self) -> None:
-    self.cp = ConfigParser(allow_no_value=True)
-    self.cp.read('config.ini')
-    self.parsedConf = self.cp['config']
-    self.sheetPath = str(self.parsedConf['Casesheet path'])
-    self.pythonPath = str(self.parsedConf['Python path'])
-    self.volley = int(self.parsedConf['Volley'])
-    self.parallel = bool(self.parsedConf['Parallel'])
-    self.exportPath = str(self.parsedConf['Export folder'])
-    self.QDSLcopyGrid = str(self.parsedConf['QDSL copy grid'])
+config = ConfigParser()
 
-config = readConfig()
+config.read('config.ini')
+sheetPath = config.get('General', 'Casesheet path', fallback='testcases.xlsx')
+exportPath = config.get('General', 'Export folder', fallback='export')
+pythonPath = config.get('Python', 'Python path')
+parallel = config.getbool('PowerFactory', 'parallel', fallback=True)
+QDSLcopyGrid = config.get('PowerFactory', 'QDSL copy grid', fallback='')
+
 import sys
-sys.path.append(config.pythonPath)
+sys.path.append(pythonPath)
 
 from typing import Optional, Tuple, List, Union
 if getattr(sys, 'gettrace', None) is not None:
@@ -37,6 +33,10 @@ import time
 from datetime import datetime
 import case_setup as cs
 import sim_interface as si
+import warnings
+
+# To suppress openpyxl warning messages
+warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")      
 
 def script_GetExtObj(script : pf.ComPython, name : str) -> Optional[pf.DataObject]:
   '''
@@ -394,7 +394,7 @@ def main():
 
   # Create task automation
   taskAuto : pf.ComTasks = studyCaseFolder.CreateObject('ComTasks') #type: ignore
-  taskAuto.SetAttribute('iEnableParal', int(config.parallel))
+  taskAuto.SetAttribute('iEnableParal', int(parallel))
   taskAuto.SetAttribute('parMethod', 0)
   (taskAuto.GetAttribute('parallelSetting')).SetAttribute('procTimeOut', 3600)
 
@@ -403,7 +403,7 @@ def main():
 
   # Read and setup cases from sheet
   pfInterface = si.PFencapsulation(app, root)
-  plantSettings, channels, cases, maxRank, ___ = cs.setup(casesheetPath = config.sheetPath, 
+  plantSettings, channels, cases, maxRank, ___ = cs.setup(casesheetPath = sheetPath, 
                                                      pscad = False,
                                                      pfEncapsulation = pfInterface)
 
@@ -411,14 +411,14 @@ def main():
   addCustomSubscribers(thisScript, channels)
   
   #Create export folder if it does not exist
-  if not os.path.exists(config.exportPath):
-    os.makedirs(config.exportPath)
+  if not os.path.exists(exportPath):
+    os.makedirs(exportPath)
 
   #Creating a datetime stamped subfolder
   datetimeFolder = f'MTB_{datetime.now().strftime(r"%d%m%Y%H%M%S")}'
 
   #Create the folder for the PowerFactory CSV results
-  csvFolder = os.path.join(config.exportPath, datetimeFolder)
+  csvFolder = os.path.join(exportPath, datetimeFolder)
   os.mkdir(csvFolder)
   
   # Find initializer script object
@@ -467,13 +467,13 @@ def main():
 
       ### WORKAROUND FOR QDSL FAILING WHEN IN MTB-GRID ###
       #TODO: REMOVE WHEN FIXED
-      if config.QDSLcopyGrid != '':
+      if QDSLcopyGrid != '':
         qdslInitializer = root.SearchObject('initializer_qdsl.ElmQdsl')
         assert qdslInitializer is not None
         for g in activeGrids:
           gridName = g.GetFullName() 
           assert isinstance(gridName, str)
-          if gridName.lower().endswith(f'{config.QDSLcopyGrid.lower()}.elmnet'):
+          if gridName.lower().endswith(f'{QDSLcopyGrid.lower()}.elmnet'):
             g.AddCopy(qdslInitializer) #type: ignore
           
         qdslInitializer.SetAttribute('outserv', 1) 
