@@ -757,13 +757,13 @@ def cursorQUSSTol(cursorSignalsDf, time_interval, settingsDict, caseDf):
 
         if len(t) > 0:
             defaultQUdroop = float(settingsDict['Default Q(U) droop']) # Q(U) droop in [%]
-            QUdroop0 = caseDf['Initial Settings']['QUdroop0'].squeeze() # pu
+            QUdroop0 = caseDf['Initial Settings']['QUdroop0'].item() # pu
             if QUdroop0 == 'Default':
                 s = defaultQUdroop
             else:
-                s = QUdroop0
+                s = float(QUdroop0)
                 
-            Uref = caseDf['Initial Settings']['U0'].squeeze() # pu
+            Uref = caseDf['Initial Settings']['U0'].item() # pu
             Qnom = 0.33 # pu
             
             dq = q[-1] - q[0]
