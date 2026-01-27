@@ -22,7 +22,7 @@ def print(*args): #type: ignore
         LOG_FILE.flush()
 
 if __name__ == '__main__':
-    print('Python ', sys.version)
+    print('Python', sys.version)
     #Ensure right working directory
     executePath = os.path.abspath(__file__)
     executeFolder = os.path.dirname(executePath)
@@ -111,13 +111,13 @@ def startPSCAD():
             if len(certs) > 0:
                 # finding a license with open instances
                 for cert in list(certs.values()):
-                    if cert.available() > 0:
+                    if cert.meets([("EMTDC Instances", volley)]):
                         print('Acquiring Certificate Now! : %s', str(cert))
                         pscad.get_certificate(cert)
                         print('PSCAD should have a license now\n')
                         break
                 if pscad.licensed() == False:
-                    print("All PSCAD Licenses are in use right now!")
+                    print(f'All PSCAD Licenses that meet the volley requirement of {volley}, are in use right now!')
             else:
                 print("No certificate licenses available on server")
                 print("Starting PSCAD in unlicensed mode")
