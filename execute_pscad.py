@@ -22,7 +22,7 @@ def print(*args): #type: ignore
         LOG_FILE.flush()
 
 if __name__ == '__main__':
-    print('Python', sys.version)
+    print('Python ', sys.version)
     #Ensure right working directory
     executePath = os.path.abspath(__file__)
     executeFolder = os.path.dirname(executePath)
