@@ -17,7 +17,7 @@ config.read('config.ini')
 sheetPath = config.get('General', 'Casesheet path', fallback='testcases.xlsx')
 exportPath = config.get('General', 'Export folder', fallback='export')
 pythonPath = config.get('Python', 'Python path')
-parallel = config.getbool('PowerFactory', 'parallel', fallback=True)
+parallel = config.getboolean('PowerFactory', 'parallel', fallback=True)
 QDSLcopyGrid = config.get('PowerFactory', 'QDSL copy grid', fallback='')
 
 import sys
@@ -25,7 +25,7 @@ sys.path.append(pythonPath)
 
 from typing import Optional, Tuple, List, Union
 if getattr(sys, 'gettrace', None) is not None:
-  sys.path.append('C:\\Program Files\\DIgSILENT\\PowerFactory 2024 SP4\\Python\\3.8')
+  sys.path.append('C:\\Program Files\\DIgSILENT\\PowerFactory 2025 SP4\\Python\\3.11')
 import powerfactory as pf #type: ignore
 
 import re
