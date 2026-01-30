@@ -220,10 +220,7 @@ def addCursorMetrics(ranksCursor, dfCursorsList, result, resultData, settingsDic
                         dy, tRiseFall = cursorRiseFallTime(cursorSignalsDf, time_interval)
                         if not np.isnan(t_response) and not np.isnan(tRiseFall):
                             t1 = t_response + tRiseFall
-                            labelRiseOrFall = 'Q(U) t1 rise time' if dy > 0 else 'Q(U) t1 fall time'
-                            cursorMetricText = f"{labelRiseOrFall}: {t1:.3f} s"
-                        else:
-                            cursorMetricText = "Q(U) t1 rise/fall time: metric error"
+                            cursorMetricText = f'Q(U) t1 response time: {t1:.3f} s'
 
                     elif option.name == 'QU_T2':
                         tSettling = cursorSettlingTime(cursorSignalsDf, time_interval, tol=2)
