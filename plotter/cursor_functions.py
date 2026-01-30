@@ -529,10 +529,10 @@ def cursorSettlingTime(cursorSignalsDf, time_interval, tol=2):
      
         if len(t) > 0:
             # Find the settling time of y
-            t0 = t[0]                          # Time t0
-            y0 = y[0]                          # Cursor start y value
-            y1 = np.mean(y[-min(10, len(y)):]) # Cursor end y value is the mean of up to the last 10 values
-            dy = np.abs(y1 - y0)               # Difference in y values
+            t0 = t[0]             # Time t0
+            y0 = y[0]             # Cursor start y value
+            y1 = y[-1]            # Cursor end y value
+            dy = np.abs(y1 - y0)  # Difference in y values
             
             outside_tol_band_mask = np.abs(y - y1) >= dy*tol/100     # Mask where the signal is OUTSIDE the tolerance band
                     
