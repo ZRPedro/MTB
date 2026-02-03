@@ -408,7 +408,7 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
     inc_c_iopt_adapt = constant('inc_c_iopt_adapt', plantSettings.PF_variable_step, pscad = False) # variable step option
     inc_c_iopt_adapt.addPFsub('$studycase$\\ComInc', 'iopt_adapt')
 
-    inc_c_iopt_lt = constant('inc_c_iopt_lt', 0, pscad = False)
+    inc_c_iopt_lt = constant('inc_c_iopt_lt', 2, pscad = False)
     inc_c_iopt_lt.addPFsub('$studycase$\\ComInc', 'iopt_lt')
 
     inc_c_errseq = constant('inc_c_errseq', 0.01, pscad = False)
