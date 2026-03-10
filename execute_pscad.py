@@ -22,7 +22,7 @@ def print(*args): #type: ignore
         LOG_FILE.flush()
 
 if __name__ == '__main__':
-    print('Python ', sys.version)
+    print('Python', sys.version)
     #Ensure right working directory
     executePath = os.path.abspath(__file__)
     executeFolder = os.path.dirname(executePath)
@@ -40,12 +40,14 @@ from configparser import ConfigParser
 config = ConfigParser()
 
 config.read('config.ini')
-sheetPath = config.get('General', 'Casesheet path', fallback='testcases.xlsx')
-exportPath = config.get('General', 'Export folder', fallback='export')
-pythonPath = config.get('Python', 'Python path')
-fortranVersion = config.get('PSCAD', 'Fortran version')
+
+sheetPath = config.get('General', 'Casesheet path', fallback='testcases.xlsx').strip()
+exportPath = config.get('General', 'Export folder', fallback='export').strip()
+pythonPath = config.get('Python', 'Python path').strip()
 volley = config.getint('PSCAD', 'Volley', fallback=16)
-workspacePath = config.get('PSCAD', 'Workspace')
+animation = config.getboolean('PSCAD', 'Animation', fallback=False)
+fortranVersion = config.get('PSCAD', 'Fortran version').strip()
+workspacePath = config.get('PSCAD', 'Workspace').strip()
 
 sys.path.append(pythonPath)
 
@@ -83,10 +85,7 @@ def connectPSCAD() -> mhi.pscad.PSCAD:
     except (AttributeError, Exception) as e:
         print(f"Connection failed: {e}. Proceeding to launch new instance.\n")
         return None
-   
-    # Set Fortran version
-    pscad.settings({'fortran_version': fortranVersion})
-
+     
     return pscad    
     
 def startPSCAD():
@@ -111,7 +110,7 @@ def startPSCAD():
             if len(certs) > 0:
                 # finding a license with open instances
                 for cert in list(certs.values()):
-                    if cert.meets([("EMTDC Instances", volley)]):
+                    if cert.meets([('EMTDC Instances', volley)]):
                         print('Acquiring Certificate Now! : %s', str(cert))
                         pscad.get_certificate(cert)
                         print('PSCAD should have a license now\n')
@@ -119,26 +118,48 @@ def startPSCAD():
                 if pscad.licensed() == False:
                     print(f'All PSCAD Licenses that meet the volley requirement of {volley}, are in use right now!')
             else:
-                print("No certificate licenses available on server")
-                print("Starting PSCAD in unlicensed mode")
+                print('No certificate licenses available on server')
+                print('Starting PSCAD in unlicensed mode')
         else:
-            print("You must log in (top right on PSCAD) and then restart script")
-        
+            print('You must log in (top right on PSCAD) and then restart script')
+                
         ## Set some PSCAD settings - can only be done with a valid license
-        pscad_options = {'fortran_version': fortranVersion,
-                         'start_page_startup':False,
-                         'cl_use_advanced': True }
+        pscad_options = {'start_page_startup':False,
+                         'cl_use_advanced': True}
         
         pscad.settings(pscad_options)
-        
+
         # Open PSCAD workspace
         pscad.load(workspacePath)
-        
+
+        # Get valid Fortran comilers for this machine        
+        available_fortrans = pscad.setting_range('fortran_version')
+        valid_fortrans = [f for f in available_fortrans if 'GFortran' not in f]
+
+        if fortranVersion == '' or 'GFortran' in fortranVersion or fortranVersion not in valid_fortrans:
+            print('A valid Fortran compiler other than GFortran has to be specified when running from the command line')
+            print('Valid options for this machine:')
+            for valid_fortran in valid_fortrans:
+                print(f'  * {valid_fortran}')
+            print()
+            exitPSCAD(pscad)
+            sys.exit(1)
+        else:
+            print(f'Fortran version set to {fortranVersion}')
+            pscad.settings({'fortran_version': fortranVersion})
+                                
         return pscad
     else:
-        print("PSCAD could not be started")
+        print('PSCAD could not be started')
         return    
     
+def exitPSCAD(pscad):
+    print('Releasing All Certificate...')
+    pscad.release_all_certificates()
+    print('Quiting PSCAD...')
+    pscad.quit()
+    print('Done.')   
+        
 def outToCsv(srcPath : str, dstPath : str):
     """
     Converts PSCAD .out file into .csv file
@@ -322,16 +343,25 @@ def main():
     buildFolder : str = project.temp_folder #type: ignore
     cleanBuildfolder(buildFolder) #type: ignore
 
-    project.parameters(time_duration = 999, time_step = plantSettings.PSCAD_Timestep, sample_step = '1000') #type: ignore
-    project.parameters(PlotType = '2', output_filename = f'{plantSettings.Projectname}.psout') #type: ignore
-    project.parameters(SnapType='0', SnapTime='2', snapshot_filename='pannatest5us.snp') #type: ignore
+    project.parameters(time_duration = 999,
+                       time_step = plantSettings.PSCAD_Timestep,
+                       sample_step = '1000',
+                       PlotType = 'PSOUT',
+                       output_filename = f'{plantSettings.Projectname}.psout',
+                       SnapType = 0) #type: ignore
 
     pscad.remove_all_simulation_sets()
     pmr = pscad.create_simulation_set('MTB')
     pmr.add_tasks(MTB.project_name)
     project_pmr = pmr.task(MTB.project_name)
-    project_pmr.parameters(ammunition = len(emtCases) if MTB.parameters()['par_mode'] == 'VOLLEY' else 1 , volley = volley, affinity_type = '2') #type: ignore
-
+    
+    project_pmr.parameters(ammunition = len(emtCases) if MTB.parameters()['par_mode'] == 'VOLLEY' else 1,
+                           volley = volley,
+                           affinity = 2) #type: ignore
+    
+    project_pmr.overrides(state_animation = animation,
+                          only_in_use_channels = True)
+                          
     pscad.run_simulation_sets('MTB') #type: ignore ??? By sideeffect changes current working directory ???
     os.chdir(executeFolder)
 
@@ -342,11 +372,7 @@ def main():
     print('execute_pscad.py finished at: ', datetime.now().strftime('%m-%d %H:%M:%S'))
     
     if runningAsEternalClient:
-        print('Releasing All Certificate...')
-        pscad.release_all_certificates()
-        print('Quiting PSCAD...')
-        pscad.quit()
-        print('Done.')
+        exitPSCAD(pscad)
 
 if __name__ == '__main__':
     main()
