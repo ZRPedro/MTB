@@ -43,13 +43,14 @@ config.read('config.ini')
 
 sheetPath = config.get('General', 'Casesheet path', fallback='testcases.xlsx').strip()
 exportPath = config.get('General', 'Export folder', fallback='export').strip()
-pythonPath = config.get('Python', 'Python path').strip()
+pythonPath = config.get('Python', 'Python path', fallback='').strip()
 volley = config.getint('PSCAD', 'Volley', fallback=16)
 animation = config.getboolean('PSCAD', 'Animation', fallback=False)
 fortranVersion = config.get('PSCAD', 'Fortran version').strip()
 workspacePath = config.get('PSCAD', 'Workspace').strip()
 
-sys.path.append(pythonPath)
+if pythonPath:
+    sys.path.append(pythonPath)
 
 from datetime import datetime
 import shutil
@@ -321,7 +322,7 @@ def main():
         #Output rank in relation to task id
         singleRank = MTB.parameters()['par_manualrank']
         singleName = emtCases[caseList.index(MTB.parameters()['par_manualrank'])].Name
-        print('---------EXECUTING MANUAL MODE---------')
+        print(f'Executing only Rank {singleRank}: {singleName}')
         print(f'Excecuting only Rank {singleRank}: {singleName}')
     else:
         raise ValueError('Invalid rank selected for par_manualrank in MTB block.')
