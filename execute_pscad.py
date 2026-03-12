@@ -376,6 +376,7 @@ def main():
         exitPSCAD(pscad)
 
 if __name__ == '__main__':
+    print('This script is meant to be run from the command line, not from within PSCAD. If you want to run it from within PSCAD, make sure to comment out the "if __name__ == "__main__":" block and the call to main() at the end of the script.')
     main()
 
 if LOG_FILE:
