@@ -238,6 +238,9 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
     mtb_s_qudroop.addPFsub_S0('station_ctrl.ElmStactrl', 'ddroop')
 
     mtb_s_mtrfrgnd = signal('mtb_s_mtrfrgnd')
+    mtb_s_mtrfrgnd.addPFsub_S0('initializer_script.ComDpl', 'IntExpr:14') #MtrfrGnd0
+    # TO DO: Missing to add MtrfrGnd0 to the initializer_qdsl
+
     
     mtb_t_qmode = signal('mtb_t_qmode')
     mtb_t_qmode.addPFsub_S0('initializer_script.ComDpl', 'IntExpr:9') #Qmode
@@ -307,34 +310,34 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
     mtb_s : List[si.Signal] = []
     # Custom signals
     mtb_s.append(signal('mtb_s_1', measFile = True))
-    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:14') #Signal_1_t0
-    mtb_s[-1].addPFsub_S0('initializer_qdsl.ElmQdsl', 'initVals:14') #Signal_1_t0
+    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:15') #Signal_1_t0 
+    mtb_s[-1].addPFsub_S0('initializer_qdsl.ElmQdsl', 'initVals:14') #Signal_1_t0   # TO DO: Missing to add MtrfrGnd0 to the initializer_qdsl
     mtb_s.append(signal('mtb_s_2', measFile = True))
-    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:15') #Signal_2_t0
+    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:16') #Signal_2_t0
     mtb_s[-1].addPFsub_S0('initializer_qdsl.ElmQdsl', 'initVals:15') #Signal_2_t0
     mtb_s.append(signal('mtb_s_3', measFile = True))
-    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:16') #Signal_3_t0
+    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:17') #Signal_3_t0
     mtb_s[-1].addPFsub_S0('initializer_qdsl.ElmQdsl', 'initVals:16') #Signal_3_t0
     mtb_s.append(signal('mtb_s_4', measFile = True))
-    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:17') #Signal_4_t0
+    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:18') #Signal_4_t0
     mtb_s[-1].addPFsub_S0('initializer_qdsl.ElmQdsl', 'initVals:17') #Signal_4_t0
     mtb_s.append(signal('mtb_s_5', measFile = True))
-    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:18') #Signal_5_t0
+    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:19') #Signal_5_t0
     mtb_s[-1].addPFsub_S0('initializer_qdsl.ElmQdsl', 'initVals:18') #Signal_5_t0
     mtb_s.append(signal('mtb_s_6', measFile = True))
-    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:19') #Signal_6_t0
+    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:20') #Signal_6_t0
     mtb_s[-1].addPFsub_S0('initializer_qdsl.ElmQdsl', 'initVals:19') #Signal_6_t0
     mtb_s.append(signal('mtb_s_7', measFile = True))
-    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:20') #Signal_7_t0
+    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:21') #Signal_7_t0
     mtb_s[-1].addPFsub_S0('initializer_qdsl.ElmQdsl', 'initVals:20') #Signal_7_t0
     mtb_s.append(signal('mtb_s_8', measFile = True))
-    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:21') #Signal_8_t0
+    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:22') #Signal_8_t0
     mtb_s[-1].addPFsub_S0('initializer_qdsl.ElmQdsl', 'initVals:21') #Signal_8_t0
     mtb_s.append(signal('mtb_s_9', measFile = True))
-    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:22') #Signal_9_t0
+    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:23') #Signal_9_t0
     mtb_s[-1].addPFsub_S0('initializer_qdsl.ElmQdsl', 'initVals:22') #Signal_9_t0
     mtb_s.append(signal('mtb_s_10', measFile = True))
-    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:23') #Signal_10_t0
+    mtb_s[-1].addPFsub_S0('initializer_script.ComDpl', 'IntExpr:24') #Signal_10_t0
     mtb_s[-1].addPFsub_S0('initializer_qdsl.ElmQdsl', 'initVals:23') #Signal_10_t0
 
     # Powerfactory references
@@ -351,6 +354,7 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
     ldf_t_refOOS.addPFsub_S0('mtb_s_qudroop.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_t_qmode.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_t_pmode.ElmDsl', 'outserv')
+    ldf_t_refOOS.addPFsub_S0('mtb_s_mtrfrgnd.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_s_1.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_s_2.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_s_3.ElmDsl', 'outserv')
@@ -506,7 +510,7 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
         if MTRFRGND:
             mtb_s_mtrfrgnd[case.rank] = 1.0
         else:
-            mtb_s_mtrfrgnd[case.rank] = 0.0
+            mtb_s_mtrfrgnd[case.rank] = 0.0     
 
         # Fault signals
         flt_s_type[case.rank] = 0.0
