@@ -45,7 +45,9 @@ sheetPath = config.get('General', 'Casesheet path', fallback='testcases.xlsx').s
 exportPath = config.get('General', 'Export folder', fallback='export').strip()
 pythonPath = config.get('Python', 'Python path', fallback='').strip()
 volley = config.getint('PSCAD', 'Volley', fallback=16)
-animation = config.getboolean('PSCAD', 'Animation', fallback=False)
+traceAffinity = config.getboolean('PSCAD', 'Tracing', fallback=False)
+stateAnimation = config.getboolean('PSCAD', 'State animation', fallback=False)
+onlyInUseChannels = config.getboolean('PSCAD', 'Only in use channels', fallback=True)
 fortranVersion = config.get('PSCAD', 'Fortran version').strip()
 workspacePath = config.get('PSCAD', 'Workspace').strip()
 
@@ -358,10 +360,11 @@ def main():
     
     project_pmr.parameters(ammunition = len(emtCases) if MTB.parameters()['par_mode'] == 'VOLLEY' else 1,
                            volley = volley,
-                           affinity = 2) #type: ignore
+                           affinity = 2, # Dynamic distribution of CPU cores
+                           affinity_type = 2 if traceAffinity else 0) # Disable Tracing
     
-    project_pmr.overrides(state_animation = animation,
-                          only_in_use_channels = True)
+    project_pmr.overrides(state_animation = stateAnimation,
+                          only_in_use_channels = onlyInUseChannels)
                           
     pscad.run_simulation_sets('MTB') #type: ignore ??? By sideeffect changes current working directory ???
     os.chdir(executeFolder)
@@ -380,3 +383,4 @@ if __name__ == '__main__':
 
 if LOG_FILE:
     LOG_FILE.close()
+
