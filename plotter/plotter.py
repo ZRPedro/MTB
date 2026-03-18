@@ -22,7 +22,7 @@ from Result import ResultType, Result
 from Cursor import Cursor
 from read_and_write_functions import loadEMT
 from process_results import getColNames, getUniqueEmtSignals
-from process_psout import getSignals
+from process_psout import getPsoutSignals
 from cursor_functions import setupCursorDataFrame, addCursorMetrics
 from guide_functions import genGuideResults
 from pypdf import PdfWriter
@@ -539,13 +539,14 @@ def drawPlot(rank: int,
     for result in resultList:
         print(f'Processing: {result.fullpath}')
         if result.typ == ResultType.RMS:
-            resultData: pd.DataFrame = pd.read_csv(result.fullpath, sep=';', decimal=',', header=[0, 1])  # type: ignore
+            resultData = pd.read_csv(result.fullpath, sep=';', decimal=',', header=[0, 1])  # type: ignore
         elif result.typ == ResultType.EMT_INF:
-            resultData: pd.DataFrame = loadEMT(result.fullpath)
+            resultData = loadEMT(result.fullpath)
         elif result.typ == ResultType.EMT_PSOUT:
-            resultData: pd.DataFrame = getSignals(result.fullpath, getUniqueEmtSignals(figureList))
+            resultData = getPsoutSignals(result.fullpath, getUniqueEmtSignals(figureList, config))
+            resultData.columns = [col.replace(f'{config.psoutPathMTB}'+'\\','') if col.startswith(f'{config.psoutPathMTB}') else col for col in resultData.columns]
         elif result.typ == ResultType.EMT_CSV or result.typ == ResultType.EMT_ZIP:
-            resultData: pd.DataFrame = pd.read_csv(result.fullpath, sep=';', decimal=',')  # type: ignore
+            resultData = pd.read_csv(result.fullpath, sep=';', decimal=',')  # type: ignore
         else:
             continue
 
