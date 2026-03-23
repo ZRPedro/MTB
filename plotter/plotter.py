@@ -574,7 +574,7 @@ def drawPlot(rank: int,
         cursorPath = figurePath+'_cursor'
         genCursorPDF(goCursorList, rank, rankName, cursorPath)
         print(f'Exported cursors for Rank {rank} to {cursorPath}.pdf')
-
+   
     print(f'Plot for Rank {rank} done.')
 
 
@@ -600,7 +600,10 @@ def create_image_plots(config, figureList, figurePath, imagePlots):
         )
 
         # Save the combined plot as a single image
-        combined_plot.write_image(f'{figurePath}.{config.imageFormat}', height=500 * len(imagePlots), width=2000)
+        combined_plot.write_image(f'{figurePath}.{config.imageFormat}',
+                                  height=500 * len(imagePlots),
+                                  width=2000,
+                                  engine="kaleido")
 
     else:
         # Combine all figures into a grid when nColumns > 1
@@ -609,8 +612,10 @@ def create_image_plots(config, figureList, figurePath, imagePlots):
             width=700 * config.imageColumns,  # Adjust width based on column number
             showlegend=True,
         )
-        imagePlots[0].write_image(f'{figurePath}.{config.imageFormat}', height=500 * ceil(len(figureList) / config.imageColumns),
-                                  width=700 * config.imageColumns)  # type: ignore
+        imagePlots[0].write_image(f'{figurePath}.{config.imageFormat}',
+                                  height=500 * ceil(len(figureList) / config.imageColumns),
+                                  width=700 * config.imageColumns,
+                                  engine="kaleido" )  # type: ignore
 
 
 def setupPlotLayout(rankName, config, figureList, htmlPlots, imagePlots, rank):
@@ -905,11 +910,7 @@ def main() -> None:
         makedirs(config.resultsDir)
 
     create_css(config.resultsDir)
-    
-    if config.genImage:
-        pio.kaleido.scope.chromium_args = ("--disable-gpu", "--no-sandbox", "--single-process")
-
-    
+        
     tasks = [
         (rank, resultDict, figureDict, casesDf, colorSchemeMap, cursorDict, settingsDict, rankNameDict, config)
         for rank in resultDict.keys()
