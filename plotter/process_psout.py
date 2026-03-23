@@ -29,7 +29,7 @@ def getPsoutSignal(psoutFilePath, signalPathName):
             data = psoutFile.call(data_path)
         except:
             print(f'The signal data path, {data_path} could not be found in {psoutFilePath}!')
-            sys.exit(1)
+            return None, None
             
         run = psoutFile.run(0)
         signal = list()
@@ -43,18 +43,35 @@ def getPsoutSignal(psoutFilePath, signalPathName):
 
 def getPsoutSignals(psoutFilePath, signalPathNames):
     '''
-    Get all signals from the .psout file whose names appear in the signalnames list
+    Get all signals from the .psout file whose names appear in the signalPathNames list
+    Exit if the first signal (time refrence) is missing.
+    Missing signals are ignored.
     '''    
-    columnNames = signalPathNames.copy()                                # Column names to be used for the returned DataFrame
-    idxOffset = 0                                                       # To keep track of the columnnames size as signals are converter to signal arrays
+    
+    if not signalPathNames:                                             # Return an empy DataFrame is the signalPathNames list is empy.
+        return pd.DataFrame()
     
     t, _ = getPsoutSignal(psoutFilePath, signalPathNames[0])            # Get time values to get the length of all the signals in the .psout file
+
+    if t is None:
+            print(f"CRITICAL: Primary signal '{signalPathNames[0]}' (Time) not found. Cannot proceed.")
+            sys.exit(1)
+
     t = np.array(t)                                                     # Convert to a numpy array
     t = t.reshape(1,-1)                                                 # Reshape the t from (N,) to (1,N)
     psoutSignals = np.array(t)                                          # Use as first row for the signals array
     
+    columnNames = signalPathNames.copy()                                # Column names to be used for the returned DataFrame
+    idxOffset = 0                                                       # To keep track of the columnnames size as signals are converter to signal arrays
+    
     for signalPathName in signalPathNames:
         _, psoutSignal = getPsoutSignal(psoutFilePath, signalPathName)  # Try to get each signal in the signalnames list
+
+        if psoutSignal is None:
+            print(f"Warning: Signal '{signalPathName}' not found. Skipping...")
+            columnNames.remove(signalPathName)                          # Remove the signal name
+            continue        
+                
         psoutSignal = np.array(psoutSignal)                             # Convert to numpy array
 
         # Test for signal array and convert signal name to a set of signal names for each signal in the array

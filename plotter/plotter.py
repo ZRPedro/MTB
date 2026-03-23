@@ -544,7 +544,9 @@ def drawPlot(rank: int,
             resultData = loadEMT(result.fullpath)
         elif result.typ == ResultType.EMT_PSOUT:
             resultData = getPsoutSignals(result.fullpath, getUniqueEmtSignals(figureList, config))
-            resultData.columns = [col.replace(f'{config.psoutPathMTB}'+'\\','') if col.startswith(f'{config.psoutPathMTB}') else col for col in resultData.columns]
+            prefix_to_remove = '' if config.psoutPathMTB == '' else config.psoutPathMTB + '\\'
+            if prefix_to_remove:
+                resultData.columns = [col.removeprefix(prefix_to_remove) for col in resultData.columns]
         elif result.typ == ResultType.EMT_CSV or result.typ == ResultType.EMT_ZIP:
             resultData = pd.read_csv(result.fullpath, sep=';', decimal=',')  # type: ignore
         else:
