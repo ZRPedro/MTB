@@ -360,7 +360,6 @@ def main():
     
     project_pmr.parameters(ammunition = len(emtCases) if MTB.parameters()['par_mode'] == 'VOLLEY' else 1,
                            volley = volley,
-                           affinity = 1, # Or "Tracing Rank". The Rank to use when Affinity Type is 'SINGLE' (not applicable here)
                            affinity_type = 2 if traceAffinity else 0) # Or "Tracing". Valid options are 0, 1 ('SINGLE') or 2 ('ALL)
     
     project_pmr.overrides(state_animation = stateAnimation,
