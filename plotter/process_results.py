@@ -30,25 +30,25 @@ def getColNames(rawSigName, result):
     return sigColName, sigDispName
 
 
-def getUniqueEmtSignals(figureList, config):
+def getUniqueEmtSignals(figureList):
     '''
     Get a unique list of emt_signals from the figureList, i.e. with no duplicate emt_signals
     used to extract signal from the .psout files and generate a DataFrame with unique columns names
     Python's "set()" could also be used, but then the order of the signals in the DataFrame would change
     '''
     
-    psoutPathMTB = '' if config.psoutPathMTB == '' else config.psoutPathMTB+'\\'
-    emt_signals = [f'{psoutPathMTB}'+'MTB\\mtb_s_pavail_pu',
-                   f'{psoutPathMTB}'+'MTB\\mtb_s_qudroop',
-                   f'{psoutPathMTB}'+'MTB\\mtb_s_1',
-                   f'{psoutPathMTB}'+'MTB\\mtb_s_2',
-                   f'{psoutPathMTB}'+'MTB\\mtb_s_3',
-                   f'{psoutPathMTB}'+'MTB\\mtb_s_4']
+    # Signals required to generate Guide Waveforms
+    emt_signals = ['MTB\\mtb_s_pavail_pu',
+                   'MTB\\mtb_s_qudroop',
+                   'MTB\\mtb_s_1',
+                   'MTB\\mtb_s_2',
+                   'MTB\\mtb_s_3',
+                   'MTB\\mtb_s_4']
     
     for fig in figureList:
-        if fig.emt_signal_1 != '': emt_signals.append(f'{psoutPathMTB}'+fig.emt_signal_1)
-        if fig.emt_signal_2 != '': emt_signals.append(f'{psoutPathMTB}'+fig.emt_signal_2)
-        if fig.emt_signal_3 != '': emt_signals.append(f'{psoutPathMTB}'+fig.emt_signal_3)
+        if fig.emt_signal_1 != '': emt_signals.append(fig.emt_signal_1)
+        if fig.emt_signal_2 != '': emt_signals.append(fig.emt_signal_2)
+        if fig.emt_signal_3 != '': emt_signals.append(fig.emt_signal_3)
     
     unique_emt_signals = []
 
