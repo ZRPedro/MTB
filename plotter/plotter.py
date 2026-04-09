@@ -22,7 +22,7 @@ from Result import ResultType, Result
 from Cursor import Cursor
 from read_and_write_functions import loadEMT
 from process_results import getColNames, getUniqueEmtSignals
-from process_psout import getPsoutSignals
+from process_psout import findPsoutSignalPath, getPsoutSignals
 from cursor_functions import setupCursorDataFrame, addCursorMetrics
 from guide_functions import genGuideResults
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -506,10 +506,14 @@ def drawPlot(rank: int,
         elif result.typ == ResultType.EMT_INF:
             resultData = loadEMT(result.fullpath)
         elif result.typ == ResultType.EMT_PSOUT:
-            resultData = getPsoutSignals(result.fullpath, getUniqueEmtSignals(figureList, config))
-            prefix_to_remove = '' if config.psoutPathMTB == '' else config.psoutPathMTB + '\\'
-            if prefix_to_remove:
-                resultData.columns = [col.removeprefix(prefix_to_remove) for col in resultData.columns]
+            signalPathNames = getUniqueEmtSignals(figureList)                                                                       # Make sure there are no duplicate signals
+            mtbPath = findPsoutSignalPath(result.fullpath, signalPathNames[0])                                                      # Use the first signal, i.e. 'MTB\\mtb_s_pavail_pu' to find the location of all the MTB signals (just to check if they are not maybe placed on a different canvas than 'Main')
+            if mtbPath != 'MTB':
+                signalPathNames = [s.replace('MTB\\', mtbPath + '\\', 1) if s.startswith('MTB\\') else s for s in signalPathNames]  # Replace the relative path 'MTB\\' with the correct signal path with respect to 'Root/Main/' for all MTB signal, if necessary
+            resultData = getPsoutSignals(result.fullpath, signalPathNames)                                                          # Get all the signals in the .psout file as a Pandas DataFrame
+            prefix_to_remove = mtbPath.replace('MTB', '', 1)
+            if prefix_to_remove != '\\':
+                resultData.columns = [col.removeprefix(prefix_to_remove) if 'MTB\\' in col else col for col in resultData.columns]  # Remove the path in front of all 'MTB\\signalName' columns in the DataFrame to reduce the legend lenght in the plots
         elif result.typ == ResultType.EMT_CSV or result.typ == ResultType.EMT_ZIP:
             resultData = pd.read_csv(result.fullpath, sep=';', decimal=',')  # type: ignore
         else:

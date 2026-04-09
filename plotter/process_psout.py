@@ -16,6 +16,54 @@ except ImportError:
     sys.exit(1)
 
 
+def findPsoutSignalPath(psoutFilePath: str, signalPathName: str, sourceType: str ='Module') -> str:
+    """
+    Recursively find the path relative to Root/Main/ of a signal in a .psout file.
+    Returns empty string if the signal could not be found
+    
+    Parameters:
+        psoutFilePath: The path to the .psout file
+        signalPathName: Can be in the format 'MTB\\signal_name' or just 'signal_name' as the leading path will be stripped anyway
+        sourceType: Should be a valid source type, e.g. 'Module', 'Graphic', 'PGB', etc.
+    """
+    
+    # Strip any leading path prefix (e.g. 'MTB\\' or 'SomePath\\MTB\\') to get just the signal name
+    signalName = signalPathName.split('\\')[-1]
+
+    def search_node(node, current_path='', depth=0):
+        if depth > 10:
+            return None
+        try:
+            for call in node.calls():
+                call_str = str(call)
+                name = call_str.split("Name='")[1].split("'")[0]
+                source = call_str.split("Source='")[1].split("'")[0]
+                new_path = current_path + '\\' + name if current_path else name
+
+                if source == sourceType: 
+                    try:
+                        child_path = 'Root/Main/' + new_path.replace('\\', '/')
+                        child_node = psout_file.call(child_path)
+                        for child_call in child_node.calls():
+                            child_str = str(child_call)
+                            child_name = child_str.split("Name='")[1].split("'")[0]
+                            if child_name == signalName:
+                                return new_path
+                        result = search_node(child_node, new_path, depth + 1)
+                        if result:
+                            return result
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+        return None
+
+    with mhi.psout.File(psoutFilePath) as psout_file:
+        root = psout_file.call('Root/Main')
+        path = search_node(root)
+        return path if path else ''
+
+       
 def getPsoutSignal(psoutFilePath, signalPathName):
     '''
     Get time and trace/signal from the opened psout file
