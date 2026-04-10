@@ -30,7 +30,6 @@ class ReadConfig:
         self.processes = parsedConf.getint('processes')
         assert self.processes > 0
         self.testcaseSheet = parsedConf['testcaseSheet']
-        self.psoutPathMTB = parsedConf['psoutPathMTB']
         self.simDataDirs : List[Tuple[str, str]] = list()
         simPaths = cp.items('Simulation data paths')
         for name, path in simPaths:
