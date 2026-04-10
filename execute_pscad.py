@@ -48,11 +48,13 @@ volley = config.getint('PSCAD', 'Volley', fallback=16)
 traceAffinity = config.getboolean('PSCAD', 'Tracing', fallback=False)
 stateAnimation = config.getboolean('PSCAD', 'State animation', fallback=False)
 onlyInUseChannels = config.getboolean('PSCAD', 'Only in use channels', fallback=True)
+disableAllUnusedPGBs = config.getboolean('PSCAD', 'Disable all unused PGBs', fallback=True)
 fortranVersion = config.get('PSCAD', 'Fortran version').strip()
 workspacePath = config.get('PSCAD', 'Workspace').strip()
 
 if pythonPath:
     sys.path.append(pythonPath)
+    
 
 from datetime import datetime
 import shutil
@@ -63,6 +65,7 @@ import warnings
 import sim_interface as si
 import case_setup as cs
 from pscad_update_ums import updateUMs
+from pscad_pgb import getSignalsFromFigureSetup, validateFigureSetupAgainstWorkspace, disablePGBsInProject
 
 # To suppress openpyxl warning messages
 warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")      
@@ -297,6 +300,24 @@ def main():
         pscad = startPSCAD()
     else:
         runningAsEternalClient = False
+        
+    if disableAllUnusedPGBs:
+        figureSetup = r'.\plotter\figureSetup.csv'
+        
+        keep_signals = getSignalsFromFigureSetup(figureSetup)
+        missing_total = validateFigureSetupAgainstWorkspace(pscad, keep_signals)
+        
+        if not missing_total:
+            # 3. Only if the CSV is 100% correct, proceed to modify projects
+            case_names = [p['name'] for p in pscad.projects() if p['type'] == 'Case']
+            
+            for case_name in case_names:
+                proj = pscad.project(case_name)
+                # This function (from previous step) now handles one project at a time
+                disablePGBsInProject(proj, keep_signals, disable=True, verbose=True)
+        else:
+            print("\nAborting: Please fix the signal names in figureSetup.csv before proceeding.")
+            os.exit(1)
 
     plantSettings, channels, _, _, emtCases = cs.setup(sheetPath, pscad = True, pfEncapsulation = None)
 
@@ -382,4 +403,6 @@ if __name__ == '__main__':
 
 if LOG_FILE:
     LOG_FILE.close()
+
+
 
