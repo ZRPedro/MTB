@@ -235,37 +235,47 @@ def printPGBStatus(proj, keep_signals: Optional[List[str]] = None) -> None:
 # PGB DISABLE/ENABLE
 # ============================================================
 
-def disablePGBsInProject(proj, keep_signals: List[str],
-                          disable: bool = False,
-                          verbose: bool = True) -> None:
+def synchronizePGBsInProject(proj, keep_signals: List[str], 
+                             sync: bool = False, 
+                             verbose: bool = True) -> None:
     """
-    Disable PGB components not in the keep_signals list for a SPECIFIC project.
+    Synchronizes PGB states with the keep_signals list.
+    Enables PGBs found in the list, disables those that are not.
     """
-    # Use the existing status gathering tool
     canvas_path_dict = getPGBStatus(proj)
 
     if verbose:
         printPGBStatus(proj, keep_signals)
 
     disabled_count = 0
+    enabled_count = 0
     kept_count = 0
 
     for canvas_path, signals in canvas_path_dict.items():
         for signal_name, signal_path, is_disabled, pgb in signals:
             in_keep_list = signal_path in keep_signals
             
+            # Case 1: Signal should be Disabled but is currently Enabled
             if not in_keep_list and not is_disabled:
-                if disable:
+                if sync:
                     pgb.disable()
                 disabled_count += 1
+            
+            # Case 2: Signal should be Enabled but is currently Disabled
+            elif in_keep_list and is_disabled:
+                if sync:
+                    pgb.enable()
+                enabled_count += 1
+            
+            # Case 3: Signal is in the list and already Enabled, or not in the list and already Disabled
             elif in_keep_list:
                 kept_count += 1
 
-    if disable:
+    if sync:
         proj.save()
-        print(f'\nProject {proj.name} Saved!')
+        print(f'\nProject {proj.name}: Disabled {disabled_count}, Enabled {enabled_count}, Kept {kept_count}. Saved!')
     else:
-        print(f'\nProject {proj.name} DRY RUN:')
+        print(f'\nProject {proj.name} DRY RUN: Would disable {disabled_count}, and enable {enabled_count}.')
 
     print('=' * 60)
     print()
@@ -323,7 +333,7 @@ if __name__ == '__main__':
             for case_name in case_names:
                 proj = pscad.project(case_name)
                 # This function (from previous step) now handles one project at a time
-                disablePGBsInProject(proj, keep_signals, disable=False)
+                synchronizePGBsInProject(proj, keep_signals, sync=False, verbose=False)
         else:
             print("\nAborting: Please fix the signal names in figureSetup.csv before proceeding.")
 
@@ -334,5 +344,6 @@ if __name__ == '__main__':
         for case_name in case_names:
             proj = pscad.project(case_name)
             printPGBStatus(proj)
+
 
 
