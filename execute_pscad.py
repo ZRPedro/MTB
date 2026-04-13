@@ -65,7 +65,7 @@ import warnings
 import sim_interface as si
 import case_setup as cs
 from pscad_update_ums import updateUMs
-from pscad_pgb import getSignalsFromFigureSetup, validateFigureSetupAgainstWorkspace, disablePGBsInProject
+from pscad_synchronize_pgbs import getSignalsFromFigureSetup, validateFigureSetupAgainstWorkspace, synchronizePGBsInProject
 
 # To suppress openpyxl warning messages
 warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")      
@@ -314,7 +314,7 @@ def main():
             for case_name in case_names:
                 proj = pscad.project(case_name)
                 # This function (from previous step) now handles one project at a time
-                disablePGBsInProject(proj, keep_signals, disable=True, verbose=True)
+                synchronizePGBsInProject(proj, keep_signals, sync=True, verbose=True)
         else:
             print("\nAborting: Please fix the signal names in figureSetup.csv before proceeding.")
             os.exit(1)
