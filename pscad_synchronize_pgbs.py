@@ -169,11 +169,11 @@ def validateFigureSetupAgainstWorkspace(pscad, keep_signals: List[str]) -> List[
     missing_globally = [s for s in keep_signals if s not in all_existing_paths]
 
     if missing_globally:
-        print("ERROR: These signals from figureSetup.csv are missing from the ENTIRE workspace:")
+        print("\nERROR: These signals from figureSetup.csv are missing from the ENTIRE workspace:")
         for missing in missing_globally:
             print(f"  - {missing}")
     else:
-        print("Success: All signals in figureSetup.csv were located in the workspace.")
+        print("\nSuccess: All signals in figureSetup.csv were located in the workspace.")
 
     return missing_globally
 
@@ -361,7 +361,7 @@ if __name__ == '__main__':
     
     pscad = mhi.pscad.application()
     
-    figureSetup = r'.\plotter\figureSetup.csv'
+    figureSetup = r'.\plotter\figureSetup.csv' # Or set to None to just print status of all PGBs without modifying anything
     SYNC = False   # Do a dry run first to review changes before actually applying them with SYNC=True
     VERBOSE = True # Print detailed status of each PGB and summary counts at the end of each project
     
