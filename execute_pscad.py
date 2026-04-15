@@ -301,6 +301,10 @@ def main():
     else:
         runningAsEternalClient = False
         
+    #Update PGB names for all unit measurement components
+    updateUMs(pscad)
+
+    #Disable all unused PGBs not specified in the plotter's figureSetup.csv if required 
     if disableAllUnusedPGBs:
         figureSetup = r'.\plotter\figureSetup.csv'
         
@@ -357,9 +361,6 @@ def main():
     
     #Set executed flag
     MTB.parameters(executed = 1) #type: ignore  
-
-    #Update pgb names for all unit measurement components
-    updateUMs(pscad)
 
     #Add interface file to project
     addInterfaceFile(project)

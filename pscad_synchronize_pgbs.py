@@ -51,6 +51,33 @@ def _buildParentMap(proj) -> Dict[str, str]:
     return parent_map
 
 
+def _buildInstanceNameMap(proj) -> Dict[str, str]:
+    """
+    Build a map of {defn_name -> instance_name} for components
+    that have a 'Name' parameter different from their definition name.
+    e.g. {'unit_meas': '$Unit$', 'unit_meas_1': '$Unit$_2', 'unit_meas_2': '$Unit$_2'}
+    """
+    instance_map = {}
+    try:
+        tree = ET.parse(proj.filename)
+        root = tree.getroot()
+        for elem in root.iter('User'):
+            defn = elem.get('defn', '')
+            if ':' in defn:
+                defn_proj, defn_name = defn.split(':', 1)
+                if defn_proj == proj.name:
+                    # Look for a 'Name' parameter
+                    for param in elem.iter('param'):
+                        if param.get('name') == 'Name':
+                            instance_name = param.get('value', '')
+                            if instance_name and instance_name != defn_name:
+                                instance_map[defn_name] = instance_name
+                            break
+    except Exception as e:
+        print('Warning: Could not build instance name map: ' + str(e))
+    return instance_map
+
+
 def _getCanvasPath(canvas_name: str, parent_map: Dict[str, str]) -> str:
     """Build full canvas path e.g. Main\\BePPC\\Pcontrol_30"""
     path = [canvas_name]
@@ -62,11 +89,12 @@ def _getCanvasPath(canvas_name: str, parent_map: Dict[str, str]) -> str:
     return '\\'.join(path)
 
 
-def _getSignalPath(canvas_name: str, signal_name: str, parent_map: Dict[str, str]) -> str:
+def _getSignalPath(canvas_name: str, signal_name: str, parent_map: Dict[str, str], 
+                   instance_map: Dict[str, str] = None) -> str:
     """
     Build full psout signal path excluding Main.
-    e.g. BePPC\\Pcontrol_30\\Pout
-    Signals directly on Main are returned as just the signal name.
+    Uses instance names (e.g. '$Unit$') instead of definition names (e.g. 'unit_meas')
+    where applicable.
     """
     canvas_path = _getCanvasPath(canvas_name, parent_map)
     parts = canvas_path.split('\\')
@@ -74,6 +102,11 @@ def _getSignalPath(canvas_name: str, signal_name: str, parent_map: Dict[str, str
         parts = parts[1:]
     if not parts:
         return signal_name
+    
+    # Replace definition names with instance names where available
+    if instance_map:
+        parts = [instance_map.get(p, p) for p in parts]
+    
     return '\\'.join(parts) + '\\' + signal_name
 
 
@@ -152,11 +185,14 @@ def validateFigureSetupAgainstWorkspace(pscad, keep_signals: List[str]) -> List[
 def getPGBStatus(proj) -> Dict[str, List[Tuple[str, str, bool, object]]]:
     """
     Get all PGB components in a project grouped by canvas path.
-
+    As .psout signal paths are built using instance names, the canvas names are replaced with 
+    instance names where applicable (e.g. 'unit_meas' -> '$Unit$').
+    
     Returns:
         Dict of {canvas_path: [(signal_name, signal_path, is_disabled, pgb_component), ...]}
     """
     parent_map = _buildParentMap(proj)
+    instance_map = _buildInstanceNameMap(proj)
     disabled_ids = _getDisabledIds(proj)
     pgb_components = proj.find_all('master:pgb')
 
@@ -166,12 +202,21 @@ def getPGBStatus(proj) -> Dict[str, List[Tuple[str, str, bool, object]]]:
         canvas_name = canvas_str.split(':')[-1].strip('")')
         signal_name = pgb.parameters().get('Name', '')
         is_disabled = pgb.iid in disabled_ids
-        canvas_path = _getCanvasPath(canvas_name, parent_map)
-        signal_path = _getSignalPath(canvas_name, signal_name, parent_map)
 
-        if canvas_path not in canvas_path_dict:
-            canvas_path_dict[canvas_path] = []
-        canvas_path_dict[canvas_path].append((signal_name, signal_path, is_disabled, pgb))
+        # Build canvas path using definition names (for hierarchy traversal)
+        canvas_path_defn = _getCanvasPath(canvas_name, parent_map)
+
+        # Build display canvas path using instance names
+        parts = canvas_path_defn.split('\\')
+        display_parts = [instance_map.get(p, p) for p in parts]
+        canvas_path_display = '\\'.join(display_parts)
+
+        # Build signal path using instance names (for psout matching)
+        signal_path = _getSignalPath(canvas_name, signal_name, parent_map, instance_map)
+
+        if canvas_path_display not in canvas_path_dict:
+            canvas_path_dict[canvas_path_display] = []
+        canvas_path_dict[canvas_path_display].append((signal_name, signal_path, is_disabled, pgb))
 
     return canvas_path_dict
 
@@ -317,7 +362,9 @@ if __name__ == '__main__':
     pscad = mhi.pscad.application()
     
     figureSetup = r'.\plotter\figureSetup.csv'
-
+    SYNC = False   # Do a dry run first to review changes before actually applying them with SYNC=True
+    VERBOSE = True # Print detailed status of each PGB and summary counts at the end of each project
+    
     if figureSetup:
         # 1. Load the "Keep" list from CSV
         keep_signals = getSignalsFromFigureSetup(figureSetup)
@@ -333,17 +380,20 @@ if __name__ == '__main__':
             for case_name in case_names:
                 proj = pscad.project(case_name)
                 # This function (from previous step) now handles one project at a time
-                synchronizePGBsInProject(proj, keep_signals, sync=False, verbose=True) # Do a dry run first to review changes before actually applying them with sync=True
+                synchronizePGBsInProject(proj, keep_signals, sync=SYNC, verbose=VERBOSE) 
         else:
             print("\nAborting: Please fix the signal names in figureSetup.csv before proceeding.")
 
     else:
         # Just print status of all PGBs
-        print('No --figureSetup provided. Printing PGB status for all Case projects...')
+        print('No figureSetup.csv file provided. Printing PGB status for all Case projects...')
         case_names = [p['name'] for p in pscad.projects() if p['type'] == 'Case']
         for case_name in case_names:
             proj = pscad.project(case_name)
             printPGBStatus(proj)
+
+
+
 
 
 
