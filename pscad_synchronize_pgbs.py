@@ -25,10 +25,11 @@ Can also be run as a script from within the PSCAD Python console to list the sta
 """
 
 from __future__ import annotations
+import os
+import sys
 import csv
 import xml.etree.ElementTree as ET
 from typing import List, Dict, Tuple, Optional
-
 
 # ============================================================
 # SIGNAL PATH UTILITIES
@@ -360,6 +361,20 @@ if __name__ == '__main__':
     import mhi.pscad
     
     pscad = mhi.pscad.application()
+
+    # --------------------------------------------------------
+    print(sys.version)
+    print()
+    # --------------------------------------------------------
+    #Ensure right working directory
+    # --------------------------------------------------------
+    executePath = os.path.abspath(__file__)
+    executeFolder = os.path.dirname(executePath)
+    os.chdir(executeFolder)
+    sys.path.append(executeFolder)
+    print(executeFolder)
+    print()
+    # --------------------------------------------------------
     
     figureSetup = r'.\plotter\figureSetup.csv' # Or set to None to just print status of all PGBs without modifying anything
     SYNC = False   # Do a dry run first to review changes before actually applying them with SYNC=True
@@ -391,6 +406,7 @@ if __name__ == '__main__':
         for case_name in case_names:
             proj = pscad.project(case_name)
             printPGBStatus(proj)
+
 
 
 
