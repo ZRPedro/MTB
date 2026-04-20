@@ -67,7 +67,6 @@ def findPsoutSignalPath(psoutFilePath: str, signalPathName: str, sourceType: str
 def getPsoutSignal(psoutFilePath, signalPathName):
     '''
     Get time and trace/signal from the opened psout file
-    This function should not be called directly
     '''
     data_path = 'Root\\Main\\'+ signalPathName +'\\0'       # figureSetup.csv uses '\\' to be consistend with PowerFactory (and MHI's Enerplot)
     data_path = data_path.replace('\\', '/')                # But mhi.psout want to use '/'
