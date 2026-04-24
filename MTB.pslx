@@ -23,7 +23,7 @@
     <param name="Warn" value="0" />
     <param name="Check" value="0" />
     <param name="description" value="" />
-    <param name="revisor" value="PRW, 1769422023" />
+    <param name="revisor" value="PRW, 1777028392" />
     <param name="Debug" value="0" />
     <param name="labels" value="" />
     <param name="Preprocessor" value="" />
@@ -36886,7 +36886,7 @@ $L0_h = max($x0_ohm/(100 * PI_), 6e-4)
 $Ln_h = max($L0_h/3.0, 6e-4)]]></segment>
       </script>
     </Definition>
-    <Definition classid="UserCmpDefn" name="PLL_seq" build="" crc="116795104" view="false" instances="0" date="1769421827" id="1100625126" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="PLL_seq" build="" crc="87017846" view="false" instances="0" date="1775836563" id="1100625126" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="" />
       </paramlist>
@@ -37355,7 +37355,7 @@ $Ln_h = max($L0_h/3.0, 6e-4)]]></segment>
           </paramlist>
         </User>
         <grouping />
-        <User classid="UserCmp" defn="master:realpole" id="1088632661" x="558" y="198" w="80" h="37" z="210" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="1088632661" x="558" y="198" w="80" h="38" z="210" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -37410,14 +37410,14 @@ $Ln_h = max($L0_h/3.0, 6e-4)]]></segment>
             <param name="Name" value="pll_pos_Vq_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="2032456412" x="486" y="198" w="80" h="59" z="80" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="2032456412" x="486" y="198" w="80" h="60" z="80" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="841930677" x="450" y="234" w="76" h="22" z="40" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="841930677" x="450" y="234" w="76" h="21" z="40" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="1" />
@@ -37762,7 +37762,7 @@ $Ln_h = max($L0_h/3.0, 6e-4)]]></segment>
         </Wire>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="unit_meas" build="" crc="2134123" view="false" instances="0" date="1769421827" id="771166254" w="320" h="400">
+    <Definition classid="UserCmpDefn" name="unit_meas" build="" crc="56281093" view="false" instances="0" date="1775836563" id="771166254" w="320" h="400">
       <paramlist>
         <param name="Description" value="" />
       </paramlist>
@@ -37966,7 +37966,7 @@ $Ln_h = max($L0_h/3.0, 6e-4)]]></segment>
             <param name="Name" value="c_vbase_3" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="715505929" x="180" y="324" w="80" h="59" z="300" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="715505929" x="180" y="324" w="80" h="60" z="300" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="3" />
             <param name="Name" value="" />
@@ -37978,7 +37978,7 @@ $Ln_h = max($L0_h/3.0, 6e-4)]]></segment>
             <param name="Name" value="meas_vgpoc_pu_3" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1853865596" x="162" y="468" w="80" h="59" z="120" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1853865596" x="162" y="468" w="80" h="60" z="120" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="3" />
             <param name="Name" value="" />
@@ -38002,7 +38002,7 @@ $Ln_h = max($L0_h/3.0, 6e-4)]]></segment>
             <param name="Name" value="c_vbase_3" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1250706900" x="162" y="576" w="80" h="59" z="260" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1250706900" x="162" y="576" w="80" h="60" z="260" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="3" />
             <param name="Name" value="" />
@@ -38019,7 +38019,7 @@ $Ln_h = max($L0_h/3.0, 6e-4)]]></segment>
             <param name="Name" value="c_ibase_3" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1694908560" x="504" y="468" w="80" h="59" z="130" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1694908560" x="504" y="468" w="80" h="60" z="130" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -38036,7 +38036,7 @@ $Ln_h = max($L0_h/3.0, 6e-4)]]></segment>
             <param name="Name" value="meas_ppoc_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="619184717" x="504" y="324" w="80" h="59" z="90" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="619184717" x="504" y="324" w="80" h="60" z="90" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -38053,7 +38053,7 @@ $Ln_h = max($L0_h/3.0, 6e-4)]]></segment>
             <param name="Name" value="meas_qpoc_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1022268251" x="144" y="360" w="80" h="59" z="250" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1022268251" x="144" y="360" w="80" h="60" z="250" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="3" />
             <param name="Name" value="" />
@@ -39263,21 +39263,21 @@ $Ln_h = max($L0_h/3.0, 6e-4)]]></segment>
             <param name="Name" value="mtb_c_pn" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1379452143" x="126" y="198" w="80" h="59" z="40" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1379452143" x="126" y="198" w="80" h="60" z="40" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="887358408" x="198" y="198" w="80" h="59" z="230" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="887358408" x="198" y="198" w="80" h="60" z="230" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="96864646" x="234" y="234" w="76" h="22" z="80" orient="2" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="96864646" x="234" y="234" w="76" h="21" z="80" orient="2" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="10" />
@@ -39378,7 +39378,7 @@ $Ln_h = max($L0_h/3.0, 6e-4)]]></segment>
             <param name="Name" value="mtb_c_vbase" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="840406842" x="450" y="198" w="80" h="59" z="60" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="840406842" x="450" y="198" w="80" h="60" z="60" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -41318,7 +41318,7 @@ if ($type > 0) then
 endif]]></segment>
       </script>
     </Definition>
-    <Definition classid="UserCmpDefn" name="Fault" build="" crc="116393342" view="false" instances="0" date="1769421826" id="1641883939" w="320" h="400">
+    <Definition classid="UserCmpDefn" name="Fault" build="" crc="97364669" view="false" instances="0" date="1775836561" id="1641883939" w="320" h="400">
       <paramlist>
         <param name="Description" value="" />
       </paramlist>
@@ -41502,7 +41502,7 @@ endif]]></segment>
             <param name="fg_color" value="0" />
             <param name="bg_color" value="15792890" />
           </paramlist><![CDATA[[group]_[type]_[name]_[unit]_[dim]]]></Sticky>
-        <User classid="UserCmp" id="767238898" name="MTB:fault_definer" x="576" y="144" w="158" h="163" z="120" orient="4" defn="MTB:fault_definer" link="-1" q="4" disable="false">
+        <User classid="UserCmp" id="767238898" name="MTB:fault_definer" x="576" y="144" w="158" h="162" z="120" orient="4" defn="MTB:fault_definer" link="-1" q="4" disable="false">
           <paramlist name="" link="-1" crc="28307411">
             <param name="Name" value="" />
           </paramlist>
@@ -42046,7 +42046,7 @@ endif]]></segment>
             <param name="Name" value="Lf" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:logic_mult" id="2052553212" x="396" y="198" w="65" h="80" z="130" orient="1" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:logic_mult" id="2052553212" x="396" y="198" w="64" h="80" z="130" orient="1" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="112549534">
             <param name="Type" value="1" />
             <param name="Num_in" value="3" />
@@ -42176,7 +42176,7 @@ endif]]></segment>
         </Wire>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="Main" id="1339999568" group="" url="" version="" build="" crc="27672720" view="false" date="0">
+    <Definition classid="UserCmpDefn" name="Main" id="1339999568" group="" url="" version="" build="" crc="29926368" view="false" date="0">
       <paramlist name="">
         <param name="Description" value="" />
       </paramlist>
@@ -42403,13 +42403,13 @@ endif]]></segment>
         </User>
         <User classid="UserCmp" id="1029603519" name="MTB:unit_meas" x="144" y="666" w="188" h="89" z="-1" orient="0" defn="MTB:unit_meas" link="-1" q="4" disable="false">
           <paramlist name="" link="-1" crc="33277434">
-            <param name="Name" value="$Unit$" />
+            <param name="Name" value="Unit" />
             <param name="alias_str" value="unit_N" />
             <param name="sbase_mva" value="1" />
             <param name="vbase_kv" value="1" />
             <param name="ext_fft_freq_hz" value="mtb_fft_f_hz" />
             <param name="alias" value="unit" />
-            <param name="Name_" value="$Unit$" />
+            <param name="Name_" value="Unit" />
           </paramlist>
         </User>
         <User classid="UserCmp" id="264587968" name="master:datalabel" x="90" y="504" w="72" h="23" z="-1" orient="0" defn="master:datalabel" link="-1" q="4" disable="false">
@@ -42470,7 +42470,7 @@ endif]]></segment>
             <param name="Name" value="PPC_P3_mode" />
           </paramlist>
         </User>
-        <Sticky classid="Sticky" id="137467393" x="288" y="612" w="540" h="180" colors="0, 15792890">
+        <Sticky classid="Sticky" id="137467393" x="288" y="612" w="576" h="234" colors="0, 15792890">
           <paramlist>
             <param name="full_font" value="Tahoma, 12world" />
             <param name="align" value="0" />
@@ -42490,7 +42490,10 @@ How to Insert One or More Unit Measurements:
 1. Copy the component provided above.
 2. Paste it where needed. Always use "Paste Special" > "Paste Transfer" when inserting a new unit measurement. **Do not** use the standard paste function, as this may cause issues.
 3. Set the "Unit alias" as desired.
-4. Run `pscad_update_ums.py` (this script is also triggered by `execute_pscad.py`).]]></Sticky>
+4. By default the "Unit alias" equals the instance name, i.e. Unit, Unit_1, Unit_2, etc.
+5. Run `pscad_update_ums.py` (this script is also triggered by `execute_pscad.py`) to prefix the "Unit alias" to all signals in the "unit measurement" object to create unique signal names
+6. For .psout output, signals no longer require unique names as the signals are referenced by the signal path name, e.g. Unit\fft_pos_Vmag_pu, Unit_1\fft_pos_Vmag_pu and Unit_2\fft_pos_Vmag_pu
+7. If this signal naming is acceptable, legacy signal naming can be disabled by changing "updateUMs(pscad)" to "updateUMs(pscad, legacy=False)"]]></Sticky>
         <Sticky classid="Sticky" id="50191634" x="486" y="180" w="540" h="144" colors="0, 15792890">
           <paramlist>
             <param name="full_font" value="Tahoma, 12world" />
@@ -42889,7 +42892,7 @@ Signal 1 value should be modified based on PPC input.
             <param name="Name" value="mtb_MtrfrGnd" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="216877820" x="1170" y="846" w="82" h="91" z="1180" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="216877820" x="1170" y="846" w="82" h="90" z="1180" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="0" />
             <param name="DPath" value="1" />
@@ -42967,7 +42970,7 @@ else:
 	Grounding Breaker will be ON (closed)]]></Sticky>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="ThreePhaseCtrl" build="" crc="30817612" view="false" instances="0" date="1769421826" id="1238595495" w="320" h="400">
+    <Definition classid="UserCmpDefn" name="ThreePhaseCtrl" build="" crc="111378194" view="false" instances="0" date="1775836561" id="1238595495" w="320" h="400">
       <paramlist>
         <param name="Description" value="" />
       </paramlist>
@@ -43257,7 +43260,7 @@ else:
             <param name="Name" value="" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:realpole" id="1659468705" x="270" y="180" w="80" h="37" z="50" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="1659468705" x="270" y="180" w="80" h="38" z="50" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -43285,7 +43288,7 @@ else:
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:realpole" id="382613160" x="558" y="252" w="80" h="37" z="100" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="382613160" x="558" y="252" w="80" h="38" z="100" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -43306,7 +43309,7 @@ else:
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="377003943" x="198" y="396" w="76" h="22" z="130" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="377003943" x="198" y="396" w="76" h="21" z="130" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="1" />
@@ -43332,7 +43335,7 @@ else:
           <vertex x="0" y="-108" />
           <vertex x="36" y="-108" />
         </Wire>
-        <User classid="UserCmp" defn="master:sumjct" id="2002024713" x="702" y="108" w="80" h="63" z="350" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="2002024713" x="702" y="108" w="80" h="64" z="350" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -43367,7 +43370,7 @@ else:
           <vertex x="0" y="0" />
           <vertex x="18" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:emtconst" id="765895485" x="738" y="162" w="76" h="22" z="60" orient="4" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="765895485" x="738" y="162" w="76" h="21" z="60" orient="4" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="3" />
@@ -43434,7 +43437,7 @@ else:
             <param name="Name" value="vc" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:realpole" id="1926503106" x="162" y="360" w="80" h="37" z="120" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="1926503106" x="162" y="360" w="80" h="38" z="120" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -43490,7 +43493,7 @@ else:
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="1490137748" x="450" y="216" w="76" h="22" z="70" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1490137748" x="450" y="216" w="76" h="21" z="70" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="5" />
@@ -43509,7 +43512,7 @@ else:
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="1397301484" x="450" y="504" w="76" h="22" z="150" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1397301484" x="450" y="504" w="76" h="21" z="150" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="5" />
@@ -43544,7 +43547,7 @@ else:
           <vertex x="0" y="108" />
           <vertex x="36" y="108" />
         </Wire>
-        <User classid="UserCmp" defn="master:sumjct" id="2015300463" x="702" y="612" w="80" h="63" z="320" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="2015300463" x="702" y="612" w="80" h="64" z="320" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -43588,7 +43591,7 @@ else:
           <vertex x="0" y="0" />
           <vertex x="18" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:emtconst" id="1411691479" x="738" y="558" w="76" h="22" z="180" orient="2" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1411691479" x="738" y="558" w="76" h="21" z="180" orient="2" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="3" />
@@ -43604,7 +43607,7 @@ else:
           <vertex x="0" y="108" />
           <vertex x="36" y="108" />
         </Wire>
-        <User classid="UserCmp" defn="master:sumjct" id="1904910968" x="900" y="360" w="61" h="82" z="430" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="1904910968" x="900" y="360" w="61" h="83" z="430" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -43618,7 +43621,7 @@ else:
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="636608172" x="1098" y="360" w="61" h="82" z="410" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="636608172" x="1098" y="360" w="61" h="83" z="410" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -43657,7 +43660,7 @@ else:
           <vertex x="0" y="36" />
           <vertex x="18" y="36" />
         </Wire>
-        <User classid="UserCmp" defn="master:realpole" id="1058906688" x="558" y="468" w="80" h="37" z="220" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="1058906688" x="558" y="468" w="80" h="38" z="220" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -43717,7 +43720,7 @@ else:
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="700848532" x="990" y="360" w="61" h="82" z="420" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="700848532" x="990" y="360" w="61" h="83" z="420" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -43796,7 +43799,7 @@ else:
             <param name="Name" value="psmag" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:realpole" id="2032257317" x="270" y="558" w="80" h="37" z="170" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="2032257317" x="270" y="558" w="80" h="38" z="170" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -43835,7 +43838,7 @@ else:
         </Wire>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="MTBsignal" build="" crc="4407164" view="false" instances="0" date="0" id="1756710793" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="MTBsignal" build="" crc="68480242" view="false" instances="0" date="0" id="1756710793" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="" />
       </paramlist>
@@ -43948,7 +43951,7 @@ $out = mtb_return_value
 #ENDIF]]></segment>
       </script>
     </Definition>
-    <Definition classid="UserCmpDefn" name="MTBconst" build="" crc="16260766" view="false" instances="0" date="0" id="1946009761" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="MTBconst" build="" crc="33930372" view="false" instances="0" date="0" id="1946009761" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="" />
       </paramlist>
@@ -44063,7 +44066,7 @@ $out = mtb_return_value
 #ENDIF]]></segment>
       </script>
     </Definition>
-    <Definition classid="UserCmpDefn" name="MTB" build="" crc="114246905" view="false" instances="0" date="1769421826" id="274789173" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="MTB" build="" crc="110827053" view="false" instances="0" date="1775836561" id="274789173" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="" />
       </paramlist>
@@ -44494,7 +44497,7 @@ $out = mtb_return_value
             <param name="Name" value="" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:time-sig" id="23735746" x="1728" y="612" w="76" h="22" z="370" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:time-sig" id="23735746" x="1728" y="612" w="76" h="21" z="370" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="20913136" />
         </User>
         <User classid="UserCmp" defn="master:compar" id="180756605" x="1782" y="576" w="85" h="64" z="1600" orient="0" link="-1" layer="" q="4" disable="false">
@@ -44514,7 +44517,7 @@ $out = mtb_return_value
           <vertex x="0" y="0" />
           <vertex x="18" y="0" />
         </Wire>
-        <User classid="UserCmp" id="484967067" name="master:source_1" x="522" y="234" w="55" h="80" z="3140" orient="1" defn="master:source_1" link="-1" q="4" disable="false">
+        <User classid="UserCmp" id="484967067" name="master:source_1" x="522" y="234" w="56" h="80" z="3140" orient="1" defn="master:source_1" link="-1" q="4" disable="false">
           <paramlist name="" link="-1" crc="49505675">
             <param name="Name" value="Source_1" />
             <param name="Type" value="6" />
@@ -44546,7 +44549,7 @@ $out = mtb_return_value
             <param name="Com" value="0" />
           </paramlist>
         </User>
-        <User classid="UserCmp" id="1135896534" name="master:source_1" x="630" y="234" w="55" h="80" z="3130" orient="1" defn="master:source_1" link="-1" q="4" disable="false">
+        <User classid="UserCmp" id="1135896534" name="master:source_1" x="630" y="234" w="56" h="80" z="3130" orient="1" defn="master:source_1" link="-1" q="4" disable="false">
           <paramlist name="" link="-1" crc="49505675">
             <param name="Name" value="Source_1" />
             <param name="Type" value="6" />
@@ -44588,7 +44591,7 @@ $out = mtb_return_value
           <vertex x="108" y="0" />
           <vertex x="108" y="36" />
         </Wire>
-        <User classid="UserCmp" id="906711646" name="master:source_1" x="738" y="234" w="55" h="80" z="3120" orient="1" defn="master:source_1" link="-1" q="4" disable="false">
+        <User classid="UserCmp" id="906711646" name="master:source_1" x="738" y="234" w="56" h="80" z="3120" orient="1" defn="master:source_1" link="-1" q="4" disable="false">
           <paramlist name="" link="-1" crc="49505675">
             <param name="Name" value="Source_1" />
             <param name="Type" value="6" />
@@ -44635,7 +44638,7 @@ $out = mtb_return_value
             <param name="Name" value="vsc_vcref_kv" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="1665064932" x="1242" y="1044" w="82" h="91" z="2390" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="1665064932" x="1242" y="1044" w="82" h="90" z="2390" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="1" />
             <param name="DPath" value="1" />
@@ -44784,7 +44787,7 @@ $out = mtb_return_value
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="2133353846" x="1116" y="1044" w="82" h="91" z="2380" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="2133353846" x="1116" y="1044" w="82" h="90" z="2380" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="1" />
             <param name="DPath" value="1" />
@@ -44810,7 +44813,7 @@ $out = mtb_return_value
             <param name="Name" value="" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:time-sig" id="95529542" x="1332" y="1260" w="76" h="22" z="890" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:time-sig" id="95529542" x="1332" y="1260" w="76" h="21" z="890" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="20913136" />
         </User>
         <User classid="UserCmp" defn="master:sandhdefn" id="1727763968" x="1314" y="1728" w="80" h="65" z="2350" orient="0" link="-1" layer="" q="4" disable="false">
@@ -44837,7 +44840,7 @@ $out = mtb_return_value
             <param name="funcArg" value="(RVOUT)" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="532545935" x="1188" y="414" w="82" h="91" z="2420" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="532545935" x="1188" y="414" w="82" h="90" z="2420" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="2" />
             <param name="DPath" value="1" />
@@ -44900,7 +44903,7 @@ $out = mtb_return_value
             <param name="rank" value="mtb_rank" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="1722404738" x="1314" y="1044" w="80" h="63" z="2400" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="1722404738" x="1314" y="1044" w="80" h="64" z="2400" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -45022,21 +45025,21 @@ $out = mtb_return_value
             <param name="Name" value="mtb_c_pn" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1168489626" x="1710" y="306" w="80" h="59" z="140" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1168489626" x="1710" y="306" w="80" h="60" z="140" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="446034144" x="1782" y="306" w="80" h="59" z="1520" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="446034144" x="1782" y="306" w="80" h="60" z="1520" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="1134042110" x="1818" y="342" w="76" h="22" z="200" orient="2" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1134042110" x="1818" y="342" w="76" h="21" z="200" orient="2" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="10" />
@@ -45117,7 +45120,7 @@ $out = mtb_return_value
             <param name="Name" value="c_vbase_3" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="412866847" x="216" y="540" w="80" h="59" z="2140" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="412866847" x="216" y="540" w="80" h="60" z="2140" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="3" />
             <param name="Name" value="" />
@@ -45129,7 +45132,7 @@ $out = mtb_return_value
             <param name="Name" value="meas_vgpoc_pu_3" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="543330723" x="216" y="684" w="80" h="59" z="300" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="543330723" x="216" y="684" w="80" h="60" z="300" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="3" />
             <param name="Name" value="" />
@@ -45153,7 +45156,7 @@ $out = mtb_return_value
             <param name="Name" value="c_vbase_3" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="67036543" x="234" y="828" w="80" h="59" z="1620" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="67036543" x="234" y="828" w="80" h="60" z="1620" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="3" />
             <param name="Name" value="" />
@@ -45170,7 +45173,7 @@ $out = mtb_return_value
             <param name="Name" value="c_ibase_3" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1893255306" x="558" y="756" w="80" h="59" z="400" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1893255306" x="558" y="756" w="80" h="60" z="400" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -45187,7 +45190,7 @@ $out = mtb_return_value
             <param name="Name" value="meas_ppoc_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1582499674" x="558" y="612" w="80" h="59" z="290" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1582499674" x="558" y="612" w="80" h="60" z="290" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -45341,7 +45344,7 @@ $out = mtb_return_value
             <param name="Name" value="mtb_rank" />
           </paramlist>
         </User>
-        <User classid="UserCmp" name="master:rank_number" id="1823972439" x="2016" y="522" w="75" h="22" z="310" orient="0" defn="master:rank_number" link="-1" layer="" q="4" disable="false">
+        <User classid="UserCmp" name="master:rank_number" id="1823972439" x="2016" y="522" w="75" h="21" z="310" orient="0" defn="master:rank_number" link="-1" layer="" q="4" disable="false">
           <paramlist link="-1" name="" crc="119362076" />
         </User>
         <User classid="UserCmp" id="1752432171" name="MTB:MTBsignal" x="1728" y="774" w="127" h="62" z="440" orient="0" defn="MTB:MTBsignal" link="-1" q="4" disable="false">
@@ -45384,7 +45387,7 @@ $out = mtb_return_value
             <param name="Name" value="out_pmode" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1166136372" x="180" y="576" w="80" h="59" z="1560" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1166136372" x="180" y="576" w="80" h="60" z="1560" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="3" />
             <param name="Name" value="" />
@@ -45777,7 +45780,7 @@ $out = mtb_return_value
             <param name="Name" value="par_mode" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="1338900751" x="2196" y="558" w="82" h="91" z="340" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="1338900751" x="2196" y="558" w="82" h="90" z="340" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="1" />
             <param name="DPath" value="0" />
@@ -46243,7 +46246,7 @@ $out = mtb_return_value
             <param name="Name" value="mtb_c_vbase" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="47486926" x="2034" y="306" w="80" h="59" z="160" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="47486926" x="2034" y="306" w="80" h="60" z="160" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -46956,7 +46959,7 @@ $out = mtb_return_value
           <vertex x="0" y="0" />
           <vertex x="36" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:realpole" id="2054025338" x="1062" y="954" w="80" h="37" z="1670" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="2054025338" x="1062" y="954" w="80" h="38" z="1670" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -47016,7 +47019,7 @@ $out = mtb_return_value
             <param name="Name" value="" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="629954809" x="1440" y="630" w="80" h="59" z="2550" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="629954809" x="1440" y="630" w="80" h="60" z="2550" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -47034,7 +47037,7 @@ $out = mtb_return_value
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="158160121" x="1332" y="666" w="76" h="22" z="380" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="158160121" x="1332" y="666" w="76" h="21" z="380" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="10" />
@@ -47115,7 +47118,7 @@ $out = mtb_return_value
             <param name="Name" value="c_vcz" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1265511349" x="2034" y="378" w="80" h="59" z="230" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1265511349" x="2034" y="378" w="80" h="60" z="230" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -47776,7 +47779,7 @@ $out = mtb_return_value
             <param name="Name" value="mtb_s_pref_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" id="1729604179" name="master:pgb" x="1836" y="810" w="101" h="40" z="460" orient="0" defn="master:pgb" link="-1" q="4" disable="false">
+        <User classid="UserCmp" id="1729604179" name="master:pgb" x="1836" y="810" w="101" h="40" z="460" orient="0" defn="master:pgb" link="-1" q="4" disable="true">
           <paramlist name="" link="-1" crc="55341900">
             <param name="Name" value="mtb_s_pref_pu" />
             <param name="Group" value="" />
@@ -47849,14 +47852,14 @@ $out = mtb_return_value
             <param name="Name" value="mtb_c_vbase" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="400188551" x="1368" y="792" w="76" h="22" z="430" orient="2" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="400188551" x="1368" y="792" w="76" h="21" z="430" orient="2" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="9" />
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="1129341062" x="1368" y="720" w="76" h="22" z="410" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1129341062" x="1368" y="720" w="76" h="21" z="410" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="12" />
@@ -47904,7 +47907,7 @@ $out = mtb_return_value
             <param name="Name" value="init_finished" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="864926341" x="990" y="648" w="82" h="91" z="3040" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="864926341" x="990" y="648" w="82" h="90" z="3040" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="0" />
             <param name="DPath" value="0" />
@@ -48028,7 +48031,7 @@ $out = mtb_return_value
             <param name="Name" value="vsc_pos_vrefcalc_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="188395890" x="1332" y="1296" w="80" h="63" z="1790" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="188395890" x="1332" y="1296" w="80" h="64" z="1790" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -48083,7 +48086,7 @@ $out = mtb_return_value
             <param name="Min" value="-2.0" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="1842327146" x="1008" y="1260" w="80" h="63" z="2310" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="1842327146" x="1008" y="1260" w="80" h="64" z="2310" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -48456,7 +48459,7 @@ $out = mtb_return_value
             <param name="CmplxParts" value="0" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="1091655177" x="270" y="1998" w="82" h="91" z="2490" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="1091655177" x="270" y="1998" w="82" h="90" z="2490" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="2" />
             <param name="DPath" value="1" />
@@ -49362,7 +49365,7 @@ $out = mtb_return_value
             <param name="Name" value="init_sgm" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="396902502" x="1458" y="1692" w="82" h="91" z="2370" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="396902502" x="1458" y="1692" w="82" h="90" z="2370" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="0" />
             <param name="DPath" value="1" />
@@ -49601,7 +49604,7 @@ $out = mtb_return_value
             <param name="Name" value="init_iinst" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="387487697" x="1188" y="1494" w="80" h="82" z="2250" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="387487697" x="1188" y="1494" w="80" h="83" z="2250" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -49677,7 +49680,7 @@ $out = mtb_return_value
           <vertex x="0" y="0" />
           <vertex x="18" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:select" id="412067512" x="1458" y="1836" w="82" h="91" z="2290" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="412067512" x="1458" y="1836" w="82" h="90" z="2290" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="0" />
             <param name="DPath" value="1" />
@@ -49718,7 +49721,7 @@ $out = mtb_return_value
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1542819169" x="1224" y="1728" w="80" h="59" z="2340" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1542819169" x="1224" y="1728" w="80" h="60" z="2340" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -49734,14 +49737,14 @@ $out = mtb_return_value
             <param name="Name" value="mtb_c_vbase" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="2134845883" x="1746" y="216" w="80" h="59" z="1490" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="2134845883" x="1746" y="216" w="80" h="60" z="1490" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="1649271207" x="1710" y="252" w="76" h="22" z="100" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1649271207" x="1710" y="252" w="76" h="21" z="100" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="10" />
@@ -49774,7 +49777,7 @@ $out = mtb_return_value
             <param name="Name" value="" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:realpole" id="1590105779" x="972" y="1494" w="80" h="37" z="930" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="1590105779" x="972" y="1494" w="80" h="38" z="930" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -49806,7 +49809,7 @@ $out = mtb_return_value
           <vertex x="0" y="-54" />
           <vertex x="72" y="-54" />
         </Wire>
-        <User classid="UserCmp" defn="master:realpole" id="1762820846" x="1152" y="1566" w="80" h="37" z="1000" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="1762820846" x="1152" y="1566" w="80" h="38" z="1000" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -49846,7 +49849,7 @@ $out = mtb_return_value
             <param name="Name" value="" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:realpole" id="1986231193" x="1386" y="1728" w="80" h="37" z="2360" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="1986231193" x="1386" y="1728" w="80" h="38" z="2360" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -49860,7 +49863,7 @@ $out = mtb_return_value
             <param name="Name" value="" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:realpole" id="298903624" x="1386" y="1800" w="80" h="37" z="2280" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="298903624" x="1386" y="1800" w="80" h="38" z="2280" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -50086,7 +50089,7 @@ $out = mtb_return_value
             <param name="Name" value="vsc_rg_ctrl_ohm" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="2016067550" x="954" y="1602" w="80" h="63" z="2210" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="2016067550" x="954" y="1602" w="80" h="64" z="2210" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -50179,7 +50182,7 @@ $out = mtb_return_value
             </Curve>
           </Graph>
         </Frame>
-        <User classid="UserCmp" defn="master:maxmin" id="205828810" x="2160" y="126" w="80" h="59" z="1450" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:maxmin" id="205828810" x="2160" y="126" w="80" h="60" z="1450" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="103689034">
             <param name="DPath" value="1" />
             <param name="Type" value="1" />
@@ -50214,7 +50217,7 @@ $out = mtb_return_value
           <vertex x="36" y="0" />
           <vertex x="36" y="54" />
         </Wire>
-        <User classid="UserCmp" defn="master:realpole" id="1918108541" x="1404" y="918" w="80" h="37" z="510" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="1918108541" x="1404" y="918" w="80" h="38" z="510" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -50455,7 +50458,7 @@ $out = mtb_return_value
             <param name="hl_color_adv" value="#FFFFFF00" />
             <param name="bdr_color_adv" value="#FFFFFFFF" />
           </paramlist><![CDATA[Correct POC power calculations]]></Sticky>
-        <User classid="UserCmp" defn="master:fft" id="1745122028" x="954" y="2538" w="152" h="153" z="1290" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:fft" id="1745122028" x="954" y="2538" w="152" h="152" z="1290" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="130147732">
             <param name="Type" value="4" />
             <param name="Size" value="0" />
@@ -50578,7 +50581,7 @@ $out = mtb_return_value
           <vertex x="0" y="0" />
           <vertex x="-36" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:fft" id="563285348" x="954" y="2790" w="152" h="153" z="1320" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:fft" id="563285348" x="954" y="2790" w="152" h="152" z="1320" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="130147732">
             <param name="Type" value="4" />
             <param name="Size" value="0" />
@@ -50938,7 +50941,7 @@ $out = mtb_return_value
             <param name="Name" value="" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="1671205010" x="1368" y="2376" w="80" h="63" z="1890" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="1671205010" x="1368" y="2376" w="80" h="64" z="1890" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -51019,7 +51022,7 @@ $out = mtb_return_value
             <param name="Name" value="" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="305469879" x="1746" y="2376" w="80" h="63" z="1910" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="305469879" x="1746" y="2376" w="80" h="64" z="1910" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -51100,7 +51103,7 @@ $out = mtb_return_value
             <param name="Name" value="" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="620072344" x="2124" y="2376" w="80" h="63" z="1940" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="620072344" x="2124" y="2376" w="80" h="64" z="1940" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -51189,7 +51192,7 @@ $out = mtb_return_value
             <param name="Name" value="P_pos_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="213760340" x="1476" y="2502" w="80" h="59" z="1990" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="213760340" x="1476" y="2502" w="80" h="60" z="1990" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="7" />
             <param name="Name" value="" />
@@ -51236,7 +51239,7 @@ $out = mtb_return_value
             <param name="Name" value="Q_pos_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1738335932" x="1476" y="2592" w="80" h="59" z="2050" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1738335932" x="1476" y="2592" w="80" h="60" z="2050" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="7" />
             <param name="Name" value="" />
@@ -51283,7 +51286,7 @@ $out = mtb_return_value
             <param name="Name" value="P_neg_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="483986156" x="1854" y="2502" w="80" h="59" z="2010" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="483986156" x="1854" y="2502" w="80" h="60" z="2010" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="7" />
             <param name="Name" value="" />
@@ -51330,7 +51333,7 @@ $out = mtb_return_value
             <param name="Name" value="Q_neg_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="886626886" x="1854" y="2592" w="80" h="59" z="2070" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="886626886" x="1854" y="2592" w="80" h="60" z="2070" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="7" />
             <param name="Name" value="" />
@@ -51393,7 +51396,7 @@ $out = mtb_return_value
             <param name="Name" value="P_zero_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1209368945" x="2232" y="2502" w="80" h="59" z="2030" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1209368945" x="2232" y="2502" w="80" h="60" z="2030" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="7" />
             <param name="Name" value="" />
@@ -51435,7 +51438,7 @@ $out = mtb_return_value
             <param name="Name" value="Q_zero_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1299160041" x="2232" y="2592" w="80" h="59" z="2090" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1299160041" x="2232" y="2592" w="80" h="60" z="2090" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="7" />
             <param name="Name" value="" />
@@ -51468,7 +51471,7 @@ $out = mtb_return_value
           <vertex x="0" y="0" />
           <vertex x="18" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:sumjct" id="116629345" x="1926" y="2736" w="80" h="82" z="2120" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="116629345" x="1926" y="2736" w="80" h="83" z="2120" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -52027,7 +52030,7 @@ $out = mtb_return_value
             </Curve>
           </Graph>
         </Frame>
-        <User classid="UserCmp" defn="master:sumjct" id="715869853" x="1350" y="2736" w="80" h="82" z="2100" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="715869853" x="1350" y="2736" w="80" h="83" z="2100" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -52804,7 +52807,7 @@ $out = mtb_return_value
         </Wire>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="PLL_ADAPTIVE" build="" crc="10561628" view="false" instances="0" date="1769421827" id="1042010625" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="PLL_ADAPTIVE" build="" crc="23662772" view="false" instances="0" date="1775836563" id="1042010625" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="" />
       </paramlist>
@@ -53208,7 +53211,7 @@ $out = mtb_return_value
             <param name="Name" value="fpll" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="896591672" x="612" y="72" w="80" h="59" z="410" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="896591672" x="612" y="72" w="80" h="60" z="410" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -53246,7 +53249,7 @@ $out = mtb_return_value
           <vertex x="0" y="72" />
           <vertex x="18" y="72" />
         </Wire>
-        <User classid="UserCmp" defn="master:div" id="1150353565" x="558" y="144" w="80" h="59" z="460" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1150353565" x="558" y="144" w="80" h="60" z="460" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -53530,7 +53533,7 @@ $out = mtb_return_value
           <vertex x="0" y="0" />
           <vertex x="18" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:sumjct" id="728493069" x="1044" y="522" w="80" h="63" z="980" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="728493069" x="1044" y="522" w="80" h="64" z="980" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -53581,7 +53584,7 @@ $out = mtb_return_value
             <param name="Name" value="Vd" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="422406249" x="1044" y="630" w="80" h="63" z="800" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="422406249" x="1044" y="630" w="80" h="64" z="800" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -53688,7 +53691,7 @@ $out = mtb_return_value
           <vertex x="-36" y="0" />
           <vertex x="-36" y="72" />
         </Wire>
-        <User classid="UserCmp" defn="master:sumjct" id="1411607954" x="1386" y="558" w="80" h="82" z="840" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="1411607954" x="1386" y="558" w="80" h="83" z="840" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -53985,7 +53988,7 @@ $out = mtb_return_value
           <vertex x="0" y="0" />
           <vertex x="54" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:sumjct" id="712767619" x="1062" y="846" w="80" h="63" z="960" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="712767619" x="1062" y="846" w="80" h="64" z="960" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -54036,7 +54039,7 @@ $out = mtb_return_value
             <param name="Name" value="Id" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="377092143" x="1062" y="954" w="80" h="63" z="940" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="377092143" x="1062" y="954" w="80" h="64" z="940" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -54196,7 +54199,7 @@ $out = mtb_return_value
             <param name="Name" value="I_beta" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="443577092" x="504" y="360" w="80" h="82" z="600" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="443577092" x="504" y="360" w="80" h="83" z="600" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -54257,14 +54260,14 @@ $out = mtb_return_value
           <vertex x="0" y="-36" />
           <vertex x="-54" y="-36" />
         </Wire>
-        <User classid="UserCmp" defn="master:emtconst" id="1827919581" x="612" y="396" w="76" h="22" z="180" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1827919581" x="612" y="396" w="76" h="21" z="180" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="13" />
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="1671004907" x="450" y="540" w="80" h="82" z="630" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="1671004907" x="450" y="540" w="80" h="83" z="630" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -54324,7 +54327,7 @@ $out = mtb_return_value
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="1245349794" x="540" y="396" w="76" h="22" z="160" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1245349794" x="540" y="396" w="76" h="21" z="160" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="9" />
@@ -54398,14 +54401,14 @@ $out = mtb_return_value
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="514787364" x="486" y="576" w="76" h="22" z="240" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="514787364" x="486" y="576" w="76" h="21" z="240" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="9" />
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="1662459789" x="504" y="720" w="80" h="82" z="660" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="1662459789" x="504" y="720" w="80" h="83" z="660" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -54466,14 +54469,14 @@ $out = mtb_return_value
           <vertex x="0" y="-36" />
           <vertex x="-54" y="-36" />
         </Wire>
-        <User classid="UserCmp" defn="master:emtconst" id="469515031" x="612" y="756" w="76" h="22" z="300" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="469515031" x="612" y="756" w="76" h="21" z="300" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="13" />
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="1984110277" x="450" y="918" w="80" h="82" z="690" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="1984110277" x="450" y="918" w="80" h="83" z="690" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -54533,7 +54536,7 @@ $out = mtb_return_value
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="596423195" x="540" y="756" w="76" h="22" z="290" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="596423195" x="540" y="756" w="76" h="21" z="290" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="9" />
@@ -54607,7 +54610,7 @@ $out = mtb_return_value
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="662059335" x="486" y="954" w="76" h="22" z="330" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="662059335" x="486" y="954" w="76" h="21" z="330" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="9" />
@@ -54625,7 +54628,7 @@ $out = mtb_return_value
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="1153657000" x="558" y="576" w="76" h="22" z="250" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1153657000" x="558" y="576" w="76" h="21" z="250" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="12" />
@@ -54639,7 +54642,7 @@ $out = mtb_return_value
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="750881358" x="558" y="954" w="76" h="22" z="340" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="750881358" x="558" y="954" w="76" h="21" z="340" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="12" />
@@ -54651,7 +54654,7 @@ $out = mtb_return_value
             <param name="Name" value="w0_filt_ref" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:realpole" id="924668843" x="954" y="306" w="80" h="37" z="740" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="924668843" x="954" y="306" w="80" h="38" z="740" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -54675,7 +54678,7 @@ $out = mtb_return_value
             <param name="Name" value="sequence" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="417815948" x="126" y="414" w="82" h="91" z="490" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="417815948" x="126" y="414" w="82" h="90" z="490" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="1" />
             <param name="DPath" value="1" />
@@ -54937,7 +54940,7 @@ $out = mtb_return_value
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="98769705" x="1134" y="342" w="76" h="22" z="170" orient="2" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="98769705" x="1134" y="342" w="76" h="21" z="170" orient="2" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="1" />
@@ -54964,14 +54967,14 @@ $out = mtb_return_value
             <param name="Min" value="-2.0" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1924859728" x="1098" y="306" w="80" h="59" z="1040" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1924859728" x="1098" y="306" w="80" h="60" z="1040" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="1809142488" x="1458" y="414" w="76" h="22" z="220" orient="2" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1809142488" x="1458" y="414" w="76" h="21" z="220" orient="2" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="1" />
@@ -54998,14 +55001,14 @@ $out = mtb_return_value
           <vertex x="-18" y="0" />
           <vertex x="-18" y="-72" />
         </Wire>
-        <User classid="UserCmp" defn="master:div" id="853660687" x="1476" y="630" w="80" h="59" z="1020" orient="0" link="-1" q="4" disable="true">
+        <User classid="UserCmp" defn="master:div" id="853660687" x="1476" y="630" w="80" h="60" z="1020" orient="0" link="-1" q="4" disable="true">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="798648628" x="1512" y="666" w="76" h="22" z="300" orient="2" link="-1" q="4" disable="true">
+        <User classid="UserCmp" defn="master:emtconst" id="798648628" x="1512" y="666" w="76" h="21" z="300" orient="2" link="-1" q="4" disable="true">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="1" />
@@ -55017,7 +55020,7 @@ $out = mtb_return_value
             <param name="Name" value="w0" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="89400606" x="792" y="54" w="80" h="82" z="720" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="89400606" x="792" y="54" w="80" h="83" z="720" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -55760,7 +55763,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
         </Gfx>
       </graphics>
     </Definition>
-    <Definition classid="UserCmpDefn" name="PLL_seq_src" build="" crc="91398720" view="false" instances="0" date="1769421826" id="146087733" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="PLL_seq_src" build="" crc="99126345" view="false" instances="0" date="1775836561" id="146087733" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="" />
       </paramlist>
@@ -56229,7 +56232,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           </paramlist>
         </User>
         <grouping />
-        <User classid="UserCmp" defn="master:realpole" id="629958483" x="558" y="198" w="80" h="37" z="210" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="629958483" x="558" y="198" w="80" h="38" z="210" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -56284,14 +56287,14 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="pll_pos_Vq_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1964033840" x="486" y="198" w="80" h="59" z="80" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1964033840" x="486" y="198" w="80" h="60" z="80" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="1005885098" x="450" y="234" w="76" h="22" z="40" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1005885098" x="450" y="234" w="76" h="21" z="40" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="1" />
@@ -56668,7 +56671,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
         </User>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="PLL_ADAPTIVE_src" build="" crc="30002298" view="false" instances="0" date="1769421826" id="1299688213" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="PLL_ADAPTIVE_src" build="" crc="15585498" view="false" instances="0" date="1775836561" id="1299688213" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="" />
       </paramlist>
@@ -57072,7 +57075,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="fpll" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="463639116" x="612" y="72" w="80" h="59" z="410" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="463639116" x="612" y="72" w="80" h="60" z="410" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -57110,7 +57113,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="72" />
           <vertex x="18" y="72" />
         </Wire>
-        <User classid="UserCmp" defn="master:div" id="1895342138" x="558" y="144" w="80" h="59" z="460" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1895342138" x="558" y="144" w="80" h="60" z="460" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -57394,7 +57397,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="0" />
           <vertex x="18" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:sumjct" id="885981180" x="1044" y="522" w="80" h="63" z="980" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="885981180" x="1044" y="522" w="80" h="64" z="980" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -57445,7 +57448,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="Vd" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="1696078665" x="1044" y="630" w="80" h="63" z="800" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="1696078665" x="1044" y="630" w="80" h="64" z="800" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -57552,7 +57555,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="-36" y="0" />
           <vertex x="-36" y="72" />
         </Wire>
-        <User classid="UserCmp" defn="master:sumjct" id="2043483942" x="1386" y="558" w="80" h="82" z="840" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="2043483942" x="1386" y="558" w="80" h="83" z="840" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -57849,7 +57852,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="0" />
           <vertex x="54" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:sumjct" id="11752867" x="1062" y="846" w="80" h="63" z="960" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="11752867" x="1062" y="846" w="80" h="64" z="960" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -57900,7 +57903,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="Id" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="218607553" x="1062" y="954" w="80" h="63" z="940" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="218607553" x="1062" y="954" w="80" h="64" z="940" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -58060,7 +58063,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="I_beta" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="915664859" x="504" y="360" w="80" h="82" z="600" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="915664859" x="504" y="360" w="80" h="83" z="600" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -58121,14 +58124,14 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="-36" />
           <vertex x="-54" y="-36" />
         </Wire>
-        <User classid="UserCmp" defn="master:emtconst" id="52606523" x="612" y="396" w="76" h="22" z="180" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="52606523" x="612" y="396" w="76" h="21" z="180" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="13" />
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="2091011091" x="450" y="540" w="80" h="82" z="630" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="2091011091" x="450" y="540" w="80" h="83" z="630" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -58188,7 +58191,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="1121475536" x="540" y="396" w="76" h="22" z="160" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1121475536" x="540" y="396" w="76" h="21" z="160" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="9" />
@@ -58262,14 +58265,14 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="996970041" x="486" y="576" w="76" h="22" z="240" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="996970041" x="486" y="576" w="76" h="21" z="240" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="9" />
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="1322927686" x="504" y="720" w="80" h="82" z="660" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="1322927686" x="504" y="720" w="80" h="83" z="660" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -58330,14 +58333,14 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="-36" />
           <vertex x="-54" y="-36" />
         </Wire>
-        <User classid="UserCmp" defn="master:emtconst" id="1726683645" x="612" y="756" w="76" h="22" z="300" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1726683645" x="612" y="756" w="76" h="21" z="300" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="13" />
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="227536708" x="450" y="918" w="80" h="82" z="690" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="227536708" x="450" y="918" w="80" h="83" z="690" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -58397,7 +58400,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="1624054914" x="540" y="756" w="76" h="22" z="290" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1624054914" x="540" y="756" w="76" h="21" z="290" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="9" />
@@ -58471,7 +58474,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="250123628" x="486" y="954" w="76" h="22" z="330" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="250123628" x="486" y="954" w="76" h="21" z="330" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="9" />
@@ -58489,7 +58492,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="1162720854" x="558" y="576" w="76" h="22" z="250" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1162720854" x="558" y="576" w="76" h="21" z="250" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="12" />
@@ -58503,7 +58506,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="718078529" x="558" y="954" w="76" h="22" z="340" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="718078529" x="558" y="954" w="76" h="21" z="340" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="12" />
@@ -58515,7 +58518,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="w0_filt_ref" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:realpole" id="1959145186" x="954" y="306" w="80" h="37" z="740" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="1959145186" x="954" y="306" w="80" h="38" z="740" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -58539,7 +58542,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="sequence" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="966483624" x="126" y="414" w="82" h="91" z="490" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="966483624" x="126" y="414" w="82" h="90" z="490" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="1" />
             <param name="DPath" value="1" />
@@ -58801,7 +58804,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="2123506973" x="1134" y="342" w="76" h="22" z="170" orient="2" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="2123506973" x="1134" y="342" w="76" h="21" z="170" orient="2" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="1" />
@@ -58828,14 +58831,14 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Min" value="-2.0" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1260429300" x="1098" y="306" w="80" h="59" z="1040" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1260429300" x="1098" y="306" w="80" h="60" z="1040" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="2134492611" x="1458" y="414" w="76" h="22" z="220" orient="2" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="2134492611" x="1458" y="414" w="76" h="21" z="220" orient="2" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="1" />
@@ -58862,14 +58865,14 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="-18" y="0" />
           <vertex x="-18" y="-72" />
         </Wire>
-        <User classid="UserCmp" defn="master:div" id="877483476" x="1476" y="630" w="80" h="59" z="1020" orient="0" link="-1" q="4" disable="true">
+        <User classid="UserCmp" defn="master:div" id="877483476" x="1476" y="630" w="80" h="60" z="1020" orient="0" link="-1" q="4" disable="true">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="228265929" x="1512" y="666" w="76" h="22" z="300" orient="2" link="-1" q="4" disable="true">
+        <User classid="UserCmp" defn="master:emtconst" id="228265929" x="1512" y="666" w="76" h="21" z="300" orient="2" link="-1" q="4" disable="true">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="1" />
@@ -58881,7 +58884,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="w0" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="1355323972" x="792" y="54" w="80" h="82" z="720" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="1355323972" x="792" y="54" w="80" h="83" z="720" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -59624,7 +59627,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
         </Gfx>
       </graphics>
     </Definition>
-    <Definition classid="UserCmpDefn" name="MTB_1" build="" crc="7350038" view="false" instances="0" date="1725193840" id="1986668948" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="MTB_1" build="" crc="109757834" view="false" instances="0" date="1725193840" id="1986668948" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="" />
       </paramlist>
@@ -60017,7 +60020,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:time-sig" id="1616319787" x="1728" y="612" w="76" h="22" z="330" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:time-sig" id="1616319787" x="1728" y="612" w="76" h="21" z="330" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="20913136" />
         </User>
         <User classid="UserCmp" defn="master:compar" id="449408996" x="1782" y="576" w="85" h="64" z="1310" orient="0" link="-1" layer="" q="4" disable="false">
@@ -60037,7 +60040,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="0" />
           <vertex x="18" y="0" />
         </Wire>
-        <User classid="UserCmp" id="1763996168" name="master:source_1" x="522" y="234" w="55" h="80" z="2570" orient="1" defn="master:source_1" link="-1" q="4" disable="false">
+        <User classid="UserCmp" id="1763996168" name="master:source_1" x="522" y="234" w="56" h="80" z="2570" orient="1" defn="master:source_1" link="-1" q="4" disable="false">
           <paramlist name="" link="-1" crc="49505675">
             <param name="Name" value="Source_1" />
             <param name="Type" value="6" />
@@ -60069,7 +60072,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Com" value="0" />
           </paramlist>
         </User>
-        <User classid="UserCmp" id="2066877597" name="master:source_1" x="630" y="234" w="55" h="80" z="2560" orient="1" defn="master:source_1" link="-1" q="4" disable="false">
+        <User classid="UserCmp" id="2066877597" name="master:source_1" x="630" y="234" w="56" h="80" z="2560" orient="1" defn="master:source_1" link="-1" q="4" disable="false">
           <paramlist name="" link="-1" crc="49505675">
             <param name="Name" value="Source_1" />
             <param name="Type" value="6" />
@@ -60111,7 +60114,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="108" y="0" />
           <vertex x="108" y="36" />
         </Wire>
-        <User classid="UserCmp" id="138520774" name="master:source_1" x="738" y="234" w="55" h="80" z="2540" orient="1" defn="master:source_1" link="-1" q="4" disable="false">
+        <User classid="UserCmp" id="138520774" name="master:source_1" x="738" y="234" w="56" h="80" z="2540" orient="1" defn="master:source_1" link="-1" q="4" disable="false">
           <paramlist name="" link="-1" crc="49505675">
             <param name="Name" value="Source_1" />
             <param name="Type" value="6" />
@@ -60158,7 +60161,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="vsc_vcref_kv" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="1094796376" x="1224" y="972" w="82" h="91" z="1990" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="1094796376" x="1224" y="972" w="82" h="90" z="1990" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="1" />
             <param name="DPath" value="1" />
@@ -60307,7 +60310,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="1357727774" x="1098" y="972" w="82" h="91" z="1980" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="1357727774" x="1098" y="972" w="82" h="90" z="1980" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="1" />
             <param name="DPath" value="1" />
@@ -60333,7 +60336,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:time-sig" id="906513402" x="1314" y="1170" w="76" h="22" z="700" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:time-sig" id="906513402" x="1314" y="1170" w="76" h="21" z="700" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="20913136" />
         </User>
         <User classid="UserCmp" id="155518597" name="master:datalabel" x="1458" y="1368" w="118" h="23" z="1" orient="0" defn="master:datalabel" link="-1" q="4" disable="false">
@@ -60370,7 +60373,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="funcArg" value="(RVOUT)" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="918503451" x="1188" y="414" w="82" h="91" z="2020" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="918503451" x="1188" y="414" w="82" h="90" z="2020" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="2" />
             <param name="DPath" value="1" />
@@ -60433,7 +60436,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="rank" value="mtb_rank" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="43982662" x="1296" y="972" w="80" h="63" z="2000" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="43982662" x="1296" y="972" w="80" h="64" z="2000" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -60555,21 +60558,21 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="mtb_c_pn" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="47104577" x="1710" y="306" w="80" h="59" z="90" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="47104577" x="1710" y="306" w="80" h="60" z="90" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="581780332" x="1782" y="306" w="80" h="59" z="1220" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="581780332" x="1782" y="306" w="80" h="60" z="1220" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="490099190" x="1818" y="342" w="76" h="22" z="140" orient="2" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="490099190" x="1818" y="342" w="76" h="21" z="140" orient="2" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="10" />
@@ -60657,7 +60660,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="c_vbase_3" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1873405810" x="216" y="540" w="80" h="59" z="1630" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1873405810" x="216" y="540" w="80" h="60" z="1630" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="3" />
             <param name="Name" value="" />
@@ -60669,7 +60672,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="meas_vgpoc_pu_3" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="415719483" x="216" y="684" w="80" h="59" z="270" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="415719483" x="216" y="684" w="80" h="60" z="270" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="3" />
             <param name="Name" value="" />
@@ -60693,7 +60696,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="c_vbase_3" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="72600357" x="234" y="828" w="80" h="59" z="1380" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="72600357" x="234" y="828" w="80" h="60" z="1380" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="3" />
             <param name="Name" value="" />
@@ -60710,7 +60713,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="c_ibase_3" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="840481348" x="558" y="756" w="80" h="59" z="340" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="840481348" x="558" y="756" w="80" h="60" z="340" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -60727,7 +60730,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="meas_ppoc_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1628948891" x="558" y="612" w="80" h="59" z="230" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1628948891" x="558" y="612" w="80" h="60" z="230" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -60881,7 +60884,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="mtb_rank" />
           </paramlist>
         </User>
-        <User classid="UserCmp" name="master:rank_number" id="1957751652" x="2016" y="522" w="75" h="22" z="280" orient="0" defn="master:rank_number" link="-1" layer="" q="4" disable="false">
+        <User classid="UserCmp" name="master:rank_number" id="1957751652" x="2016" y="522" w="75" h="21" z="280" orient="0" defn="master:rank_number" link="-1" layer="" q="4" disable="false">
           <paramlist link="-1" name="" crc="119362076" />
         </User>
         <User classid="UserCmp" id="817963527" name="MTB:MTBsignal" x="1728" y="774" w="127" h="62" z="400" orient="0" defn="MTB:MTBsignal" link="-1" q="4" disable="false">
@@ -60924,7 +60927,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="out_pmode" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="2125877072" x="180" y="576" w="80" h="59" z="1260" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="2125877072" x="180" y="576" w="80" h="60" z="1260" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="3" />
             <param name="Name" value="" />
@@ -61317,7 +61320,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="par_mode" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="1264090457" x="2196" y="558" w="82" h="91" z="300" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="1264090457" x="2196" y="558" w="82" h="90" z="300" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="1" />
             <param name="DPath" value="0" />
@@ -61393,7 +61396,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="mtb_t_vmode" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:maxmin" id="700728967" x="1134" y="1818" w="80" h="59" z="1720" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:maxmin" id="700728967" x="1134" y="1818" w="80" h="60" z="1720" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="103689034">
             <param name="DPath" value="1" />
             <param name="Type" value="1" />
@@ -61761,7 +61764,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="39621390" x="1062" y="1818" w="80" h="59" z="1710" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="39621390" x="1062" y="1818" w="80" h="60" z="1710" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -61813,14 +61816,14 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="c_vcz" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="902113197" x="918" y="1818" w="80" h="59" z="1690" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="902113197" x="918" y="1818" w="80" h="60" z="1690" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="274168924" x="1404" y="1854" w="76" h="22" z="1020" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="274168924" x="1404" y="1854" w="76" h="21" z="1020" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="1" />
@@ -61831,14 +61834,14 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="0" />
           <vertex x="36" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:div" id="1485098752" x="1368" y="1818" w="80" h="59" z="2100" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1485098752" x="1368" y="1818" w="80" h="60" z="2100" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="660351627" x="1440" y="1818" w="80" h="59" z="2200" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="660351627" x="1440" y="1818" w="80" h="60" z="2200" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -61854,7 +61857,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="0" />
           <vertex x="18" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:div" id="77895462" x="918" y="2016" w="80" h="59" z="1590" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="77895462" x="918" y="2016" w="80" h="60" z="1590" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -61877,7 +61880,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="0" />
           <vertex x="36" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:maxmin" id="822633495" x="990" y="2016" w="80" h="59" z="2180" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:maxmin" id="822633495" x="990" y="2016" w="80" h="60" z="2180" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="103689034">
             <param name="DPath" value="1" />
             <param name="Type" value="1" />
@@ -61916,7 +61919,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="0" />
           <vertex x="36" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:maxmin" id="1768013492" x="1476" y="2016" w="80" h="59" z="2170" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:maxmin" id="1768013492" x="1476" y="2016" w="80" h="60" z="2170" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="103689034">
             <param name="DPath" value="1" />
             <param name="Type" value="1" />
@@ -61942,14 +61945,14 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="vsc_ln_h" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="912108703" x="1296" y="2016" w="80" h="59" z="1610" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="912108703" x="1296" y="2016" w="80" h="60" z="1610" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="67443316" x="1224" y="2016" w="80" h="59" z="1600" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="67443316" x="1224" y="2016" w="80" h="60" z="1600" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -61963,7 +61966,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="2084227047" x="1188" y="2052" w="76" h="22" z="1070" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="2084227047" x="1188" y="2052" w="76" h="21" z="1070" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="1" />
@@ -61984,7 +61987,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="mtb_c_vbase" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="205480087" x="2034" y="306" w="80" h="59" z="110" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="205480087" x="2034" y="306" w="80" h="60" z="110" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -62697,7 +62700,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="0" />
           <vertex x="36" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:realpole" id="1526517540" x="1098" y="882" w="80" h="37" z="1390" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="1526517540" x="1098" y="882" w="80" h="38" z="1390" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -62768,7 +62771,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1526727815" x="1080" y="756" w="80" h="59" z="2160" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1526727815" x="1080" y="756" w="80" h="60" z="2160" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -62786,7 +62789,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="1472412777" x="972" y="792" w="76" h="22" z="380" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1472412777" x="972" y="792" w="76" h="21" z="380" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="10" />
@@ -62827,7 +62830,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="mtb_t_r0_ohm" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="948614119" x="1404" y="2016" w="80" h="59" z="1620" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="948614119" x="1404" y="2016" w="80" h="60" z="1620" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -62893,7 +62896,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="c_vcz" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="711286277" x="2034" y="378" w="80" h="59" z="180" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="711286277" x="2034" y="378" w="80" h="60" z="180" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -63210,7 +63213,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="0" />
           <vertex x="108" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:maxmin" id="822780445" x="918" y="1890" w="59" h="80" z="1560" orient="5" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:maxmin" id="822780445" x="918" y="1890" w="60" h="80" z="1560" orient="5" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="103689034">
             <param name="DPath" value="1" />
             <param name="Type" value="1" />
@@ -63674,14 +63677,14 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="mtb_c_vbase" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="1661398678" x="1476" y="702" w="76" h="22" z="370" orient="2" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="1661398678" x="1476" y="702" w="76" h="21" z="370" orient="2" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="9" />
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:emtconst" id="559021728" x="1476" y="630" w="76" h="22" z="310" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:emtconst" id="559021728" x="1476" y="630" w="76" h="21" z="310" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="116269466">
             <param name="Name" value="" />
             <param name="Value" value="12" />
@@ -63729,7 +63732,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="init_finished" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="1137514803" x="990" y="612" w="82" h="91" z="1740" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="1137514803" x="990" y="612" w="82" h="90" z="1740" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="0" />
             <param name="DPath" value="0" />
@@ -63850,7 +63853,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="915194670" x="990" y="1422" w="80" h="63" z="1880" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="915194670" x="990" y="1422" w="80" h="64" z="1880" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -63888,7 +63891,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="1307026134" x="990" y="1458" w="80" h="63" z="1910" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="1307026134" x="990" y="1458" w="80" h="64" z="1910" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -63936,7 +63939,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="mtb_c_vbase" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1327843790" x="1134" y="1404" w="80" h="59" z="1950" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1327843790" x="1134" y="1404" w="80" h="60" z="1950" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -63974,7 +63977,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="vsc_pos_vrefcalc_pu" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="1263864009" x="1314" y="1206" w="80" h="63" z="1470" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="1263864009" x="1314" y="1206" w="80" h="64" z="1470" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -64029,7 +64032,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Min" value="-2.0" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="1334510689" x="990" y="1170" w="80" h="63" z="1940" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="1334510689" x="990" y="1170" w="80" h="64" z="1940" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -64422,7 +64425,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="CmplxParts" value="0" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:select" id="453621113" x="270" y="1998" w="82" h="91" z="2090" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="453621113" x="270" y="1998" w="82" h="90" z="2090" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="2" />
             <param name="DPath" value="1" />
@@ -64615,7 +64618,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="DPath" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1135162933" x="882" y="1692" w="80" h="59" z="1790" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1135162933" x="882" y="1692" w="80" h="60" z="1790" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -64626,7 +64629,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="0" />
           <vertex x="36" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:div" id="1213381357" x="1332" y="1692" w="80" h="59" z="1830" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1213381357" x="1332" y="1692" w="80" h="60" z="1830" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -65430,7 +65433,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="0" />
           <vertex x="54" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:select" id="1692622724" x="1278" y="1368" w="82" h="91" z="1960" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:select" id="1692622724" x="1278" y="1368" w="82" h="90" z="1960" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="108938206">
             <param name="A" value="0" />
             <param name="DPath" value="1" />
@@ -65456,7 +65459,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="0" />
           <vertex x="234" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:realpole" id="2015869244" x="1188" y="1314" w="80" h="37" z="1500" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="2015869244" x="1188" y="1314" w="80" h="38" z="1500" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -65641,7 +65644,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="0" />
           <vertex x="90" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:realpole" id="1117015537" x="1368" y="666" w="80" h="37" z="1350" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:realpole" id="1117015537" x="1368" y="666" w="80" h="38" z="1350" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="96177319">
             <param name="Limit" value="0" />
             <param name="COM" value="Real_Pole" />
@@ -65804,7 +65807,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="init_v0_kv" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:maxmin" id="1945844553" x="1242" y="1584" w="80" h="59" z="1510" orient="0" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:maxmin" id="1945844553" x="1242" y="1584" w="80" h="60" z="1510" orient="0" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="103689034">
             <param name="DPath" value="1" />
             <param name="Type" value="1" />
@@ -65830,7 +65833,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="init_v0_kv_nz" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1077952107" x="1062" y="1620" w="80" h="59" z="1520" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1077952107" x="1062" y="1620" w="80" h="60" z="1520" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -65842,7 +65845,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Name" value="init_v0_kv_nz" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:sumjct" id="775534981" x="1098" y="1692" w="80" h="63" z="1820" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="775534981" x="1098" y="1692" w="80" h="64" z="1820" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -65896,7 +65899,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
           <vertex x="0" y="0" />
           <vertex x="18" y="0" />
         </Wire>
-        <User classid="UserCmp" defn="master:sumjct" id="741617683" x="1476" y="1692" w="80" h="63" z="1850" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:sumjct" id="741617683" x="1476" y="1692" w="80" h="64" z="1850" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="16672553">
             <param name="DPath" value="1" />
             <param name="A" value="0" />
@@ -65910,7 +65913,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
             <param name="Dim" value="1" />
           </paramlist>
         </User>
-        <User classid="UserCmp" defn="master:div" id="1101374912" x="1440" y="1620" w="80" h="59" z="1530" orient="6" link="-1" q="4" disable="false">
+        <User classid="UserCmp" defn="master:div" id="1101374912" x="1440" y="1620" w="80" h="60" z="1530" orient="6" link="-1" q="4" disable="false">
           <paramlist link="-1" name="" crc="74852640">
             <param name="Dim" value="1" />
             <param name="Name" value="" />
@@ -65972,7 +65975,7 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
     </Resource>
   </List>
   <hierarchy>
-    <call link="737352768" name="MTB:DS" z="-1" view="false" instance="0">
+    <call link="991325826" name="MTB:DS" z="-1" view="false" instance="0">
       <call link="855062775" name="MTB:Main" z="-1" view="true" instance="0">
         <call link="2118952145" name="MTB:MTB" z="-1" view="false" instance="0">
           <call link="168397858" name="MTB:ThreePhaseCtrl" z="2410" view="false" instance="0" />
