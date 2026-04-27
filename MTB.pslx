@@ -23,7 +23,7 @@
     <param name="Warn" value="0" />
     <param name="Check" value="0" />
     <param name="description" value="" />
-    <param name="revisor" value="PRW, 1777281280" />
+    <param name="revisor" value="PRW, 1777287608" />
     <param name="Debug" value="0" />
     <param name="labels" value="" />
     <param name="Preprocessor" value="" />
@@ -42176,7 +42176,7 @@ endif]]></segment>
         </Wire>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="Main" id="1339999568" group="" url="" version="" build="" crc="46707963" view="false" date="0">
+    <Definition classid="UserCmpDefn" name="Main" id="1339999568" group="" url="" version="" build="" crc="73822884" view="false" date="0">
       <paramlist name="">
         <param name="Description" value="" />
       </paramlist>
@@ -42470,7 +42470,7 @@ endif]]></segment>
             <param name="Name" value="PPC_P3_mode" />
           </paramlist>
         </User>
-        <Sticky classid="Sticky" id="137467393" x="288" y="612" w="576" h="234" colors="0, 15792890">
+        <Sticky classid="Sticky" id="137467393" x="288" y="612" w="576" h="252" colors="0, 15792890">
           <paramlist>
             <param name="full_font" value="Tahoma, 12world" />
             <param name="align" value="0" />
@@ -42483,17 +42483,18 @@ endif]]></segment>
             <param name="font" value="1" />
             <param name="fg_color" value="0" />
             <param name="bg_color" value="15792890" />
-          </paramlist><![CDATA[This "unit measurement" object can be used to measure PLL and FFT quantities at arbitrary locations.
+          </paramlist><![CDATA[This "unit measurement" object can be used to measure voltage, current, active and reactive power, as well as PLL and FFT quantities, at arbitrary locations.
 
-How to Insert One or More Unit Measurements:
+How to insert one or more Unit Measurements block:
 
 1. Copy the component provided above.
-2. Paste it where needed. Always use "Paste Special" > "Paste Transfer" when inserting a new unit measurement. **Do not** use the standard paste function, as this may cause issues.
+2. Paste it where needed. Always use "Paste Special" > "Paste Transfer" when inserting a new unit measurement. **DO NOT** use the standard paste function, as this may cause issues.
 3. Set the "Unit alias" as desired.
 4. By default the "Unit alias" equals the instance name, i.e. Unit, Unit_1, Unit_2, etc.
 5. Run `pscad_update_ums.py` (this script is also triggered by `execute_pscad.py`) to prefix the "Unit alias" to all signals in the "unit measurement" object to create unique signal names
 6. For .psout output, signals no longer require unique names as the signals are referenced by the signal path name, e.g. Unit\fft_pos_Vmag_pu, Unit_1\fft_pos_Vmag_pu and Unit_2\fft_pos_Vmag_pu
-7. If this signal naming is acceptable, legacy signal naming can be disabled by changing "updateUMs(pscad)" to "updateUMs(pscad, legacy=False)"]]></Sticky>
+7. If this signal naming is acceptable, legacy signal naming can be disabled, by setting "Use legacy Unit measurement signal naming = False" in the config.ini file
+]]></Sticky>
         <Sticky classid="Sticky" id="50191634" x="486" y="180" w="540" h="144" colors="0, 15792890">
           <paramlist>
             <param name="full_font" value="Tahoma, 12world" />
@@ -65975,9 +65976,9 @@ $iqneg = $ineg * Sin(v_neg_p-i_neg_p)]]></segment>
     </Resource>
   </List>
   <hierarchy>
-    <call link="1761620043" name="MTB:DS" z="-1" view="false" instance="0">
-      <call link="855062775" name="MTB:Main" z="-1" view="false" instance="0">
-        <call link="2118952145" name="MTB:MTB" z="-1" view="true" instance="0">
+    <call link="1530430428" name="MTB:DS" z="-1" view="false" instance="0">
+      <call link="855062775" name="MTB:Main" z="-1" view="true" instance="0">
+        <call link="2118952145" name="MTB:MTB" z="-1" view="false" instance="0">
           <call link="168397858" name="MTB:ThreePhaseCtrl" z="2410" view="false" instance="0" />
           <call link="1075289416" name="MTB:PLL_seq_src" z="2510" view="false" instance="0">
             <call link="212921357" name="MTB:PLL_ADAPTIVE_src" z="60" view="false" instance="0" />

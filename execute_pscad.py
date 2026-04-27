@@ -49,6 +49,7 @@ traceAffinity = config.getboolean('PSCAD', 'Tracing', fallback=False)
 stateAnimation = config.getboolean('PSCAD', 'State animation', fallback=False)
 onlyInUseChannels = config.getboolean('PSCAD', 'Only in use channels', fallback=True)
 disableAllUnusedPGBs = config.getboolean('PSCAD', 'Disable all unused PGBs', fallback=True)
+useLegacyUMSignalNaming = config.getboolean('PSCAD', 'Use legacy Unit measurement signal naming', fallback=True)
 fortranVersion = config.get('PSCAD', 'Fortran version').strip()
 workspacePath = config.get('PSCAD', 'Workspace').strip()
 
@@ -302,7 +303,7 @@ def main():
         runningAsEternalClient = False
         
     #Update PGB names for all unit measurement components
-    updateUMs(pscad)
+    updateUMs(pscad, useLegacyUMSignalNaming)
 
     #Disable all unused PGBs not specified in the plotter's figureSetup.csv if required 
     if disableAllUnusedPGBs:
