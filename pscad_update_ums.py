@@ -33,7 +33,7 @@ def updateUMs(pscad : mhi.pscad.PSCAD, legacy : bool = True, verbose : bool = Fa
     projectLst = pscad.projects()
     for prjDic in projectLst:
         if prjDic['type'].lower() == 'case':
-            project = pscad.project(prjDic['name'])½
+            project = pscad.project(prjDic['name'])
             canvas = project.canvas('Main')
             print(f'Updating unit measurements in project: {project}')
             for comp in canvas.components():
@@ -51,6 +51,8 @@ def updateUMs(pscad : mhi.pscad.PSCAD, legacy : bool = True, verbose : bool = Fa
                             pgb.parameters(Name = alias + '_' + pgbParams['Group'])
                         else:
                             pgb.parameters(Name = pgbParams['Group'])
+    print()
+    
 def main():
     pscad = connectPSCAD()  
     updateUMs(pscad, legacy=True, verbose=False)
@@ -58,6 +60,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
