@@ -161,6 +161,8 @@ def validateFigureSetupAgainstWorkspace(pscad, keep_signals: List[str]) -> List[
     # Collect every single PGB path available in the workspace
     for name in case_names:
         proj = pscad.project(name)
+        proj.save() # Ensure XML is up to date before parsing
+        print("Checking project: " + name + " for signals from figureSetup.csv...")
         status_map = getPGBStatus(proj)
         for signals in status_map.values():
             for _, signal_path, _, _ in signals:
@@ -406,6 +408,7 @@ if __name__ == '__main__':
         for case_name in case_names:
             proj = pscad.project(case_name)
             printPGBStatus(proj)
+
 
 
 
