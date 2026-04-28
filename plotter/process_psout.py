@@ -6,9 +6,12 @@ It uses the signal names defined in a figure setup CSV file to extract relevant 
 It is designed to be used in conjunction with the Manitoba Hydro International (MHI) PSOUT File Reader Library.
 '''
 
+from __future__ import annotations
 import sys
 import numpy as np
 import pandas as pd
+from typing import List
+
 try:
     import mhi.psout
 except ImportError:
@@ -16,23 +19,25 @@ except ImportError:
     sys.exit(1)
 
 
-def findPsoutSignalPath(psoutFilePath: str, signalPathName: str, sourceType: str ='Module') -> str:
+def findPsoutSignalPath(psoutFilePath: str, signalPathName: str, sourceType: str = 'Module') -> List[str] | None:
     """
-    Recursively find the path relative to Root/Main/ of a signal in a .psout file.
-    Returns empty string if the signal could not be found
-    
+    Recursively find the path(s) relative to Root/Main/ of a signal in a .psout file.
+    Returns None if the signal could not be found, otherwise a list of paths where the signal was found.
+    Note: Multiple paths may be returned if the signal exists in multiple modules.
+
     Parameters:
         psoutFilePath: The path to the .psout file
-        signalPathName: Can be in the format 'MTB\\signal_name' or just 'signal_name' as the leading path will be stripped anyway
+        signalPathName: Can be in the format 'MTB\\signal_name' or just 'signal_name' 
+                        as the leading path will be stripped to get just the signal name.
         sourceType: Should be a valid source type, e.g. 'Module', 'Graphic', 'PGB', etc.
     """
-    
     # Strip any leading path prefix (e.g. 'MTB\\' or 'SomePath\\MTB\\') to get just the signal name
     signalName = signalPathName.split('\\')[-1]
 
     def search_node(node, current_path='', depth=0):
         if depth > 10:
             return None
+        result_list = []
         try:
             for call in node.calls():
                 call_str = str(call)
@@ -40,7 +45,7 @@ def findPsoutSignalPath(psoutFilePath: str, signalPathName: str, sourceType: str
                 source = call_str.split("Source='")[1].split("'")[0]
                 new_path = current_path + '\\' + name if current_path else name
 
-                if source == sourceType: 
+                if source == sourceType:
                     try:
                         child_path = 'Root/Main/' + new_path.replace('\\', '/')
                         child_node = psout_file.call(child_path)
@@ -48,21 +53,19 @@ def findPsoutSignalPath(psoutFilePath: str, signalPathName: str, sourceType: str
                             child_str = str(child_call)
                             child_name = child_str.split("Name='")[1].split("'")[0]
                             if child_name == signalName:
-                                return new_path
-                        result = search_node(child_node, new_path, depth + 1)
-                        if result:
-                            return result
+                                result_list.append(new_path)
+                        # Recurse deeper
+                        result_list.extend(search_node(child_node, new_path, depth + 1))
                     except Exception:
                         pass
         except Exception:
             pass
-        return None
+        return result_list
 
     with mhi.psout.File(psoutFilePath) as psout_file:
         root = psout_file.call('Root/Main')
-        path = search_node(root)
-        return path if path else ''
-
+        results = search_node(root)
+        return results if results else None
        
 def getPsoutSignal(psoutFilePath, signalPathName):
     '''
