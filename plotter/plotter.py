@@ -9,7 +9,6 @@ import numpy as np
 import pandas as pd
 from plotly.subplots import make_subplots  # type: ignore
 import plotly.graph_objects as go  # type: ignore
-import plotly.io as pio
 from typing import List, Dict, Union, Tuple, Set
 from sampling_functions import downSample
 import multiprocessing
@@ -507,7 +506,13 @@ def drawPlot(rank: int,
             resultData = loadEMT(result.fullpath)
         elif result.typ == ResultType.EMT_PSOUT:
             signalPathNames = getUniqueEmtSignals(figureList)                                                                       # Make sure there are no duplicate signals
-            mtbPath = findPsoutSignalPath(result.fullpath, signalPathNames[0])                                                      # Use the first signal, i.e. 'MTB\\mtb_s_pavail_pu' to find the location of all the MTB signals (just to check if they are not maybe placed on a different canvas than 'Main')
+            # Use the first signal, i.e. 'MTB\\mtb_s_pavail_pu' to find the location of the MTB instances (just to check if the MTB is not maybe placed on a different canvas than 'Main')
+            mtbPaths = findPsoutSignalPath(result.fullpath, signalPathNames[0])
+            if mtbPaths is None:
+                print('ERROR: MTB not found!')
+                sys.exit(0)
+            else:                
+                mtbPath = mtbPaths[0]                                                                                               # There should one be one instance                                        
             if mtbPath != 'MTB':
                 signalPathNames = [s.replace('MTB\\', mtbPath + '\\', 1) if s.startswith('MTB\\') else s for s in signalPathNames]  # Replace the relative path 'MTB\\' with the correct signal path with respect to 'Root/Main/' for all MTB signal, if necessary
             resultData = getPsoutSignals(result.fullpath, signalPathNames)                                                          # Get all the signals in the .psout file as a Pandas DataFrame
