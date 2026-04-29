@@ -31,14 +31,14 @@ parser.add_argument('-o', '--outputRootFolder',
                     nargs = '?',
                     metavar = 'OUTPUTROOTFOLDER',
                     default = '..\\export',
-                    help = 'the folder where the .psout files are located')
+                    help = 'the output root folder where the date-time stamped folder will be created and the [compressed] .csv files will be saved')
 parser.add_argument('-f', '--figureSetupPath',
                     action = 'store',
                     dest = 'figureSetupPath',
                     nargs = '?',
                     metavar = 'FIGURESETUPPATH',
                     default = 'figureSetup.csv',
-                    help = 'the folder where the .psout files are located')
+                    help = 'the path to the figureSetup.csv file')
 parser.add_argument('-c', '--compressionType',
                     action = 'store',
                     dest = 'compressionType',
