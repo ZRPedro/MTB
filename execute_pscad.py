@@ -351,7 +351,6 @@ def main():
         singleRank = MTB.parameters()['par_manualrank']
         singleName = emtCases[caseList.index(MTB.parameters()['par_manualrank'])].Name
         print(f'Executing only Rank {singleRank}: {singleName}')
-        print(f'Excecuting only Rank {singleRank}: {singleName}')
     else:
         raise ValueError('Invalid rank selected for par_manualrank in MTB block.')
 
