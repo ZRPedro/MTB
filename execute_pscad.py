@@ -322,7 +322,7 @@ def main():
                 synchronizePGBsInProject(proj, keep_signals, sync=True, verbose=True)
         else:
             print("\nAborting: Please fix the signal names in figureSetup.csv before proceeding.")
-            os.exit(1)
+            sys.exit(1)
 
     plantSettings, channels, _, _, emtCases = cs.setup(sheetPath, pscad = True, pfEncapsulation = None)
 
