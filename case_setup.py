@@ -46,7 +46,6 @@ class PlantSettings:
 
         df.set_index(0, inplace = True) # type: ignore
         inputs : pd.Series[Union[str, float]] = df.iloc[1:, 0] 
-        self.inputs = inputs
 
         self.Casegroup = str(inputs['Casegroup'])
         self.Run_custom_cases = bool(inputs['Run custom cases'])
@@ -93,7 +92,7 @@ class PlantSettings:
             self.Pn_unitD_con = float(inputs['Pn Unit D (Consumption)'])
 
 class Case:
-    def __init__(self, inputs, case: 'pd.Series[Union[str, int, float, bool]]') -> None:
+    def __init__(self, inputs: PlantSettings, case: 'pd.Series[Union[str, int, float, bool]]') -> None:
         self.rank: int = int(case['Rank'])
         self.RMS: bool = bool(case['RMS'])
         self.EMT: bool = bool(case['EMT'])
@@ -455,13 +454,13 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
     emtCases : List[Case] = []
 
     for _, case in df.iterrows(): # type: ignore
-        cases.append(Case(plantSettings.inputs, case)) # type: ignore
+        cases.append(Case(plantSettings, case)) # type: ignore
         maxRank = max(maxRank, cases[-1].rank)
 
     if plantSettings.Run_custom_cases and plantSettings.Casegroup != 'Custom':
         dfc = pd.read_excel(casesheetPath, sheet_name='Custom cases', header=1) # type: ignore
         for _, case in dfc.iterrows(): # type: ignore
-            cases.append(Case(plantSettings.inputs, case)) # type: ignore
+            cases.append(Case(plantSettings, case)) # type: ignore
             maxRank = max(maxRank, cases[-1].rank)
 
     for case in cases:
@@ -495,13 +494,16 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
         mtb_t_r0_ohm[case.rank] = plantSettings.R0
         mtb_t_x0_ohm[case.rank] = plantSettings.X0
         
-        # Standard plant references and outputs default setup # TO DO: Co-location signals must be initialized similar to P0 and Pavail0
-        if case.Pavail0.lower() == "default":
-            mtb_s_pavail_pu[case.rank] = plantSettings.Default_Pavail        
+        # Standard plant references and outputs default setup 
+        if plantSettings.Casegroup == 'Co-location':
+            continue # TO DO: Co-location signals must be initialized similar to P0 and Pavail0
         else:
-            mtb_s_pavail_pu[case.rank] = float(case.Pavail0)
-        
-        mtb_s_pref_pu[case.rank] = case.P0
+            if case.Pavail0.lower() == "default":
+                mtb_s_pavail_pu[case.rank] = plantSettings.Default_Pavail        
+            else:
+                mtb_s_pavail_pu[case.rank] = float(case.Pavail0)
+            
+            mtb_s_pref_pu[case.rank] = case.P0
         
         # Set Qmode
         if case.Qmode.lower() == 'default':
