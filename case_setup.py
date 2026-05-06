@@ -496,7 +496,10 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
         
         # Standard plant references and outputs default setup 
         if plantSettings.Casegroup == 'Co-located':
-            continue # TO DO: Co-location signals must be initialized similar to P0 and Pavail0
+            # Keep generic channels initialized for PF/PSCAD interfaces.
+            # Proper co-located aggregation logic is still pending.
+            mtb_s_pavail_pu[case.rank] = plantSettings.Default_Pavail
+            mtb_s_pref_pu[case.rank] = 0.0
         else:
             if case.Pavail0.lower() == "default":
                 mtb_s_pavail_pu[case.rank] = plantSettings.Default_Pavail        
