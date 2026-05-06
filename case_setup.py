@@ -495,7 +495,7 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
         mtb_t_x0_ohm[case.rank] = plantSettings.X0
         
         # Standard plant references and outputs default setup 
-        if plantSettings.Casegroup == 'Co-location':
+        if plantSettings.Casegroup == 'Co-located':
             continue # TO DO: Co-location signals must be initialized similar to P0 and Pavail0
         else:
             if case.Pavail0.lower() == "default":
