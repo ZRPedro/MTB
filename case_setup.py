@@ -46,6 +46,7 @@ class PlantSettings:
 
         df.set_index(0, inplace = True) # type: ignore
         inputs : pd.Series[Union[str, float]] = df.iloc[1:, 0] 
+        self.inputs = inputs
 
         self.Casegroup = str(inputs['Casegroup'])
         self.Run_custom_cases = bool(inputs['Run custom cases'])
@@ -75,15 +76,41 @@ class PlantSettings:
         self.PF_enforce_P_limits_in_LDF = bool(inputs['PF enforce P limits in LDF'])
         self.PF_enforce_Q_limits_in_LDF = bool(inputs['PF enforce Q limits in LDF'])
 
+        if self.Casegroup == 'Co-located':
+            self.PnG3 = float(inputs['PnG3'])
+            self.PnD3 = float(inputs['PnD3'])
+            self.Pn_unitA_gen = float(inputs['Pn Unit A (Generation)'])
+            self.Pavail_unitA = float(inputs['Default P available or SoC Unit A'])
+            self.Pn_unitA_con = float(inputs['Pn Unit A (Consumption)'])
+            self.Pn_unitB_gen = float(inputs['Pn Unit B (Generation)'])
+            self.Pavail_unitB = float(inputs['Default P available or SoC Unit B'])
+            self.Pn_unitB_con = float(inputs['Pn Unit B (Consumption)'])
+            self.Pn_unitC_gen = float(inputs['Pn Unit C (Generation)'])
+            self.Pavail_unitC = float(inputs['Default P available or SoC Unit C'])
+            self.Pn_unitC_con = float(inputs['Pn Unit C (Consumption)'])
+            self.Pn_unitD_gen = float(inputs['Pn Unit D (Generation)'])
+            self.Pavail_unitD = float(inputs['Default P available or SoC Unit D'])
+            self.Pn_unitD_con = float(inputs['Pn Unit D (Consumption)'])
+
 class Case:
-    def __init__(self, case: 'pd.Series[Union[str, int, float, bool]]') -> None:
+    def __init__(self, inputs, case: 'pd.Series[Union[str, int, float, bool]]') -> None:
         self.rank: int = int(case['Rank'])
         self.RMS: bool = bool(case['RMS'])
         self.EMT: bool = bool(case['EMT'])
         self.Name: str = str(case['Name'])
         self.U0: float = float(case['U0'])
-        self.P0: float = float(case['P0'])
-        self.Pavail0: str = str(case['Pavail0']) if 'Pavail0' in case else '1.0' # Use 'str' because 'default' is also a valid value for the droop
+        if inputs.Casegroup == 'Co-located':
+            self.P0_unitA: float = float(case['P0_unitA'])
+            self.Pavail0_unitA: float = float(case['Pavail0_unitA']) 
+            self.P0_unitB: float = float(case['P0_unitB'])
+            self.Pavail0_unitB: float = float(case['Pavail0_unitB'])
+            self.P0_unitC: float = float(case['P0_unitC'])
+            self.Pavail0_unitC: float = float(case['Pavail0_unitC'])
+            self.P0_unitD: float = float(case['P0_unitD'])
+            self.Pavail0_unitD: float = float(case['Pavail0_unitD'])
+        else:
+            self.P0: float = float(case['P0'])
+            self.Pavail0: str = str(case['Pavail0']) if 'Pavail0' in case else '1.0' # Use 'str' because 'default' is also a valid value for the droop
         self.Pmode: str = str(case['Pmode'])
         self.Qmode: str = str(case['Qmode'])
         self.Qref0: float = float(case['Qref0'])
@@ -206,7 +233,7 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
     mtb_t_x0_ohm.addPFsub_S0('vac.ElmVac', 'X0')
     mtb_t_x0_ohm.addPFsub_S0('fault_ctrl.ElmDsl', 'x0')
 
-    # Standard plant references and outputs
+    # Standard plant references and outputs # TO DO: Co-location signals must be added similar to P0 and Pavail0
     mtb_s_pref_pu = signal('mtb_s_pref_pu', measFile = True)
     mtb_s_pref_pu.addPFsub_S0('initializer_script.ComDpl', 'IntExpr:6') #P0
     mtb_s_pref_pu.addPFsub_S0('initializer_qdsl.ElmQdsl', 'initVals:6') #P0
@@ -428,13 +455,13 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
     emtCases : List[Case] = []
 
     for _, case in df.iterrows(): # type: ignore
-        cases.append(Case(case)) # type: ignore
+        cases.append(Case(plantSettings.inputs, case)) # type: ignore
         maxRank = max(maxRank, cases[-1].rank)
 
     if plantSettings.Run_custom_cases and plantSettings.Casegroup != 'Custom':
         dfc = pd.read_excel(casesheetPath, sheet_name='Custom cases', header=1) # type: ignore
         for _, case in dfc.iterrows(): # type: ignore
-            cases.append(Case(case)) # type: ignore
+            cases.append(Case(plantSettings.inputs, case)) # type: ignore
             maxRank = max(maxRank, cases[-1].rank)
 
     for case in cases:
@@ -468,7 +495,7 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
         mtb_t_r0_ohm[case.rank] = plantSettings.R0
         mtb_t_x0_ohm[case.rank] = plantSettings.X0
         
-        # Standard plant references and outputs default setup
+        # Standard plant references and outputs default setup # TO DO: Co-location signals must be initialized similar to P0 and Pavail0
         if case.Pavail0.lower() == "default":
             mtb_s_pavail_pu[case.rank] = plantSettings.Default_Pavail        
         else:
@@ -532,7 +559,7 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
         # Default OOS references
         ldf_t_refOOS[case.rank] = 0
 
-        # Parse events
+        # Parse events # TO DO: Add assertion checks on eventType, eventX1 and eventX2 values for co-location.
         for event in case.Events:
             eventType = event[0]
             eventTime = event[1]
