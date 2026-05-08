@@ -92,13 +92,13 @@ class PlantSettings:
             self.Pn_unitD_con = float(inputs['Pn Unit D (Consumption)'])
 
 class Case:
-    def __init__(self, inputs: PlantSettings, case: 'pd.Series[Union[str, int, float, bool]]') -> None:
+    def __init__(self, plantSettings: PlantSettings, case: 'pd.Series[Union[str, int, float, bool]]') -> None:
         self.rank: int = int(case['Rank'])
         self.RMS: bool = bool(case['RMS'])
         self.EMT: bool = bool(case['EMT'])
         self.Name: str = str(case['Name'])
         self.U0: float = float(case['U0'])
-        if inputs.Casegroup == 'Co-located':
+        if plantSettings.Casegroup == 'Co-located':
             self.P0_unitA: float = float(case['P0_unitA'])
             self.Pavail0_unitA: float = float(case['Pavail0_unitA']) 
             self.P0_unitB: float = float(case['P0_unitB'])
