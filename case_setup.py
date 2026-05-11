@@ -382,6 +382,7 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
     ldf_t_refOOS.addPFsub_S0('mtb_t_qmode.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_t_pmode.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_s_mtrfrgnd.ElmDsl', 'outserv')
+    ldf_t_refOOS.addPFsub_S0('mtb_s_sips.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_s_1.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_s_2.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_s_3.ElmDsl', 'outserv')
