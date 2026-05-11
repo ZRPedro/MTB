@@ -163,6 +163,7 @@ def setupResFiles(app : pf.Application, script : pf.ComPython, root : pf.DataObj
       'mtb_s_qudroop.ElmDsl',
       'mtb_s_pavail_pu.ElmDsl',
       'mtb_s_mtrfrgnd.ElmDsl',
+      'mtb_s_sips.ElmDsl',
       'mtb_s_qref_3.ElmDsl',
       'mtb_s_qref_4.ElmDsl',
       'mtb_s_qref_5.ElmDsl',
