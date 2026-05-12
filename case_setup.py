@@ -265,9 +265,11 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
 
     mtb_s_mtrfrgnd = signal('mtb_s_mtrfrgnd')
     mtb_s_mtrfrgnd.addPFsub_S0('initializer_script.ComDpl', 'IntExpr:14') #MtrfrGnd0
-    # TODO: Missing to add MtrfrGnd0 to the initializer_qdsl
+    # TODO: Add MtrfrGnd0 to the initializer_qdsl
     
     mtb_s_sips = signal('mtb_s_sips')
+    mtb_s_sips.addPFsub_S0('initializer_script.ComDpl', 'IntExpr:25') #Signal_sips_t0
+    # TODO: Add mtb_s_sips to the initializer_qdsl
     
     mtb_t_qmode = signal('mtb_t_qmode')
     mtb_t_qmode.addPFsub_S0('initializer_script.ComDpl', 'IntExpr:9') #Qmode
