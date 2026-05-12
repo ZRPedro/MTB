@@ -265,8 +265,11 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
 
     mtb_s_mtrfrgnd = signal('mtb_s_mtrfrgnd')
     mtb_s_mtrfrgnd.addPFsub_S0('initializer_script.ComDpl', 'IntExpr:14') #MtrfrGnd0
-    # TO DO: Missing to add MtrfrGnd0 to the initializer_qdsl
-
+    # TODO: Add MtrfrGnd0 to the initializer_qdsl
+    
+    mtb_s_sips = signal('mtb_s_sips')
+    mtb_s_sips.addPFsub_S0('initializer_script.ComDpl', 'IntExpr:25') #Signal_sips_t0
+    # TODO: Add mtb_s_sips to the initializer_qdsl
     
     mtb_t_qmode = signal('mtb_t_qmode')
     mtb_t_qmode.addPFsub_S0('initializer_script.ComDpl', 'IntExpr:9') #Qmode
@@ -381,6 +384,7 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
     ldf_t_refOOS.addPFsub_S0('mtb_t_qmode.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_t_pmode.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_s_mtrfrgnd.ElmDsl', 'outserv')
+    ldf_t_refOOS.addPFsub_S0('mtb_s_sips.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_s_1.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_s_2.ElmDsl', 'outserv')
     ldf_t_refOOS.addPFsub_S0('mtb_s_3.ElmDsl', 'outserv')
@@ -544,6 +548,9 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
         else:
             mtb_s_mtrfrgnd[case.rank] = 0.0     
 
+        # MTB SIPS signal
+        mtb_s_sips[case.rank] = 0.0
+        
         # Fault signals
         flt_s_type[case.rank] = 0.0
         flt_s_rf_ohm[case.rank] = 0.0
@@ -719,6 +726,11 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
                 wf = mtb_s_fref_hz[case.rank] = si.Recorded(path=eventX1, column=1, scale=eventX2, pf=pf, pscad=pscad)
                 pscad_lonRec = max(wf.pscadLen, pscad_lonRec)
                 pf_lonRec = max(wf.pfLen, pf_lonRec)
+
+            elif eventType == ('SIPS'):
+                assert isinstance(eventX1, float)
+                assert isinstance(eventX2, float)
+                mtb_s_sips[case.rank].add(eventTime, eventX1, 0.0)
 
             elif eventType.lower().startswith('signal'):
                 eventNr = int(eventType.lower().replace('signal','').replace('recording',''))
