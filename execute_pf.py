@@ -184,6 +184,18 @@ def setupResFiles(app : pf.Application, script : pf.ComPython, root : pf.DataObj
     signalObj = root.SearchObject(signal)
     assert signalObj is not None
     elmRes.AddVariable(signalObj, 's:yo')
+    
+  SIPSObj = root.SearchObject('mtb_sips_decoder.ElmDsl')
+  assert SIPSObj is not None
+  elmRes.AddVariable(SIPSObj, 's:mtb_s_sips')
+  elmRes.AddVariable(SIPSObj, 's:sips_arm')
+  elmRes.AddVariable(SIPSObj, 's:sips_step_1')
+  elmRes.AddVariable(SIPSObj, 's:sips_step_2')
+  elmRes.AddVariable(SIPSObj, 's:sips_step_3')
+  elmRes.AddVariable(SIPSObj, 's:sips_step_4')
+  elmRes.AddVariable(SIPSObj, 's:sips_step_5')
+  elmRes.AddVariable(SIPSObj, 's:sips_step_6')
+  elmRes.AddVariable(SIPSObj, 's:sips_step_7')
 
   # Include measurement objects and set alias
   for i in range(1, 100):
