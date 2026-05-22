@@ -727,7 +727,7 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
                 pscad_lonRec = max(wf.pscadLen, pscad_lonRec)
                 pf_lonRec = max(wf.pfLen, pf_lonRec)
 
-            elif eventType == ('SIPS'):
+            elif eventType == 'SIPS':
                 assert isinstance(eventX1, float)
                 assert isinstance(eventX2, float)
                 mtb_s_sips[case.rank].add(eventTime, eventX1, 0.0)
