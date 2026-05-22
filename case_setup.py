@@ -729,7 +729,6 @@ def setup(casesheetPath : str, pscad : bool, pfEncapsulation : Optional[si.PFint
 
             elif eventType == 'SIPS':
                 assert isinstance(eventX1, float)
-                assert isinstance(eventX2, float)
                 mtb_s_sips[case.rank].add(eventTime, eventX1, 0.0)
 
             elif eventType.lower().startswith('signal'):
