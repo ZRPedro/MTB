@@ -4,15 +4,7 @@
 
 MTB is intended to help facility owners and model providers evaluate simulation model behaviour in the context of Danish grid-code requirements and Energinet simulation model requirements. It includes predefined case sets for RfG, DCC, unit testing, co-located generation/demand cases, and custom user-defined studies.
 
-> [!IMPORTANT]
-> Using MTB is not a guarantee of model compliance. The plant owner remains responsible for ensuring that models comply with the requirements applicable at any time.
-
-<p align="center">
-	<!-- <img src="https://github.com/user-attachments/assets/2264d07d-e99f-46ab-bbb1-4dceddcc614b" width="800" height="210" alt="MTB workflow from testcase workbook to simulation and plotting"> -->
-	<img width="1324" height="1188" alt="image" src="https://github.com/user-attachments/assets/3c3156c3-f606-440a-aff6-ad152179422a" />
-</p>
-
-## Workflow
+## MTB Workflow
 
 1. Configure the testcase workbook to test various requirements in e.g. EU 2016/631 with specific relevance to the Danish NC RfG
 2. Set up the MTB in PowerFactory and execute the selected simulation cases
@@ -20,7 +12,17 @@ MTB is intended to help facility owners and model providers evaluate simulation 
 4. Plot and compare RMS and EMT results making use of among other things, analytically calculated guide curves, cursor metrics, and visual inspection
 5. Determine if the plant models adheres to the applicable grid codes
 
+<p align="center">
+	<!-- <img src="https://github.com/user-attachments/assets/2264d07d-e99f-46ab-bbb1-4dceddcc614b" width="800" height="210" alt="MTB workflow from testcase workbook to simulation and plotting"> -->
+	<img width="1027" alt="image" src="https://github.com/user-attachments/assets/44053f91-117f-48ea-a00d-b809bd5db55a" />
+</p>
+
+> [!IMPORTANT]
+> Using MTB is not a guarantee of model compliance. The plant owner remains responsible for ensuring that models comply with the requirements applicable at any time.
+
 ## Python/Plotly Output Example
+
+The MTB plotter generates interactive, self-contained HTML reports built with Plotly, letting users pan, zoom, and toggle signals directly in the browser without any additional software. One HTML output file is generated per testcase (or Rank), with multiple plots covering line voltages, line currents, active and reactive current components, active power, reactive power, frequency, and more.
 
 <p align="left">
 	<img width="1000" alt="Zoomed view of MTB HTML plot output features" src="https://github.com/user-attachments/assets/522c623e-e778-41ec-a800-d4f807ae7a46" />
@@ -52,6 +54,8 @@ The generated HTML reports include:
 | 6       | [Quickstart Cursor Metrics](https://github.com/Energinet-SimTools/MTB/wiki/6.-Quickstart-Cursor-Metrics)                     | Configure and interpret cursor metric tables.                                                   |
 | 7       | [Quickstart Python Utility Scripts](https://github.com/Energinet-SimTools/MTB/wiki/7.-Quickstart-Python-Utility-Scripts)     | Use helper scripts for model checks, data extraction,`.psout` inspection, and recovery.       |
 | A       | [Working with .psout files](https://github.com/Energinet-SimTools/MTB/wiki/A.-Working-with-.psout-files)                     | Use PSCAD`.psout` files with MHI tools, MTB helper functions, and conversion/listing scripts. |
+
+The above Quickstart Wiki can also be downloaded as a sing PDF file: [MTB 2.0 Quickstart Guide](<https://raw.githubusercontent.com/wiki/Energinet-SimTools/MTB/MTB%202.0%20Quickstart%20Guide.pdf>)
 
 Example PowerFactory and PSCAD setups are available in [setup_examples](setup_examples). These examples demonstrate the MTB setup workflow only; they are not representative of compliant plant models.
 
