@@ -12,13 +12,13 @@ MTB is intended to help facility owners and model providers evaluate simulation 
 4. Plot and compare RMS and EMT results making use of among other things, analytically calculated guide curves, cursor metrics, and visual inspection
 5. Determine if the plant models adheres to the applicable grid codes
 
+> [!IMPORTANT]
+> Using MTB is not a guarantee of model compliance. The plant owner remains responsible for ensuring that models comply with the requirements applicable at any time.
+
 <p align="center">
 	<!-- <img src="https://github.com/user-attachments/assets/2264d07d-e99f-46ab-bbb1-4dceddcc614b" width="800" height="210" alt="MTB workflow from testcase workbook to simulation and plotting"> -->
 	<img width="1027" alt="image" src="https://github.com/user-attachments/assets/44053f91-117f-48ea-a00d-b809bd5db55a" />
 </p>
-
-> [!IMPORTANT]
-> Using MTB is not a guarantee of model compliance. The plant owner remains responsible for ensuring that models comply with the requirements applicable at any time.
 
 ## Python/Plotly Output Example
 
@@ -55,7 +55,7 @@ The generated HTML reports include:
 | 7       | [Quickstart Python Utility Scripts](https://github.com/Energinet-SimTools/MTB/wiki/7.-Quickstart-Python-Utility-Scripts)     | Use helper scripts for model checks, data extraction,`.psout` inspection, and recovery.       |
 | A       | [Working with .psout files](https://github.com/Energinet-SimTools/MTB/wiki/A.-Working-with-.psout-files)                     | Use PSCAD`.psout` files with MHI tools, MTB helper functions, and conversion/listing scripts. |
 
-The above Quickstart Wiki can also be downloaded as a sing PDF file: [MTB 2.0 Quickstart Guide](<https://raw.githubusercontent.com/wiki/Energinet-SimTools/MTB/MTB%202.0%20Quickstart%20Guide.pdf>)
+The above Quickstart Wiki can also be downloaded as a single PDF file: [MTB 2.0 Quickstart Guide](<https://raw.githubusercontent.com/wiki/Energinet-SimTools/MTB/MTB%202.0%20Quickstart%20Guide.pdf>)
 
 Example PowerFactory and PSCAD setups are available in [setup_examples](setup_examples). These examples demonstrate the MTB setup workflow only; they are not representative of compliant plant models.
 
