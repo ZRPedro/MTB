@@ -17,7 +17,7 @@ MTB is intended to help facility owners and model providers evaluate simulation 
 
 <p align="center">
 	<!-- <img src="https://github.com/user-attachments/assets/2264d07d-e99f-46ab-bbb1-4dceddcc614b" width="800" height="210" alt="MTB workflow from testcase workbook to simulation and plotting"> -->
-	<img width="1027" alt="image" src="https://github.com/user-attachments/assets/44053f91-117f-48ea-a00d-b809bd5db55a" />
+	<img width="10000" alt="image" src="https://github.com/user-attachments/assets/0e8cb9a1-f024-4b21-bc7a-244489a544b4" />
 </p>
 
 ## Python/Plotly Output Example
