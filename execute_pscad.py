@@ -221,7 +221,7 @@ def taskIdToRank(psoutFolder : str, projectName : str, emtCases : List[cs.Case],
         if rank is None:
             if typ == '.psout_taskid' and root == projectName and len(emtCases) == 1:
                 newName = f'{projectName}_{emtCases[0].rank}.psout'
-                print(f'Renaming {fileName} to {newName}')
+                print(f'Renaming {fileName} to {newName}\n')
                 os.rename(os.path.join(psoutFolder, fileName), os.path.join(psoutFolder, newName))
             elif typ == '.psout_taskid' and root.startswith(projectName + '_'):
                 suffix = root[len(projectName) + 1:]
@@ -243,7 +243,7 @@ def taskIdToRank(psoutFolder : str, projectName : str, emtCases : List[cs.Case],
             else:
                 print(f'WARNING: {fileName} is of unknown type. Ignoring file.')
                 continue
-            print(f'Renaming {fileName} to {newName}')
+            print(f'Renaming {fileName} to {newName}\n')
             os.rename(os.path.join(psoutFolder, fileName), os.path.join(psoutFolder, newName))
             
 def cleanUpPsoutFiles(buildPath : str, exportPath : str, projectName : str) -> str:
@@ -425,7 +425,7 @@ def main():
     print()
     taskIdToRank(psoutFolder, plantSettings.Projectname, emtCases, singleRank)
 
-    print('execute_pscad.py finished at: ', datetime.now().strftime('%m-%d %H:%M:%S'))
+    print('execute_pscad.py finished at: ', datetime.now().strftime('%m-%d %H:%M:%S\n'))
     
     if runningAsEternalClient:
         exitPSCAD(pscad)
