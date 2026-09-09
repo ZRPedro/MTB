@@ -10,7 +10,6 @@ MTB is intended to help facility owners and model providers evaluate simulation 
 2. Set up the MTB in PowerFactory and execute the selected simulation cases
 3. Set up the MTB in PSCAD and execute the selected simulation cases
 4. Plot and compare RMS and EMT results making use of among other things, analytically calculated guide curves, cursor metrics, and visual inspection
-5. Determine if the plant models adheres to the applicable grid codes
 
 > [!IMPORTANT]
 > Using MTB is not a guarantee of model compliance. The plant owner remains responsible for ensuring that models comply with the requirements applicable at any time.
@@ -42,7 +41,7 @@ The generated HTML reports include:
 10. **Plot Figure Legend** - lists the plotted signals. Click a legend item to hide or show the corresponding trace.
 11. **Plotly Buttons** - standard Plotly controls for downloading, zooming, panning, autoscaling, and resetting axes.
 
-## MTB Quickstart [Wiki ](https://github.com/Energinet-SimTools/MTB/wiki)Guides
+## MTB Quickstart Wiki Guides
 
 | Section | Page                                                                                                                        | Purpose                                                                                         |
 | ------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
