@@ -129,7 +129,7 @@ def startPSCAD():
                 # finding a license with open instances
                 for cert in list(certs.values()):
                     if cert.meets([('EMTDC Instances', volley)]) and (cert.available() > 0):
-                        print('Acquiring Certificate Now! : %s', str(cert))
+                        print(f'Acquiring Certificate Now! : {cert}\n')
                         pscad.get_certificate(cert)
                         print('PSCAD should have a license now\n')
                         break
@@ -148,7 +148,7 @@ def startPSCAD():
         pscad.settings(pscad_options)
 
         # Open PSCAD workspace
-        pscad.load(workspacePath)
+        loadWorkspace(pscad)
 
         # Get valid Fortran comilers for this machine        
         available_fortrans = pscad.setting_range('fortran_version')
@@ -163,20 +163,36 @@ def startPSCAD():
             exitPSCAD(pscad)
             sys.exit(1)
         else:
-            print(f'Fortran version set to {fortranVersion}')
+            print(f'Fortran version set to {fortranVersion}\n')
             pscad.settings({'fortran_version': fortranVersion})
                                 
         return pscad
     else:
         print('PSCAD could not be started')
         return    
+
+def loadWorkspace(pscad: mhi.pscad.PSCAD) -> None:
+    resolvedWorkspacePath = os.path.abspath(workspacePath)
+    if not os.path.isfile(resolvedWorkspacePath):
+        print(f'ERROR: PSCAD workspace file not found: {resolvedWorkspacePath}\n')
+        print('Check the [PSCAD] Workspace setting in config.ini.\n')
+        exitPSCAD(pscad)
+        sys.exit(1)
+
+    try:
+        pscad.load(resolvedWorkspacePath)
+    except Exception as e:
+        print(f'ERROR: PSCAD could not load workspace: {resolvedWorkspacePath}')
+        print(f'PSCAD error: {e}')
+        exitPSCAD(pscad)
+        sys.exit(1)
     
 def exitPSCAD(pscad):
-    print('Releasing All Certificate...')
+    print('Releasing All Certificates...\n')
     pscad.release_all_certificates()
-    print('Quiting PSCAD...')
+    print('Quiting PSCAD...\n')
     pscad.quit()
-    print('Done.')   
+    print('Done!')   
         
 def outToCsv(srcPath : str, dstPath : str):
     """
@@ -195,7 +211,7 @@ def moveFiles(srcPath : str, dstPath : str, types : List[str], suffix : str = ''
         if typ in types:
             shutil.move(os.path.join(srcPath, file), os.path.join(dstPath, file + suffix))
 
-def taskIdToRank(psoutFolder : str, projectName : str, emtCases : List[cs.Case], rank: int):
+def taskIdToRank(psoutFolder : str, projectName : str, emtCases : List[cs.Case], rank: Optional[int]):
     '''
     Changes task ID to rank of the .psout files in psoutFolder.
     '''
@@ -203,7 +219,11 @@ def taskIdToRank(psoutFolder : str, projectName : str, emtCases : List[cs.Case],
         _, fileName = os.path.split(file)
         root, typ = os.path.splitext(fileName)
         if rank is None:
-            if typ == '.psout_taskid' and root.startswith(projectName + '_'):
+            if typ == '.psout_taskid' and root == projectName and len(emtCases) == 1:
+                newName = f'{projectName}_{emtCases[0].rank}.psout'
+                print(f'Renaming {fileName} to {newName}\n')
+                os.rename(os.path.join(psoutFolder, fileName), os.path.join(psoutFolder, newName))
+            elif typ == '.psout_taskid' and root.startswith(projectName + '_'):
                 suffix = root[len(projectName) + 1:]
                 parts = suffix.split('_')
                 if  len(parts) > 0 and parts[0].isnumeric():
@@ -223,7 +243,7 @@ def taskIdToRank(psoutFolder : str, projectName : str, emtCases : List[cs.Case],
             else:
                 print(f'WARNING: {fileName} is of unknown type. Ignoring file.')
                 continue
-            print(f'Renaming {fileName} to {newName}')
+            print(f'Renaming {fileName} to {newName}\n')
             os.rename(os.path.join(psoutFolder, fileName), os.path.join(psoutFolder, newName))
             
 def cleanUpPsoutFiles(buildPath : str, exportPath : str, projectName : str) -> str:
@@ -330,7 +350,7 @@ def main():
             for case_name in case_names:
                 proj = pscad.project(case_name)
                 # This function (from previous step) now handles one project at a time
-                synchronizePGBsInProject(proj, keep_signals, sync=True, verbose=True)
+                synchronizePGBsInProject(proj, keep_signals, sync=True, verbose=False)
         else:
             print("\nAborting: Please fix the signal names in figureSetup.csv before proceeding.")
             sys.exit(1)
@@ -405,7 +425,7 @@ def main():
     print()
     taskIdToRank(psoutFolder, plantSettings.Projectname, emtCases, singleRank)
 
-    print('execute_pscad.py finished at: ', datetime.now().strftime('%m-%d %H:%M:%S'))
+    print('execute_pscad.py finished at: ', datetime.now().strftime('%m-%d %H:%M:%S\n'))
     
     if runningAsEternalClient:
         exitPSCAD(pscad)

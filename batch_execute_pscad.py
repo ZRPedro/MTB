@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import os
 import configparser
+import subprocess
+import sys
 
 config = configparser.ConfigParser()
 
@@ -19,4 +20,9 @@ for test_case_path in test_case_paths:
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
 
-    os.system('py execute_pscad.py')
+    result = subprocess.run(['py', 'execute_pscad.py'])
+    if result.returncode != 0:
+        print(f'execute_pscad.py failed with exit code {result.returncode}. Stopping batch execution.')
+        sys.exit(result.returncode)
+        
+print('\nBatch execution completed successfully.')

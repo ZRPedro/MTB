@@ -311,7 +311,7 @@ def printPGBStatus(proj, keep_signals: Optional[List[str]] = None) -> None:
 
 def synchronizePGBsInProject(proj, keep_signals: List[str], 
                              sync: bool = False, 
-                             verbose: bool = True) -> None:
+                             verbose: bool = False) -> None:
     """
     Synchronizes PGB states with the keep_signals list.
     Enables PGBs found in the list, disables those that are not.
@@ -347,9 +347,9 @@ def synchronizePGBsInProject(proj, keep_signals: List[str],
 
     if sync:
         proj.save()
-        print(f'\nProject {proj.name}: Disabled {disabled_count}, Enabled {enabled_count}, Kept {kept_count}. Saved!')
+        print(f'\nProject {proj.name}: Disabled {disabled_count}, Enabled {enabled_count}, Kept {kept_count}. Saved!\n')
     else:
-        print(f'\nProject {proj.name} DRY RUN: Would disable {disabled_count}, and enable {enabled_count}.')
+        print(f'\nProject {proj.name} DRY RUN: Would disable {disabled_count}, and enable {enabled_count}.\n')
 
     print('=' * 60)
     print()
