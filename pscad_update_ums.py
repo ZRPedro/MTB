@@ -30,6 +30,10 @@ def _findUnitMeasPgbUpdates(proj, legacy: bool) -> List[Tuple[int, str, str]]:
     is unreliable when PSCAD runs on a remote server reached via mhi.pscad.connect(port=...),
     even though it works fine when running inside PSCAD's own embedded Python console.
 
+    Note: Uses plain xml.etree.ElementTree, not the mhi.xml.pscad object model, since this
+    script must also run inside PSCAD's embedded Python 3.7 console, and mhi.xml requires
+    Python >=3.9.
+
     Returns:
         [(pgb_id, current_name, new_name), ...]
     """

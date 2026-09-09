@@ -44,6 +44,10 @@ def _parseProjectXML(proj) -> Tuple[Dict[str, str], Dict[str, str], List[Tuple[i
     when connected to PSCAD over an external automation link rather than running inside
     PSCAD's embedded Python console.
 
+    Note: Uses plain xml.etree.ElementTree, not the mhi.xml.pscad object model, since this
+    script must also run inside PSCAD's embedded Python 3.7 console, and mhi.xml requires
+    Python >=3.9.
+
     Returns:
         parent_map: {child_defn -> parent_defn} (canvas hierarchy, by definition name)
         instance_map: {defn_name -> instance_name} for components with a custom 'Name' param
