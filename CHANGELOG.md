@@ -104,6 +104,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `pscad_synchronize_pgbs.py` to execute correctly from the MTB folder (#281)
 - Fixed `pscad_synchronize_pgbs.py` failure when the project was not saved before script execution (#288)
 - Fixed PGB `mtb_s_pref_pu` that was accidentally disabled (#289)
+- Improved `batch_execute_pscad.py` to fail softly on first error, allowing graceful error handling (#346)
+- Fixed `execute_pscad.py` to handle a missing or invalid PSCAD workspace file gracefully instead of crashing (#346)
+- Enhanced print feedback messages in `execute_pscad.py` and `batch_execute_pscad.py` for improved user communication (#346)
 
 #### PowerFactory
 - Fixed garbage output in MTB `execute.ComPython` (line 218) (#207)
