@@ -5,12 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-### Changed
-
-- Clarified the README disclaimer to state that passing MTB test cases does not by itself constitute approval, and that a model will not be approved unless there is full confidence that the connected plant will not cause grid instability or reduce grid security
-
 ## [2.0.0] - 2026-09-16
 
 ### Added
@@ -112,6 +106,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reworked the README to provide a clearer MTB overview, workflow, documentation links, requirements, release notes, contribution guidance, and contact details (#339, #340, #341)
 - Added a workflow illustration and an annotated HTML report example to the README (#339, #340, #341)
 - Corrected the `.bz2` compression extension in the `psout_to_csv.py` help text (#338)
+- Clarified the README disclaimer to state that passing MTB test cases does not by itself constitute approval, and that a model will not be approved unless there is full confidence that the connected plant will not cause grid instability or reduce grid security
 
 ### Fixed
 
