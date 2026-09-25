@@ -456,6 +456,8 @@ def genCursorPDF(goCursorList, rank, rankName, cursorPath):
     '''
     Generates PDF for cursor plots
     '''
+    from pypdf import PdfWriter
+
     cursor_pdf_filenames = []
     for i, goCursor in enumerate(goCursorList):
         cursor_pdf_filename = f'{cursorPath}_{i:02d}.pdf'
@@ -555,8 +557,6 @@ def drawPlot(rank: int,
         print(f'Exported plot for Rank {rank} to {figurePath}.{config.imageFormat}')
 
     if config.genCursorPDF and len(goCursorList)>0:
-        from pypdf import PdfWriter
-
         cursorPath = figurePath+'_cursor'
         genCursorPDF(goCursorList, rank, rankName, cursorPath)
         print(f'Exported cursors for Rank {rank} to {cursorPath}.pdf')
