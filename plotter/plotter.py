@@ -28,6 +28,9 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from tqdm import tqdm
 import warnings, logging
 
+# Above this, HTML output falls back to a single subplot grid
+maxHtmlColumnNr = 4
+
 try:
     LOG_FILE = open('plotter.log', 'w')
 except:
@@ -607,7 +610,7 @@ def setupPlotLayout(rankName, config, figureList, htmlPlots, imagePlots, rank):
         lst.append((config.imageColumns, imagePlots))
 
     for columnNr, plotList in lst:
-        if columnNr == 1 and plotList == imagePlots or columnNr in (1,2,3) and plotList == htmlPlots:
+        if columnNr == 1 and plotList == imagePlots or columnNr in range(1, maxHtmlColumnNr + 1) and plotList == htmlPlots:
             for fig in figureList:
                 # Create a direct Figure instead of subplots when there's only 1 column
                 plotList.append(go.Figure())  # Normal figure, no subplots
@@ -811,7 +814,7 @@ def create_html(plots: List[go.Figure], goCursorList: List[go.Figure], path: str
 
 
 def create_html_plots(columns, plots, rank, rankName):
-    if columns in (1,2,3):
+    if columns in range(1, maxHtmlColumnNr + 1):
         figur_links = '<div style="text-align: left; margin-top: 1px;">'
         figur_links += '<h2><div id="Figures">Figures:</div></h2><br>'
         for p in plots:
@@ -830,7 +833,7 @@ def create_html_plots(columns, plots, rank, rankName):
         html_content += f'<th style"width:{round(100/columns)}%"> &nbsp; </th>'
     html_content += '<tr>'
     for i, plot in enumerate(plots):
-        plot_title: str = plot['layout']['title']['text']  # type: ignore
+        plot_title: str = plot['layout']['title']['text'] or ''  # type: ignore  # Subplot layouts (columns > maxHtmlColumnNr) have no title
         plot_ref = plot_title.replace('$','') # For future use with MathJax
 
         if ((i+1) % columns) == 1:
