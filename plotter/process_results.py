@@ -40,7 +40,9 @@ def getUniqueEmtSignals(figureList):
     '''
     
     # Signals required to generate Guide Waveforms
-    emt_signals = ['MTB\\mtb_s_pavail_pu',
+    # mtb_s_pref_pu must be first: it exists in both TSO and DSO setups and is used to locate the MTB and as time reference
+    emt_signals = ['MTB\\mtb_s_pref_pu',
+                   'MTB\\mtb_s_pavail_pu',
                    'MTB\\mtb_s_qudroop',
                    'MTB\\mtb_s_sips_g',
                    'MTB\\mtb_s_sips_d']

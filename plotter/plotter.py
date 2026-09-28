@@ -521,7 +521,7 @@ def drawPlot(rank: int,
             resultData = loadEMT(result.fullpath)
         elif result.typ == ResultType.EMT_PSOUT:
             signalPathNames = getUniqueEmtSignals(figureList)                                                                       # Make sure there are no duplicate signals
-            # Use the first signal, i.e. 'MTB\\mtb_s_pavail_pu' to find the location of the MTB instances (just to check if the MTB is not maybe placed on a different canvas than 'Main')
+            # Use the first signal, i.e. 'MTB\\mtb_s_pref_pu' to find the location of the MTB instances (just to check if the MTB is not maybe placed on a different canvas than 'Main')
             mtbPaths = findPsoutSignalPath(result.fullpath, signalPathNames[0])
             if mtbPaths is None:
                 print('ERROR: MTB not found!')
