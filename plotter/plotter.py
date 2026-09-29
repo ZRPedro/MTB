@@ -524,8 +524,8 @@ def drawPlot(rank: int,
             # Use the first signal, i.e. 'MTB\\mtb_s_pref_pu' to find the location of the MTB instances (just to check if the MTB is not maybe placed on a different canvas than 'Main')
             mtbPaths = findPsoutSignalPath(result.fullpath, signalPathNames[0])
             if mtbPaths is None:
-                print('ERROR: MTB not found!')
-                sys.exit(0)
+                print(f"ERROR: MTB path not found! Signal '{signalPathNames[0]}' is missing in {result.fullpath}")
+                sys.exit(1)
             else:                
                 mtbPath = mtbPaths[0]                                                                                               # There should one be one instance                                        
             if mtbPath != 'MTB':
