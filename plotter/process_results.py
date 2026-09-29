@@ -39,8 +39,8 @@ def getUniqueEmtSignals(figureList):
     Python's "set()" could also be used, but then the order of the signals in the DataFrame would change
     '''
     
-    # Signals required to generate Guide Waveforms
-    # mtb_s_pref_pu must be first: it exists in both TSO and DSO setups and is used to locate the MTB and as time reference
+    # Use 'mtb_s_pref_pu' as the first signal as this signal/PGB will never manually be disabled and is later used to find the MTB path
+    # The other signals are required to generate Guide Waveforms
     emt_signals = ['MTB\\mtb_s_pref_pu',
                    'MTB\\mtb_s_pavail_pu',
                    'MTB\\mtb_s_qudroop',
